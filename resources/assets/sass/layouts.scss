@@ -1,0 +1,102 @@
+// ============================
+// Main Layout
+// ============================
+.main {
+  position: relative;
+  width: 100%;
+  min-width: 1200px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &-content {
+    display: flex;
+    flex: 1;
+    height: 100%;
+    background: #f4f6f9;
+  }
+}
+
+// ============================
+// Sidebar
+// ============================
+.sidebar {
+  width: 15%;
+  background: #f8f8f8;
+  border-right: 1px solid #e0e0e0;
+  height: 100%;
+  overflow-y: auto;
+
+  &-inner {
+    padding: 0;
+  }
+
+  &-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &-list li {
+    display: block;
+    font-weight: 600;
+    color: #222d32;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #e0e7ff; 
+      color: $color_primary;
+    }
+  }
+
+  &-break {
+    height: 1px;
+    margin: 0 0 10px 0;
+    background: #ddd;
+  }
+}
+
+// ============================
+// Main View
+// ============================
+.main-view {
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+// ============================
+// Layout container for router-view or panels
+// ============================
+.layout {
+  position: relative;
+  padding: 0;
+  height: 100%;
+  overflow-y: auto;
+}
+
+// ============================
+// Centered Pages (like License expired or empty states)
+// ============================
+.page-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+  text-align: center;
+  color: #555;
+}
+
+// ============================
+// Condition Select & Filters
+// ============================
+.condition-select {
+  font-size: 14px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 200px;
+}

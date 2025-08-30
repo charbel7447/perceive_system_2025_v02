@@ -1,0 +1,271 @@
+<template>
+    <div class="main">
+        <!-- <div class="navbar">
+            <div class="navbar-inner">
+                <div class="navbar-brand" style="background:#fff;">
+                    <div>
+                       <a href="/"><img :src="logo_name" class="navbar-logo"></a>
+                    </div>
+                </div>
+                <div style="height: 48px;background: #fff;border-bottom: 2px solid #ddd;">
+                        <button onclick="showHideSideBar()" style="background: #fff;border: 2px solid #ddd;"><i class="fa fa-arrow-left"></i></button>
+                    </div>
+                <div class="navbar-right">
+                <p style="color:#9e9e9e;margin: 0 30% 0 0;"><small>v2.1.2 perceiveagency.me © Copyright {{fiscal_year}}. All Rights Reserved.</small></p>
+                <br>
+                    
+                </div>
+            </div>
+        </div> -->
+        <div class="hk-wrapper hk-vertical-nav">
+
+        <!-- Top Navbar -->
+        <div class="navbar">
+            <div class="navbar-inner">
+        <nav class="navbar navbar-expand-xl navbar-dark fixed-top hk-navbar">
+            <a id="navbar_toggle_btn" class="navbar-toggle-btn nav-link-hover" onclick="showHideSideBar()">
+                    <span class="feather-icon fa fa-bars" style="font-size: 18px;padding: 10px;">
+                    <i data-feather="fa fa-bars"></i>
+                    </span>
+            </a>
+            <a class="navbar-brandx" href="/">
+                 <a href="/"><img :src="logo_name" class="navbar-logo"></a>
+            </a>
+            <div class="col col-2" style="margin: 0 1.1%;">
+                <SearchMenu :initial="menu" :url="menunUrl" @input="onMenuUpdate"></SearchMenu>
+            </div>
+            
+             <p style="color:rgb(202 202 202);    margin: 15px 2% 0 1%;"><small>{{copyrights}}</small></p>
+
+             <div class="quick-form-div">
+                <!-- <h4>Quick Form</h4> -->
+                <ul>
+                    <li v-for="(quick, index) in quick_menus">
+                        <a :class='"btn btn-primary " + `${quick.class}`' @click="QuickMenu(quick, index)">
+                            {{quick.name}}
+                        </a>
+                        <!-- :href="quick.link" -->
+                    </li>
+                    <!-- <li><a class="btn btn-primary" href="/products/create">Product</a></li> -->
+                    <!-- <li><a class="btn btn-primary" href="/sales_orders/create">Sales Order</a></li> -->
+                    <!-- <li><a class="btn btn-primary" href="/invoices/create">Invoice</a></li> -->
+                    <!-- <li><a class="btn btn-primary" href="/clients/create">Clients</a></li> -->
+                    <!-- <li><a class="btn btn-primary" href="/purchase_orders/create">Purchase Order</a></li> -->
+                </ul>
+             </div>
+
+             <div v-for="release in release_note">
+                <transition name="modal" v-if="user.id != release.checked_by">
+                    <div class="modal-mask" style="background-color: rgb(0 0 0 / 18%);">
+                        <div class="modal-wrapper">
+                            <div class="modal-container" style="background-color: #fff;margin-top:0%;">
+                                <div class="modal-heading" style="    font-size: 15px;background: #eee;
+">
+                                    <b>
+                                        <div class="row col col-12" style="    width: 100%;
+    min-width: 630px;">
+                                            <div class="col col-1">
+                                                <i class="fa fa-bullhorn" style="background: red;
+    padding: 5px 10px;
+    color: #fff;"></i>
+                                            </div>
+                                            <div class="col col-11">
+                                                <p style="margin: 0px 30px 0 0;padding: 5px;">
+                                                    New Release
+                                                    <small style="font-size: 9px;
+    font-weight: bold;
+    margin: 0 10%;">{{copyrights}}</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </b>
+                                    <span>
+                                        <a   :href="'/api/release_note/' +user.id+'/mark/1'">
+                                            <label class="switch">
+                                                <span class="slider active-slider round"></span>
+                                            </label>
+                                        </a>
+                                    </span>
+                                </div>
+                                <div class="modal-body" style="background: #eee">
+                                    <div class="box" style="background: #eee;border:1px solid #fff">
+
+                                <div style="--m-background: hsla(0, 0%, 0%, .4);">
+                                    <div class="modal">
+                                        <div class="row col col-12" style="margin:10px" v-html="release.body"></div>
+                                    </div>
+                                </div>
+                                </div>
+
+                                        
+                                </div>
+                            </div>
+                            </div>
+
+                            </div>
+                </transition>
+            </div>
+
+            <ul class="navbar-nav hk-navbar-content">
+                <!-- <li class="nav-item" style="color:#fff;margin: 40px;">
+                    <i class="fa fa-bell"></i>
+                </li> -->
+                   <li class="nav-item" style="margin: 0 10px;">
+                    <a href="/custom_query" target="_blanl" style="padding: 3px;color:cyan;border:1px solid cyan;border-radius:25px;">
+                         <span class="badge-wrap" style="top: 11px;margin: 0 0 0 -5px;">
+                            <span style="background:cyan;" class="badge badge-primary badge-indicator badge-indicator-sm badge-pill pulse"></span>
+                        </span>
+                        <i class="fa fa-code"></i>
+                    </a>
+                </li>
+
+                <li class="nav-item" style="color:#fff">
+                  <span v-if="notifications != 0" class="badge-wrap"><span class="badge badge-primary badge-indicator badge-indicator-sm badge-pill pulse"></span></span>
+                    <Notification ref="more">
+                       <div class="dropdown-menu dropdown-menu-right" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+                        <h6 class="dropdown-header" ><span>Notifications</span> <a href="/notifications" v-if="notifications != 0"  class="notifications_menu">View all</a></h6>
+                             <br>
+                             <div  v-for="note in notifications">
+                            <div v-if="note.manager_id == user.id" class="notifications-nicescroll-bar" style="background: rgb(247 247 247);padding: 10px;font-size: 14px;">
+                               <table v-if="note.manager_id == user.id">
+                                    <thead>
+                                            <tr>
+                                                <td style="vertical-align: middle;">
+                                                    <a :href="'/'+note.link+''+note.document_id" target="_self" title="Visit" >
+                                                        +
+                                                    </a>
+                                                </td>
+                                                <td style="vertical-align: middle;">
+                                                    <a :href="'/'+note.link+''+note.document_id" target="_self" class="dropdown-item">
+                                                        #{{note.id}} - 
+                                                        <span><b>{{note.description}}</b></span> <br>
+                                                        <small style="text-transform:capitalize;">
+                                                            <b>
+                                                                {{note.document_type}}
+                                                            </b> - Created By 
+                                                            {{note.created_by}}
+                                                        </small>
+                                                </a>
+                                                </td>
+                                                <td class="ar" style="vertical-align: middle;float: right;">
+                                                    <a @click.stop="markAs(note.id)" class=" btn-success" style="font-size: 11px;float: right;text-align: right;padding: 0 5px;">
+                                                        <i class="fa fa-trach">x</i>
+                                                     </a>
+                                                </td>
+                                            </tr>
+                                    </thead>
+                               </table> 
+                               
+                             
+                               </div>
+                            </div>
+                        </div>
+                      
+                    </Notification>
+                </li>
+                <li class="nav-item" style="color:#fff">
+                    <user ref="more">
+                        <strong slot="title">{{sharedState.user.name}}</strong>
+                        <li>
+                            <router-link to="/notifications">Notifications</router-link>
+                        </li>
+                        <li>
+                            <router-link to="/personal-settings">Personal Settings</router-link>
+                        </li>
+                        <li>
+                            <a href="/logout">Logout</a>
+                        </li>
+                    </user>
+                </li>
+            </ul>
+        </nav>
+        </div>
+        </div>
+        </div>
+        <div class="main-content">
+            <sidebar></sidebar>
+            <div class="main-view" id="main-view"  v-if="installed_at == fiscal_year">
+                <transition name="fade" mode="out-in">
+                    <router-view class="layout" :key="$route.path"></router-view>
+                </transition>
+            </div>
+            <div v-else style="width: 90%;">
+                <div class="col col-12"  style="margin: 25% auto;">
+                    <p style="color:red;text-align:center;"><strong>License Expired, Feel free and contact Us</strong></p>
+                    <p style="color:#000;text-align:center;"><strong><a v-bind:href=" `mailto:${license_email}` ">{{license_email}}</a></strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script type="text/javascript">
+    import Sidebar from './components/layouts/Sidebar.vue'
+    import Vue from 'vue'
+    import ErrorText from './components/form/ErrorText.vue'
+    import SearchNotification from './components/form/SearchNotification.vue'
+    import SearchMenu from './components/form/SearchMenu.vue'
+    import Spinner from './components/loading/Spinner.vue'
+    import { get, post, byMethod } from './lib/api'
+    import { form } from './lib/mixins'
+    import { User, Notification } from './components/dropdown'
+    export default {
+        computed: {
+            user() {
+                return window.apex.user
+            },
+            logo_name() {
+                return window.apex.logo_name
+            },
+            fiscal_year(){
+                return window.apex.fiscal_year
+            },
+            installed_at(){
+                 return window.apex.installed_at
+            },
+            notifications(){
+                return window.apex.notifications
+            },
+            quick_menus(){
+                return window.apex.quick_menus
+            },
+            copyrights(){
+                return window.apex.copyrights
+            },
+            license_email(){
+                return window.apex.license_email
+            },
+            release_note(){
+                return window.apex.release_note
+            },
+        },
+        data() {
+            return {
+                sharedState: window.apex,
+                notificationUrl: '/api/search/notifications',
+                menunUrl: '/api/search/menu',
+            }
+        },
+        components: {
+            Sidebar,
+            User,
+            Notification,ErrorText, SearchNotification, Spinner, SearchMenu
+        },
+        methods: {
+            QuickMenu(item, index){		
+                window.open(''+ item.link, item.type,`toolbar=no,width=1224,height=800,resizable`);	
+            },
+            markAs(status) {
+                post(`/api/notifications/mark`, {status: status})
+                // wait(3);
+                setTimeout(() => {   window.location.reload(); }, 2000);
+            },
+            onMenuUpdate(e) {
+                const menu = e.target.value
+                // Vue.set(this.form, 'menu_id', menu.id)
+                // Vue.set(this.form, 'menu', menu)
+                this.$router.push(menu.link)
+                // window.open(menu.link, '_self')
+            },
+        }
+    }
+</script>

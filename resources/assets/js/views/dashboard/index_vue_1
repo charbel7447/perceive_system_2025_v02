@@ -1,0 +1,978 @@
+<template>
+    <div v-if="show">
+    <!-- <div v-if="show && (installed_at == model.today_year)"> -->
+        <div class="panel">
+            <div class="panel-heading">
+                <span class="panel-title">
+                    <button v-bind:style="{ 'background-color': app_color}"  class="btn displayoverview" style="background-color: #3da5ff;color: #fff;" @click="DisplayOverview">
+                        Overview 
+                    </button>
+                    <button v-bind:style="{ 'background-color': app_color}"  class="btn displaysales" style="background-color: #3da5ff;color: #fff;" @click="DisplaySales">
+                        Sales
+                    </button>
+                   <button v-bind:style="{ 'background-color': app_color}"  class="btn displayaccounting" style="background-color: #3da5ff;color: #fff;" @click="DisplayAccounting">
+                        Accounting
+                    </button>
+                    <button v-bind:style="{ 'background-color': app_color}"  class="btn displaystock" style="background-color: #3da5ff;color: #fff;" @click="DisplayStock">
+                        Procurment & Stock
+                    </button>
+                    <button v-bind:style="{ 'background-color': app_color}"  v-if="company_type == 1" class="btn displayproduction" style="background-color: #3da5ff;color: #fff;" @click="DisplayProduction">
+                        Production
+                    </button>
+                </span>
+                <div class="row" style="padding: 0 1%;"  v-if="model.display_overview == 1 || model.display_overview == 3">
+                    <select class="form-control year-select " v-model="model.selected_year"  v-bind:style="{ 'background-color': nav_color}">
+                        <option :value="model.today_year" selected>{{model.today_year}}</option>
+                        <option :value="model.today_year-1">{{model.today_year-1}}</option>
+                        <option :value="model.today_year-2">{{model.today_year-2}}</option>
+                        <option value="all">All</option>
+                    </select>
+                </div>
+            </div>
+            <div class="panel-overview displayoverview" v-if="model.display_overview == 1 || model.display_overview == 3">
+                <!--  -->
+                <div class="row" style="padding:30px;">
+                    <div class="col-md-3" v-if="model.box_1 == 1">
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered" v-bind:style="{ 'background-color': nav_color}" style="padding: 6px;"><i class="fa fa-arrow-up"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year">{{model.accounts_receivable_now | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-1">{{model.accounts_receivable_now_1 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-2">{{model.accounts_receivable_now_2 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == 'all'">{{model.accounts_receivable | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-base text-gray-600 mt-1">Total Clients Due</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3" v-if="model.box_2 == 1">
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered" v-bind:style="{ 'background-color': app_color}" style="padding: 6px;"><i class="fa fa-arrow-up"></i></div>
+                                        </div> 
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year">{{model.client_payment_now | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-1">{{model.client_payment_now_1 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-2">{{model.client_payment_now_2 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == 'all'">{{model.client_payment | formatMoney(model.currency, false)}}</div>
+                                    <!-- <div class="text-3xl font-bold leading-8 mt-6">{{model.total_revenue - model.total_debit | formatMoney(model.currency, false)}}</div> -->
+                                    <div class="text-base text-gray-600 mt-1">Total Clients Payments</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3" v-if="model.box_3 == 1">
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered" v-bind:style="{ 'background-color': app_color}" style="padding: 6px;"><i class="fa fa-arrow-up"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year">{{model.total_saled_item_now}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-1">{{model.total_saled_item_now_1}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-2">{{model.total_saled_item_now_2}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == 'all'">{{model.total_saled_item}}</div>
+                                    <div class="text-base text-gray-600 mt-1">Saled Items</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" v-if="model.box_4 == 1">
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered" v-bind:style="{ 'background-color': app_color}" style="padding: 6px;"><i class="fa fa-arrow-up"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year">{{model.total_saled_item_qty_now}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-1">{{model.total_saled_item_qty_now_1}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-2">{{model.total_saled_item_qty_now_2}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == 'all'">{{model.total_saled_item_qty}}</div>
+                                    <div class="text-base text-gray-600 mt-1">Sales Qty</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- row 2 -->
+ 
+                <div class="row" style="padding:30px;">
+                    <div class="col-md-3" v-if="model.box_5 == 1" style="display:non">
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered" v-bind:style="{ 'background-color': app_color}" style="padding: 6px;"><i class="fa fa-arrow-up"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6">{{model.total_debit | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-base text-gray-600 mt-1">Total Clients Debit</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" v-if="model.box_6 == 1">
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <i style="font-size: 24px;" class="fa fa fa-file-text-o feather feather-shopping-cart report-box__icon text-theme-10"></i> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered" v-bind:style="{ 'background-color': nav_color}" style="padding: 6px;"><i class="fa fa-arrow-up"></i></div>
+                                        </div> 
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year">{{model.open_sales_orders_now}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-1">{{model.open_sales_orders_now_1}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-2">{{model.open_sales_orders_now_2}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == 'all'">{{model.open_sales_orders}}</div>
+                                    <div class="text-base text-gray-600 mt-1">Open SalesOrders</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" v-if="model.box_7 == 1">
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <i style="font-size: 24px;" class="fa fa fa-file-text-o feather feather-shopping-cart report-box__icon text-theme-10"></i> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered" v-bind:style="{ 'background-color': app_color}" style="padding: 6px;"><i class="fa fa-arrow-up"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year">{{model.unpaid_invoices_now}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-1">{{model.unpaid_invoices_now_1}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-2">{{model.unpaid_invoices_now_2}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == 'all'">{{model.unpaid_invoices}}</div>
+                                    <div class="text-base text-gray-600 mt-1">Unpaid Invoices</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" v-if="model.box_8 == 1">
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered"  v-bind:style="{ 'background-color': app_color}" style="padding: 6px;" ><i class="fa fa-arrow-up"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year">{{model.total_invoice_now | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-1">{{model.total_invoice_now_1 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-2">{{model.total_invoice_now_2 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == 'all'">{{model.total_invoice | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-base text-gray-600 mt-1">TOTAL INVOICES AMOUNT</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" v-if="model.box_9 == 1"> 
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered" v-bind:style="{ 'background-color': nav_color}" style="padding: 6px;"><i class="fa fa-arrow-up"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year">{{model.accounts_payable_now | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-1">{{model.accounts_payable_now_1 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-2">{{model.accounts_payable_now_2 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == 'all'">{{model.accounts_payable | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-base text-gray-600 mt-1">TOTAL VENDOR DUE</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="col-md-3" v-if="model.box_13 == 1">
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered" v-bind:style="{ 'background-color': app_color}" style="padding: 6px;"><i class="fa fa-arrow-up"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year">{{model.total_invoice_now | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-1">{{model.total_invoice_now_1 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-2">{{model.total_invoice_now_2 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == 'all'">{{model.total_invoice | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-base text-gray-600 mt-1">TOTAL INVOICES AMOUNT</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- row 3 -->
+ 
+                <div class="row" style="padding:30px;">
+                    <div class="col-md-4" v-if="model.box_10 == 1">
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered" v-bind:style="{ 'background-color': app_color}" style="padding: 6px;"><i class="fa fa-arrow-up"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year">{{model.balanceCurrency1}} {{model.balanceUSD_now | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-1">{{model.balanceCurrency1}} {{model.balanceUSD_now_1 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-2">{{model.balanceCurrency1}} {{model.balanceUSD_now_2 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == 'all'">{{model.balanceCurrency1}} {{model.balanceUSD | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-base text-gray-600 mt-1">{{model.balanceUSDName}} Balance</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" v-if="model.box_11 == 1">
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered" v-bind:style="{ 'background-color': app_color}" style="padding: 6px;"><i class="fa fa-arrow-up"></i></div>
+                                        </div> 
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year">{{model.balanceCurrency2}} {{model.balanceLBP_now | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-1">{{model.balanceCurrency2}} {{model.balanceLBP_now_1 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-2">{{model.balanceCurrency2}} {{model.balanceLBP_now_2 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == 'all'">{{model.balanceCurrency2}} {{model.balanceLBP | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-base text-gray-600 mt-1">{{model.balanceLBPName}} Balance</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3" v-if="model.box_12 == 1">
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered" v-bind:style="{ 'background-color': app_color}" style="padding: 6px;"><i class="fa fa-arrow-up"></i></div>
+                                        </div> 
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year">{{model.balanceCurrency3}} {{model.balanceEURO_now | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-1">{{model.balanceCurrency3}} {{model.balanceEURO_now_1 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == model.today_year-2">{{model.balanceCurrency3}} {{model.balanceEURO_now_2 | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-3xl font-bold leading-8 mt-6" v-if="model.selected_year == 'all'">{{model.balanceCurrency3}} {{model.balanceEURO | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-base text-gray-600 mt-1">{{model.balanceEUROName}} Balance</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                   
+                    <div class="col-md-4" v-if="model.box_14 == 1">
+                        <div class="col-span-12 sm:col-span-6 xl:col-span-3">
+                            <div class="report-box zoom-in">
+                                <div class="box p-5">
+                                    <div class="flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> 
+                                        <div class="ml-auto">
+                                            <div class="report-box__indicator tooltip cursor-pointer tooltipstered" v-bind:style="{ 'background-color': app_color}" style="padding: 6px;"><i class="fa fa-arrow-up"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-3xl font-bold leading-8 mt-6">{{model.total_revenue - model.total_expense | formatMoney(model.currency, false)}}</div>
+                                    <div class="text-base text-gray-600 mt-1" style="font-size: 13px;">TOTAL REVENUE<small style="">(Revenue - Expense)</small></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                   
+                 
+                
+            </div>
+        </div>
+        <div class="row" style="padding:0 15px;">
+            <div class="col col-6 displayoverview"  v-if="model.display_overview == 1 || model.display_overview == 3">
+                <div class="panel"  v-if="model.chart_1 == 1">
+                    <div class="panel-heading">
+                        <span class="panel-title">Income vs Expense</span>
+                    </div>
+                    <div class="panel-body">
+                        <line-chart :datasets="datasets" :labels="labels"></line-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-6 displayoverview"  v-if="model.display_overview == 1 || model.display_overview == 3">
+                <div class="panel" v-if="model.chart_2 == 1">
+                    <div class="panel-heading">
+                        <span class="panel-title">Accounts</span>
+                    </div>
+                    <div class="panel-body">
+                        <pie-chart :datasets_account="datasets_account" :labels_account="labels_account"></pie-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row displaysales"  v-if="model.display_sales == 1">
+            <div class="col col-4">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">Clients</span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-link">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Totalrevenue</th>
+                                    <th>UnusedCredit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="clients in model.top_clients" @click="$router.push(`/clients/${clients.id}`)">
+                                    <td>{{clients.company }}
+                                        <br>
+                                        <small style="color:red;">({{clients.person}})</small>
+                                    </td>
+                                    <td>
+                                        {{Number(clients.total_revenue) | formatMoney(clients.currency, true)}}
+                                    </td>
+                                    <td>
+                                          {{Number(clients.unused_credit) | formatMoney(clients.currency, true)}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">Latest Saled Products
+                            <br>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-link">
+                            <thead>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Details</th>
+                                    <!-- <th>Client</th> -->
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="sales in model.top_saled_products" @click="$router.push(`/sales_orders/${sales.id}`)">
+                                   <td>{{sales.number}}</td>
+                                    <td>
+                                        <li v-for="sal in sales.items"  style="display:flow-root;border-bottom: 1px solid;line-height: 20px;">
+                                            <p><span style="float:left;">{{sal.productd.description}}</span><span style="float:right;"><strong>Qty.:</strong>{{sal.quantity}}{{sal.uomd.unit}}</span></p>
+                                        </li>
+                                    </td>
+                                    <!-- <td>{{sales.clientd.company}}</td> -->
+                                   <td>{{sales.date }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="col col-8" >
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">Latest 5 Quotations
+                        <br>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-link">
+                            <thead>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Details</th>
+                                    <th>Client</th>
+                                    <th>Total</th>
+                                    <th>Date</th>
+                                    <th>Created By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="quotation in model.top_quotations" @click="$router.push(`/quotations/${quotation.id}`)">
+                                    <td>{{quotation.number}}</td>
+                                    <td>
+                                        <li v-for="quote in quotation.items" style="display:flow-root;border-bottom: 1px solid;line-height: 20px;">
+                                            <p><span style="float:left;">{{quote.productd.description}}</span> <span style="float:right;"><strong>Qty.:</strong>{{quote.qty}}{{quote.uomd}} - <strong>Price:</strong>{{Number(quote.unit_price) | formatMoney(model.currency, false)}}</span></p>
+                                        </li>
+                                    </td>
+                                    <td>{{quotation.clientd.company}}</td>
+                                   <td>
+                                       {{Number(quotation.total) | formatMoney(quotation.currency, true)}}
+                                   </td>
+                                   <td>{{quotation.date }}</td>
+                                   <td class="width-2">{{quotation.created_by }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">Latest 5 Sales Orders
+                            <br>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-link">
+                            <thead>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Details</th>
+                                    <th>Client</th>
+                                    <th>Total</th>
+                                    <th>Date</th>
+                                    <th>Created By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="sales in model.top_sales_order" @click="$router.push(`/sales_orders/${sales.id}`)">
+                                   <td>{{sales.number}}</td>
+                                    <td>
+                                        <li v-for="sal in sales.items" style="display:flow-root;border-bottom: 1px solid;line-height: 20px;">
+                                            <p><span style="float:left;">{{sal.productd.description}}</span><span style="float:right;"><strong>Qty.:</strong>{{sal.quantity}}{{sal.uomd.uom}} - <strong>Price:</strong>{{Number(sal.price) | formatMoney(model.currency, false)}}</span></p>
+                                        </li>
+                                    </td>
+                                    <td>{{sales.clientd.company}}</td>
+                                   <td>
+                                       {{Number(sales.total) | formatMoney(sales.currency, true)}}
+                                   </td>
+                                   <td>{{sales.date }}</td>
+                                   <td class="width-2">{{sales.created_by }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row displaystock"  v-if="model.display_stock == 1">
+            <div class="col col-5">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">Vendors</span>
+                    </div>
+                    <table class="table table-link">
+                            <thead>
+                                <tr>
+                                    <th>Person</th>
+                                    <th>Company</th>
+                                    <th>Expenses</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="vendors in model.top_vendors" @click="$router.push(`/vendors/${vendors.id}`)">
+                                    <td>{{vendors.person}}</td>
+                                    <td>{{vendors.company }}</td>
+                                    <td>
+                                        {{Number(vendors.total_expense) | formatMoney(vendors.currency, true)}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col col-7">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">Warehouses</span>
+                    </div>
+                    <table class="table table-link">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Total Products</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="warehouses in model.all_warehouses" @click="$router.push(`/warehouses/${warehouses.id}`)">
+                                    <td class="width-1">{{warehouses.number}}</td>
+                                    <td class="width-2">{{warehouses.name }}</td>
+                                    <td class="width-4">
+                                        <li  style="display:flow-root;border-bottom: 1px solid;line-height: 20px;" v-for="wh in model.wh_product" v-if="wh.warehouse_id == warehouses.id">
+                                                <p><span style="float:left;">{{wh.description}}</span><span style="float:right;"><strong>Qty.:</strong>{{wh.current_stock}}</span></p>
+                                        </li>
+                                    </td>
+                                </tr>
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col col-12" >
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">Latest 5 Purchase Orders
+                         <br>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-link">
+                            <thead>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Details</th>
+                                    <th>Vendor</th>
+                                    <th>Total</th>
+                                    <th>Date</th>
+                                    <th>Created By</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="purchase in model.top_purchase_order" @click="$router.push(`/purchase_orders/${purchase.id}`)">
+                                    <td class="width-1">{{purchase.number}}</td>
+                                    <td>
+                                        <li v-for="pur in purchase.items"  style="display:flow-root;border-bottom: 1px solid;line-height: 20px;">
+                                             <p><span style="float:left;">{{pur.productd.description}}</span><span style="float:right;"><strong>Qty.:</strong>{{pur.qty}}{{pur.uom.code}} - <strong>Price:</strong>{{Number(pur.unit_price) | formatMoney(model.currency, false)}}</span></p>
+                                        </li>
+                                    </td>
+                                   <td class="width-2">{{purchase.vendord.company}}</td>
+                                   <td class="width-1">
+                                        {{Number(purchase.total) | formatMoney(purchase.currency, true)}}
+                                   </td>
+                                   <td class="width-1">{{purchase.date }}</td>
+                                   <td class="width-1">{{purchase.created_by }}</td>
+                                   <td class="width-1" v-if="purchase.status_id == 1"><small>DRAFT</small></td>
+                                   <td class="width-1" v-if="purchase.status_id == 2"><small>SENT</small></td>
+                                   <td class="width-1" v-if="purchase.status_id == 3"><small>CONFIRMED</small></td>
+                                   <td class="width-1" v-if="purchase.status_id == 4"><small>BILLED</small></td>
+                                   <td class="width-1" v-if="purchase.status_id == 5"><small>CANCELLED</small></td>
+                                   <td class="width-1" v-if="purchase.status_id == 6"><small>CLOSED</small></td>
+                                   <td class="width-1" v-if="purchase.status_id == 7"><small>RECEIVED</small></td>
+                                   <td class="width-1" v-if="purchase.status_id == 8"><small>PARTIALLY_RECEIVED</small></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-12" >
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">Products
+                            <br>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-link">
+                            <thead>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Name</th>
+                                    <th>Warehouse</th>
+                                    <th>Category</th>
+                                    <th>Sub Category</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="products in model.all_products" @click="$router.push(`/products/${products.id}`)">
+                                    <td>{{products.code}}</td>
+                                    <td>{{products.description }}</td>
+                                    <td>{{products.warehoused.name}}
+                                        <br>
+                                        <span style="color:red;"><small>({{products.warehoused.number}})</small></span>
+                                    </td>
+                                    <td>{{products.categoryd.name}}
+                                        <br>
+                                        <span style="color:red;"><small>({{products.categoryd.number}})</small></span>
+                                    </td>
+                                    <td>
+                                        <div v-if="products.sub_categoryd">
+                                            {{products.sub_categoryd.title}}
+                                        <br>
+                                        <span style="color:red;"><small>({{products.sub_categoryd.id}})</small></span>
+                                        </div>
+                                        <div v-else>
+                                                -
+                                        </div>
+                                    </td>
+                                   <td>{{products.current_stock}} {{products.uom}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row displayaccounting"  v-if="model.display_accounting == 1">
+            <div class="col col-12">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">Invoices</span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-link">
+                            <thead>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Client</th>
+                                    <th>Details</th>
+                                    <th>Total</th>
+                                    <th>Received Amount</th>
+                                    <th>Remaning Amount</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="invoices in model.top_invoices" @click="$router.push(`/invoices/${invoices.id}`)">
+                                    <td>{{invoices.number}}</td>
+                                    <td>{{invoices.client.company}}<br>
+                                        <small>({{invoices.client.person}})</small>
+                                    </td>
+                                    <td>
+                                     <li v-for="prod in invoices.items"  style="display:flow-root;border-bottom: 1px solid;line-height: 20px;">
+                                            <p><span style="float:left;">{{prod.productd.description}}</span><span style="float:right;"><strong>Qty.:</strong>{{prod.quantity}}{{prod.uomd.unit}}  &nbsp;{{Number(prod.price) | formatMoney(model.currency, false)}}</span></p>
+                                     </li>
+                                    </td>
+                                    <td>
+                                        {{Number(invoices.total) | formatMoney(invoices.currency, true)}}
+                                    </td>
+                                    <td>
+                                        {{Number(invoices.amount_paid) | formatMoney(invoices.currency, false)}}
+                                    </td>
+                                    <td>
+                                        {{Number(invoices.total) - Number(invoices.amount_paid) | formatMoney(invoices.currency, false)}}
+                                    </td>
+                                    <td>{{invoices.date}}</td>
+                                    <td class="width-1" v-if="invoices.status_id == 1"><small>DRAFT</small></td>
+                                    <td class="width-1" v-if="invoices.status_id == 2"><small>CONFIRMED</small></td>
+                                    <td class="width-1" v-if="invoices.status_id == 3"><small>PARTIALLY_PAID</small></td>
+                                    <td class="width-1" v-if="invoices.status_id == 4"><small>PAID</small></td>
+                                    <td class="width-1" v-if="invoices.status_id == 5"><small>VOID</small></td>
+                                    <td class="width-1" v-if="invoices.status_id == 6"><small>CONFIRMED</small></td>
+                                    <td class="width-1" v-if="invoices.status_id == 7"><small>ADJUSTED</small></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-12">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">Bills</span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-link">
+                            <thead>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Vendor</th>
+                                    <th>Details</th>
+                                    <th>Total</th>
+                                    <th>Received Amount</th>
+                                    <th>Remaning Amount</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="bills in model.top_bills" @click="$router.push(`/bills/${bills.id}`)">
+                                    <td>{{bills.number}}</td>
+                                    <td>{{bills.vendor.company}}<br>
+                                        <small>({{bills.vendor.person}})</small>
+                                    </td>
+                                    <td>
+                                     <li v-for="prod in bills.items"  style="display:flow-root;border-bottom: 1px solid;line-height: 20px;">
+                                            <p><span style="float:left;">{{prod.productd.description}}</span><span style="float:right;"><strong>Qty.:</strong>{{prod.qty}}{{prod.uomd.unit}}  &nbsp;{{Number(prod.unit_price) | formatMoney(model.currency, false)}}</span></p>
+                                     </li>
+                                    </td>
+                                    <td>
+                                        {{Number(bills.total) | formatMoney(bills.currency, true)}}
+                                    </td>
+                                    <td>
+                                        {{Number(bills.amount_paid) | formatMoney(bills.currency, false)}}
+                                    </td>
+                                    <td>
+                                        {{Number(bills.total) - Number(bills.amount_paid) | formatMoney(bills.currency, false)}}
+                                    </td>
+                                    <td>{{bills.date}}</td>
+                                    <td class="width-1" v-if="bills.status_id == 1"><small>SENT</small></td>
+                                    <td class="width-1" v-if="bills.status_id == 2"><small>PARTIALLY_PAID</small></td>
+                                    <td class="width-1" v-if="bills.status_id == 3"><small>PAID</small></td>
+                                    <td class="width-1" v-if="bills.status_id == 4"><small>VOID</small></td>
+                                    <td class="width-1" v-if="bills.status_id == 5"><small>DRAFT</small></td>
+                                    <td class="width-1" v-if="bills.status_id == 6"><small>CONFIRMED</small></td>
+                                    <td class="width-1" v-if="bills.status_id == 7"><small>ADJUSTED</small></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-6">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">Latest 5 Vendor Payments
+                            <br>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-link">
+                            <thead>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Amount </th>
+                                    <th>Payment </th>
+                                    <th>Date</th>
+                                    <th style="display:none">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="vp in model.top_vendors_payments" @click="$router.push(`/vendor_payments/${vp.id}`)">
+                                    <td>{{vp.number}}</td>
+                                    <td>
+                                        {{Number(vp.amount_paid) | formatMoney(vp.currency, true)}}
+                                    </td>
+                                    <td>{{vp.payment_mode }}</td>
+                                    <td>{{vp.payment_date }}</td>
+                                    <td  style="display:none" v-if="vp.status_id == 1"><small>RECEIVED</small></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-6">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">Latest 5 Client Payments
+                            <br>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-link">
+                            <thead>
+                                <tr>
+                                    <th>Number</th>
+                                    <th>Amount</th>
+                                    <th>Payment</th>
+                                    <th>Date</th>
+                                    <th style="display:none">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="cp in model.top_clients_payments" @click="$router.push(`/client_payments/${cp.id}`)">
+                                    <td>{{cp.number}}</td>
+                                    <td>
+                                         {{Number(cp.amount_received) | formatMoney(cp.currency, true)}}
+                                    </td>
+                                    <td>{{cp.payment_mode }}</td>
+                                    <td>{{cp.payment_date }}</td>
+                                    <td  style="display:none" v-if="cp.status_id == 1"><small>RECEIVED</small></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row displayproduction"  v-if="model.display_production == 1">
+            <div class="col col-12">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span class="panel-title">Prodction Dashboard</span>
+                       App Color
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div v-if="model.display_accounting == 0 && model.display_overview == 0 && model.display_sales == 0 && model.display_stock == 0 && model.display_production == 0">
+        <div class="col col-12"  style="margin: 35% auto 0 auto;">
+            <p style="color:red;text-align:center;">
+                <a href="/">
+                        <img src="images/perceive.png" class="navbar-lo" style="width:20%;">
+                </a>
+            </p>
+            
+            <p style="color:red;text-align:center;"><strong>Licensed For {{company_name}}, Feel free and contact Us</strong></p>
+            <p style="color:#000;text-align:center;"><strong><a v-bind:href=" `mailto:${license_email}` ">{{license_email}}</a></strong></p>
+        </div>
+    </div>
+    </div>
+   
+    
+    <!-- <div v-else>
+        <div class="col col-12"  style="margin: 25% auto;">
+            <p style="color:red;text-align:center;"><strong>License Expired, Feel free and contact Us</strong></p>
+            <p style="color:#000;text-align:center;"><strong><a href="mailto:it@propack.me">it@propack.me</a></strong></p>
+        </div>
+    </div> -->
+</template>
+<script type="text/javascript">
+    import Vue from 'vue'
+    import { get } from '../../lib/api'
+    import LineChart from '../../components/charts/Line.vue'
+    import PieChart from '../../components/charts/Pie.vue'
+    export default {
+        computed:{
+            base_currency() {
+                return window.apex.base_currency
+            },
+            first_currency(){
+                return window.apex.first_currency
+            },
+            second_currency(){
+                return window.apex.second_currency
+            },
+            first_currency_decimal(){
+                 return window.apex.first_currency_decimal
+            },
+            second_currency_decimal(){
+                 return window.apex.second_currency_decimal
+            },
+            installed_at(){
+                 return window.apex.installed_at
+            },
+            disable_second_currency(){
+                 return window.apex.disable_second_currency
+            },
+            logo_name() {
+                return window.apex.logo_name
+            },
+            company_name() {
+                return window.apex.company_name
+            },
+            company_type() {
+                return window.apex.company_type
+            },
+            app_color() {
+                return window.apex.app_color
+            },
+            license_email() {
+                return window.apex.license_email
+            },
+            nav_color() {
+                return window.apex.nav_color
+            },
+        },
+        components: {LineChart,PieChart},
+        data() {
+            return {
+                show: false,
+                datasets: [],
+                labels: [],
+                datasets_account: [],
+                labels_account: [],
+                
+                model: {
+                    top_unpaid_invoices: [],
+                    top_sales_order: [],
+                    top_purchase_order: [],
+                    currency: {}
+                }
+            }
+        },
+        beforeRouteEnter(to, from, next) {
+            get(`/api/dashboard`)
+                .then(res => {
+                    next(vm => vm.setData(res))
+                })
+                // catch 422
+        },
+        beforeRouteUpdate (to, from, next) {
+            this.show = false
+            get(`/api/dashboard`)
+                .then(res => {
+                    this.setData(res)
+                    next()
+                })
+                //catch 422
+        },
+        methods: {
+            DisplayOverview() {
+                this.model.display_production = 0,
+                this.model.display_overview = 1,
+                this.model.display_sales = 0,
+                this.model.display_accounting = 0,
+                this.model.display_stock= 0
+            },
+            DisplaySales() {
+                this.model.display_production = 0,
+                this.model.display_overview = 0,
+                this.model.display_sales = 1,
+                this.model.display_accounting = 0,
+                this.model.display_stock= 0
+            },
+            DisplayAccounting() {
+                this.model.display_production = 0,
+                this.model.display_overview = 0,
+                this.model.display_sales = 0,
+                this.model.display_accounting = 1,
+                this.model.display_stock= 0
+            },
+            DisplayStock() {
+                this.model.display_production = 0,
+                this.model.display_overview = 0,
+                this.model.display_sales = 0,
+                this.model.display_accounting = 0,
+                this.model.display_stock= 1
+            },
+            DisplayProduction(){
+                this.model.display_production = 1,
+                this.model.display_overview = 0,
+                this.model.display_sales = 0,
+                this.model.display_accounting = 0,
+                this.model.display_stock= 0
+            },
+            setData(res) {
+                this.$title.set('Dashboard')
+                Vue.set(this.$data, 'model', res.data.data)
+                Vue.set(this.$data, 'labels', res.data.income_expense_chart.labels)
+                Vue.set(this.$data, 'datasets', res.data.income_expense_chart.datasets)
+                Vue.set(this.$data, 'labels_account', res.data.accounts_chart.labels_account)
+                Vue.set(this.$data, 'datasets_account', res.data.accounts_chart.datasets_account)
+                
+                this.$bar.finish()
+                this.show = true
+            },
+            
+        }
+    }
+</script>
+<style>
+    .year-select {
+        color: #fff;
+        border-radius: 7px;
+        margin: 0px 20px;
+    }
+</style>

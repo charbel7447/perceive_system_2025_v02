@@ -1,0 +1,305 @@
+<template>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-inner" v-if="installed_at == fiscal_year">
+      <div class="sidebar-links">
+        <ul class="sidebar-list">
+          <li
+            v-for="(group, gIdx) in activeList"
+            :key="gIdx"
+            class="sidebar-group"
+            style="direction: rtl;"
+          >
+            <!-- Expandable button if present -->
+            <button
+              v-if="group.links.some(l => l.path === '' && l.expand === 'collapse')"
+              type="button"
+              class="sidebar-parent"
+              :class="group.links[0].title"
+              @click="toggleGroup(gIdx)"
+              :aria-expanded="isExpanded(gIdx)"
+            >
+              <i class="fa" :class="group.links[0].icon"></i>
+              <span class="sidebar-text">{{ group.links[0].title }}</span>
+              <i
+                class="fa"
+                :class="isExpanded(gIdx) ? 'fa-chevron-up' : 'fa-chevron-down'"
+                aria-hidden="true"
+              ></i>
+            </button>
+
+            <!-- Child items -->
+            <ul
+              v-show="isExpanded(gIdx)"
+              v-if="group.links.some(l => l.path !== '' && l.list === 'content')"
+              class="sidebar-children"
+            >
+              <li
+                v-for="(link, lIdx) in group.links"
+                :key="'child-'+lIdx"
+                v-if="link.path !== '' && link.list === 'content'"
+                :class="['sidebar-child', link.title, currentPath === link.path ? 'active-link' : '']"
+              >
+                <router-link
+                  :to="link.path"
+                  class="sidebar-link"
+                  :class="link.title"
+                >
+                  <i class="fa" :class="link.icon"></i>
+                  <span class="sidebar-text">{{ link.title }}</span>
+                </router-link>
+              </li>
+            </ul>
+
+            <!-- If no collapse, show links directly -->
+            <ul v-if="!group.links.some(l => l.path === '' && l.expand === 'collapse')" class="sidebar-children">
+              <li
+                v-for="(link, lIdx) in group.links"
+                :key="'direct-'+lIdx"
+                :class="['sidebar-child', link.title, currentPath === link.path ? 'active-link' : '']"
+              >
+                <router-link
+                  :to="link.path"
+                  class="sidebar-link"
+                  :class="link.title"
+                >
+                  <i class="fa" :class="link.icon"></i>
+                  <span class="sidebar-text">{{ link.title }}</span>
+                </router-link>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div v-else>
+      <div class="col col-12" style="margin: 25% auto;">&nbsp;</div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      expandedGroups: [],
+       lists: [
+        {
+          dashboard_tab: true,
+          links: [
+            { path: '', title: 'Dashboard',icon: 'fa fa-dashboard', fix: 'fix-nav', expand: 'collapse' },
+            { path: '/sidebar_reports', title: 'General_Reports', icon: 'fa fa-home', list: 'content' },
+            { path: '/general_settings', title: 'General_Setup', icon: 'fa fa-cogs', list: 'content' },
+            { path: '/custom_query', title: 'Custom_Query', icon: 'fa fa-cogs', list: 'content' }
+          ],
+        },
+        {
+          sales_tab: true,
+          links: [
+            { path: '', title: 'Sales', icon: 'fa fa-dashboard', fix: 'fix-nav', expand: 'collapse' },
+            { path: '/sales_orders', title: 'Sales_Orders', icon: 'fa fa-file-text-o', list: 'content' },
+            { path: '/invoices', title: 'Client_Invoices', icon: 'fa fa-file-text-o', list: 'content' },
+            { path: '/quotations', title: 'Quotations', icon: 'fa fa-file-text-o', list: 'content' },
+            { path: '/clients', title: 'Clients', icon: 'fa fa-user', list: 'content' },
+          ],
+        },
+        {
+          procurment_tab: true,
+          links: [
+            { path: '', title: 'Purchase_Orders', icon: 'fa fa-cogs', fix: 'fix-nav', expand: 'collapse' },
+            { path: '/receive_orders', title: 'Receive_Orders', icon: 'fa fa-file-text-o', list: 'content' },
+            { path: '/purchase_orders', title: 'Purchase_Orders', icon: 'fa fa-file-text-o', list: 'content' },
+          ],
+        },
+        {
+          procurment_tab: true,
+          links: [
+            { path: '', title: 'Procurment & Stock', icon: 'fa fa-cogs', fix: 'fix-nav', expand: 'collapse' },
+            { path: '/products', title: 'Products', icon: 'fa fa-cubes', list: 'content' },
+            { path: '/customer_returns', title: 'Customer Returns', icon: 'fa fa-cubes', list: 'content' },
+          ],
+        },
+        {
+          accounting_tab: true,
+          links: [
+            { path: '', title: 'Accounting', icon: 'fa fa-dashboard', fix: 'fix-nav', expand: 'collapse' },
+            { path: '/clients', title: 'Clients', icon: 'fa fa-user', list: 'content' },
+            { path: '/journal_vouchers', title: 'Journal_Vouchers', icon: 'fa fa-file-text-o', list: 'content' },
+            { path: '/journal_vouchers_movement', title: 'JV_Movement', icon: 'fa fa-file-text-o', list: 'content' },
+            { path: '/advance_payments', title: 'Client_Advance_Payments', icon: 'fa fa-money', list: 'content' },
+            { path: '/invoices', title: 'Client_Invoices', icon: 'fa fa-file-text-o', list: 'content' },
+            { path: '/credit_notes', title: 'Credit_Notes', icon: 'fa fa-file-text-o', list: 'content' },
+            { path: '/debit_notes', title: 'Debit_Notes', icon: 'fa fa-file-text-o', list: 'content' },
+            { path: '/client_payments', title: 'Client_Payments', icon: 'fa fa-money', list: 'content' },
+            { path: '/statement', title: 'Client_SOA', icon: 'fa fa-money', list: 'content' },
+            { path: '/expenses', title: 'Vendor_Expenses', icon: 'fa fa-file-text-o', list: 'content' },
+            { path: '/bills', title: 'Vendor_Bills', icon: 'fa fa-file-text-o', list: 'content' },
+            { path: '/vendor_payments', title: 'Vendor_Payments', icon: 'fa fa-money', list: 'content' },
+            { path: '/vendor_statement', title: 'Vendor_SOA', icon: 'fa fa-money', list: 'content' },
+          ],
+        },
+        {
+          procurment_tab: true,
+          links: [
+            { path: '', title: 'Procurment & Stock', icon: 'fa fa-cogs', fix: 'fix-nav', expand: 'collapse' },
+            { path: '/products', title: 'Products', icon: 'fa fa-cubes', list: 'content' },
+            { path: '/warehouses', title: 'Warehouses', icon: 'fa fa-home', list: 'content' },
+            { path: '/raw_material_type', title: 'Raw_Material_Type', icon: 'fa fa-cubes', list: 'content' },
+            { path: '/receive_orders', title: 'Receive_Orders', icon: 'fa fa-file-text-o', list: 'content' },
+            { path: '/vendors', title: 'Vendors', icon: 'fa fa-users', list: 'content' },
+            { path: '/purchase_orders', title: 'Purchase_Orders', icon: 'fa fa-file-text-o', list: 'content' },
+            { path: '/transfers', title: 'Transfers', icon: 'fa fa-cubes', list: 'content' },
+            { path: '/products_division', title: 'Products_Division', icon: 'fa fa-cubes', list: 'content' },
+            { path: '/products_aggregation', title: 'Products_Aggregation', icon: 'fa fa-cubes', list: 'content' },
+            { path: '/stock_movement', title: 'Stock_Movement', icon: 'fa fa-cubes', list: 'content' },
+            { path: '/damaged_deteriorate', title: 'Damaged_Deteriorate', icon: 'fa fa-cubes', list: 'content' },
+          ],
+        },
+        {
+          company_tab: true,
+          links: [
+            { path: '', title: 'Company', icon: 'fa fa-dashboard', fix: 'fix-nav', expand: 'collapse' },
+            { path: '/chart_of_accounts', title: 'Chart_of_Accounts', icon: 'fa fa-money', list: 'content' },
+            { path: '/transfer_accounts', title: 'Transfer_Accounts', icon: 'fa fa-money', list: 'content' },
+            { path: '/deposits', title: 'Deposit', icon: 'fa fa-money', list: 'content' },
+            { path: '/return_deposits', title: 'Return_Deposit', icon: 'fa fa-money', list: 'content' },
+          ],
+        },
+        {
+          sales_tab: true,
+          links: [
+            { path: '', title: 'Sellers', icon: 'fa fa-dashboard', fix: 'fix-nav', expand: 'collapse' },
+            { path: '/sellers', title: 'Sellers', icon: 'fa fa-user', list: 'content' },
+            { path: '/seller_payments_docs', title: 'Seller_Payments', icon: 'fa fa-user', list: 'content' },
+            { path: '/seller_statement', title: 'Seller_SOA', icon: 'fa fa fa-money', list: 'content' },
+          ],
+        },
+        {
+          settings_tab: true,
+          links: [
+            { path: '', title: 'General_Parameters', icon: 'fa fa-dashboard', fix: 'fix-nav', expand: 'collapse' },
+            { path: '/general_settings', title: 'General_Settings', icon: 'fa fa-home', list: 'content' },
+            { path: '/sidebar_reports', title: 'Custom_Reports', icon: 'fa fa-home', list: 'content' },
+          ],
+        },
+      ],
+    };
+  },
+  computed: {
+    user() {
+      return window.apex.user;
+    },
+    installed_at() {
+      return window.apex.installed_at;
+    },
+    fiscal_year() {
+      return window.apex.fiscal_year;
+    },
+    currentPath() {
+      return this.$route.path;
+    },
+    activeList() {
+      return this.lists.filter((group) => {
+        if (group.settings_tab) return this.user.is_settings_tab;
+        if (group.company_tab) return this.user.is_company_tab;
+        if (group.sales_tab) return this.user.is_sales_tab;
+        if (group.procurment_tab) return this.user.is_procurment_tab;
+        if (group.accounting_tab) return this.user.is_accounting_tab;
+        if (group.production_tab) return this.user.is_production_tab;
+        if (group.dashboard_tab) return this.user.is_dashboard;
+        if (group.admin) return this.user.is_admin;
+        return false;
+      });
+    },
+  },
+  methods: {
+    toggleGroup(index) {
+      if (this.expandedGroups.includes(index)) {
+        this.expandedGroups = this.expandedGroups.filter(i => i !== index);
+      } else {
+        this.expandedGroups.push(index);
+      }
+    },
+    isExpanded(index) {
+      return this.expandedGroups.includes(index);
+    },
+  },
+};
+</script>
+
+<style scoped>
+.sidebar-inner {
+  padding: 15px;
+  height: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.sidebar-inner::-webkit-scrollbar {
+  display: none;
+}
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar-group + .sidebar-group {
+  margin-top: 5px;
+  border-top: 1px solid #34495e;
+}
+.sidebar-parent {
+  width: 100%;
+  background: none;
+  border: none;
+  color: #000;
+  font-size: 14px;
+  padding: 5px;
+  text-align: right;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+.sidebar-parent:hover {
+  background-color: #dedede;
+  border-radius: 4px;
+}
+.sidebar-children {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0 0;
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.sidebar-child {
+  padding: 5px;
+}
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.sidebar-link i {
+  margin-left: 5px;
+  min-width: 20px;
+  font-size: 14px;
+  color: #bdc3c7;
+}
+.sidebar-link:hover {
+  color: #1abc9c;
+}
+.active-link > .sidebar-link {
+  background-color: #1abc9c;
+  border-radius: 4px;
+  color: white !important;
+}
+.active-link > .sidebar-link i {
+  color: white !important;
+}
+</style>

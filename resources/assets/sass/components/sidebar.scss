@@ -1,0 +1,107 @@
+/* =========================
+   Sidebar Styles
+========================= */
+.sidebar {
+  width: 240px;
+  background: #f8f8f8;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  border-right: 1px solid #e0e0e0;
+  font-family: Lato;
+
+  &-inner {
+    height: 100%;
+    overflow-y: auto;
+    padding-top: 64px; /* space for top navbar */
+    scrollbar-width: thin;
+    scrollbar-color: #c1c1c1 transparent;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #c1c1c1;
+      border-radius: 3px;
+    }
+  }
+
+  &-links {
+    height: 100%;
+  }
+
+  &-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: block;
+
+      &.active > .sidebar-link {
+        background-color: #e0e7ff;
+        color: #1d4ed8;
+      }
+
+      &:hover > .sidebar-link {
+        background-color: #e0e7ff;
+        color: #1d4ed8;
+      }
+
+      .sidebar-sublist {
+        display: none;
+        list-style: none;
+        padding-left: 20px;
+        margin: 0;
+
+        li {
+          padding: 5px 0;
+
+          &:hover > a {
+            color: #1d4ed8;
+          }
+        }
+      }
+
+      &.open > .sidebar-sublist {
+        display: block;
+      }
+    }
+  }
+
+  &-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    color: #222d32;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #e0e7ff;
+      color: #1d4ed8;
+      border-left: 3px solid #1d4ed8;
+    }
+
+    i {
+      margin-left: auto;
+      transition: transform 0.2s ease;
+    }
+
+    &.open i {
+      transform: rotate(90deg);
+    }
+  }
+
+  &-break {
+    height: 1px;
+    margin: 0 0 10px 0;
+    background-color: #e0e0e0;
+  }
+}

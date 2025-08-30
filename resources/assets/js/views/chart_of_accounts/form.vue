@@ -1,0 +1,221 @@
+<template>
+    <div v-if="show">
+        <div class="panel">
+            <div class="panel-heading">
+                <span class="panel-title">{{title}} Account</span>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col col-4">
+                        <div class="form-group">
+                            <label>Name En</label>
+                            <input type="text" class="form-control" v-model="form.name_en">
+                            <error-text :error="error.name_en"></error-text>
+                        </div>
+                    </div>
+                    <div class="col col-4">
+                        <div class="form-group">
+                            <label>Name Ar</label>
+                            <input type="text" class="form-control" v-model="form.name_ar">
+                            <error-text :error="error.name_ar"></error-text>
+                        </div>
+                    </div>
+                    <div class="col col-4">
+                        <div class="form-group">
+                            <label>Code</label>
+                            <input type="text" class="form-control" v-model="form.code">
+                            <error-text :error="error.code"></error-text>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                     <div class="col col-4">
+                        <div class="form-group">
+                            <label>Balance</label>
+                            <input type="text" disabled class="form-control" v-model="form.balance">
+                            <error-text :error="error.balance"></error-text>
+                        </div>
+                    </div>
+                    <div class="col col-4">
+                        <div class="form-group">
+                            <label>Debit</label>
+                            <input type="text" disabled class="form-control" v-model="form.debit">
+                            <error-text :error="error.debit"></error-text>
+                        </div>
+                    </div>
+                    <div class="col col-4">
+                        <div class="form-group">
+                            <label>Credit</label>
+                            <input type="text" disabled class="form-control" v-model="form.debit">
+                            <error-text :error="error.debit"></error-text>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-4">
+                        <div class="form-group">
+                            <label>Currency</label>
+                            <typeahead :initial="form.currency"
+                                :url="currencyURL"
+                                @input="onCurrencyUpdate"
+                            >
+                            </typeahead>
+                            <error-text :error="error.currency_id"></error-text>
+                        </div>
+                    </div>
+                    <div class="col col-4">
+                        <div class="form-group">
+                            <label>Class</label>
+                            <typeahead :initial="form.classes"
+                                :url="classesURL"
+                                @input="onClassUpdate"
+                            >
+                            </typeahead>
+                            <error-text :error="error.class_code"></error-text>
+                        </div>
+                    </div>
+                    <div class="col col-4">
+                        <div class="form-group">
+                            <label>Vat Account</label>
+                            <typeahead :initial="form.vat_account"
+                                :url="vataccountURL"
+                                @input="onVatAccountUpdate"
+                            >
+                            </typeahead>
+                            <error-text :error="error.vat_account"></error-text>
+                        </div>
+                    </div>
+                <hr>
+            </div>
+            </div>
+            </div>
+            <div class="panel-footer">
+                <spinner v-if="isProcessing"></spinner>
+                <div class="btn-group" v-else>
+                    <button :disabled="isProcessing" @click="save" class="btn btn-primary">
+                        Save
+                    </button>
+                    <button :disabled="isProcessing" v-if="!isEdit"
+                        @click="saveAndNew" class="btn btn-secondary">
+                        Save and New
+                    </button>
+                    <router-link :disabled="isProcessing" :to="`${resource}/${$route.params.id}`"
+                        class="btn" v-if="isEdit">
+                        Cancel
+                    </router-link>
+                    <router-link :disabled="isProcessing" :to="`${resource}`"
+                        class="btn" v-else>
+                        Cancel
+                    </router-link>
+                </div>
+            </div>
+        </div>
+</template>
+<script type="text/javascript">
+    import Vue from 'vue'
+    import ErrorText from '../../components/form/ErrorText.vue'
+    import Typeahead from '../../components/form/Typeahead.vue'
+    import Spinner from '../../components/loading/Spinner.vue'
+    import { get, byMethod } from '../../lib/api'
+    import { form } from '../../lib/mixins'
+
+    function initializeUrl (to) {
+        let urls = {
+            'create': `/api/chart_of_accounts/create`,
+            'edit': `/api/chart_of_accounts/${to.params.id}/edit`,
+            'clone': `/api/chart_of_accounts/${to.params.id}/edit?mode=clone`,
+        }
+
+        return (urls[to.meta.mode] || urls['create'])
+    }
+
+    export default {
+        computed: {
+            user() {
+                return window.apex.user
+            },
+        },
+        components: { ErrorText, Typeahead, Spinner },
+        mixins: [ form ],
+        data () {
+            return {
+                resource: '/chart_of_accounts',
+                store: '/api/chart_of_accounts',
+                method: 'POST',
+                title: 'Create',
+                message: 'You have successfully created  Ledger Account!',
+                currencyURL: '/api/search/currencies',
+                classesURL: '/api/search/chart_classes',
+                vataccountURL: '/api/search/ledger_vat_accounts', 
+            }
+        },
+        created() {
+            if(this.mode === 'edit') {
+                this.store = `/api/chart_of_accounts/${this.$route.params.id}`
+                this.message = 'You have successfully updated Ledger Account!'
+                this.method = 'PUT'
+                this.title = 'Edit'
+            }
+        },
+        beforeRouteEnter(to, from, next) {
+
+            get(initializeUrl(to))
+                .then(res => {
+                    next(vm => vm.setData(res))
+                })
+                // catch 422
+        },
+        beforeRouteUpdate (to, from, next) {
+            this.show = false
+
+            get(initializeUrl(to))
+                .then(res => {
+                    this.setData(res)
+                    next()
+                })
+                //catch 422
+        },
+        methods: {
+            save() {
+                this.submit((data) => {
+                    this.success()
+                    this.$router.push(`${this.resource}/${data.id}`)
+                })
+            },
+            onCurrencyUpdate(e) {
+                const currency = e.target.value
+
+                Vue.set(this.form, 'currency_id', currency.id)
+                Vue.set(this.form, 'currency', currency)
+            },
+            onClassUpdate(e) {
+                const classes = e.target.value
+
+                Vue.set(this.form, 'class_code', classes.code)
+                Vue.set(this.form, 'classes', classes)
+            },
+            onVatAccountUpdate(e) {
+                const vat_account = e.target.value
+
+                Vue.set(this.form, 'vat_account_id', vat_account.id)
+                Vue.set(this.form, 'vat_account_code', vat_account.code)
+                Vue.set(this.form, 'vat_account_name', vat_account.name_en)
+                Vue.set(this.form, 'vat_account', vat_account)
+            },
+            saveAndNew() {
+                this.submit((data) => {
+                    const id = Math.random().toString(36).substring(7)
+                    this.endProcessing()
+                    this.success()
+                    this.$router.push(`${this.resource}/create?new=${id}`)
+                })
+            },
+            setData(res) {
+                Vue.set(this.$data, 'form', res.data.form)
+                this.$title.set(`Chart Of Accounts ${this.title}`)
+                this.$bar.finish()
+                this.show = true
+            }
+        }
+    }
+</script>

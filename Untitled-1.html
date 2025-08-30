@@ -1,0 +1,270 @@
+<ul class="form-group">
+<li class="announcement-li">
+    <span>Reports:</span>
+    <ul>
+      <li class="announcement-li-li">
+        <p>All Reports have  been adjusted to be exported with proper values as PDF/Excel.</p>
+      </li>
+      <li class="announcement-li-li">
+        <p>Missing Reports have been added.</p>
+      </li>
+      <li class="announcement-li-li">
+        <p>Price Changes Report Done.</p>
+      </li>
+    </ul>
+</li>
+<li class="announcement-li">
+  <span>Products:</span>
+  <ul>
+    <li class="announcement-li-li">
+      <p>Brands Adjustment.</p>
+    </li>
+    <li class="announcement-li-li">
+      <p>Items Per Box.</p>
+    </li>
+  
+  </ul>
+</li>
+<li class="announcement-li">
+    <span>Invoices:</span>
+    <ul>
+      <li class="announcement-li-li">
+        <p>Now you can Re-open Confirmed/Sent Documents.</p>
+      </li>
+      <li class="announcement-li-li">
+        <p>If the invoice is already paid or partially paid, when clicking reopen, the amount paid will be converted to a credit note document, to be applied later once the invoice editing is done!</p>
+      </li>
+      <li class="announcement-li-li">
+        <p>Product name will not change after renaming submited products</p>
+      </li>
+      <li class="announcement-li-li">
+        <p>Discount Calculation bug fixed.</p>
+      </li>
+    </ul>
+</li>
+<li class="announcement-li">
+    <span>Quick History:</span>
+    <ul>
+      <li class="announcement-li-li">
+        <p>When creating an Invoice/Purchase Document, after selecting Client/Vendor and the Product, a quick link button will appear</p>
+      </li>
+      <li class="announcement-li-li">
+        <p>This link will display the sale/purchase history for the selected fields.</p>
+      </li>
+    </ul>
+</li>
+<li class="announcement-li">
+    <span>Important Note:&nbsp;<i style="color: darkblue;" class="fa fa-exclamation-triangle"></i></span>
+    <ul>
+      <li class="announcement-li-li">
+        <p>Make sure after submitting a new purchase order, to receive the quantities as reception, in order to adjust the stock.</p>
+      </li>
+      <li class="announcement-li-li">
+        <p>Once Received, better to generate a supplier invoice "Vendor Bill", in order to add payments to these bills.</p>
+      </li>
+      <li class="announcement-li-li">
+        <p>Following this procedure will allow us to monitor the balance amounts and audit the profit by the next year.</p>
+      </li>
+    </ul>
+</li>
+</ul>
+<style>
+
+.modal {
+  border-radius: .8rem;
+  color: var(--light);
+  background: var(--background);
+  box-shadow: var(--m-shadow, .4rem .4rem 10.2rem .2rem) var(--shadow-1);
+  overflow: hidden;
+}
+
+.modal__title {
+  font-size: 3.2rem;
+}
+.modal__text {
+  padding: 0 4rem;
+  margin-top: 4rem;
+
+  font-size: 1.6rem;
+  line-height: 2;
+}
+
+.modal__btn {
+  margin-top: 4rem;
+  padding: 1rem 1.6rem;
+  border: 1px solid var(--border-color);
+  border-radius: 100rem;
+
+  color: inherit;
+  background: transparent;
+  font-size: 1.4rem;
+  font-family: inherit;
+  letter-spacing: .2rem;
+
+  transition: .2s;
+  cursor: pointer;
+}
+
+.modal__btn:nth-of-type(1) {
+  margin-right: 1rem;
+}
+
+.modal__btn:hover,
+.modal__btn:focus {
+  background: var(--focus);
+  border-color: var(--focus);
+  transform: translateY(-.2rem);
+}
+
+
+/* link-... */
+.link-1 {
+  font-size: 1.8rem;
+
+  color: var(--light);
+  background: var(--background);
+  box-shadow: .4rem .4rem 2.4rem .2rem var(--shadow-1);
+  border-radius: 100rem;
+  padding: 1.4rem 3.2rem;
+
+  transition: .2s;
+}
+
+.link-1:hover,
+.link-1:focus {
+  transform: translateY(-.2rem);
+  box-shadow: 0 0 4.4rem .2rem var(--shadow-2);
+}
+
+.link-1:focus {
+  box-shadow:
+    0 0 4.4rem .2rem var(--shadow-2),
+    0 0 0 .4rem var(--global-background),
+    0 0 0 .5rem var(--focus);
+}
+
+.link-2 {
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid var(--border-color);
+  border-radius: 100rem;
+
+  color: inherit;
+  font-size: 2.2rem;
+
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: .2s;
+}
+
+.link-2::before {
+  content: '×';
+
+  transform: translateY(-.1rem);
+}
+
+.link-2:hover,
+.link-2:focus {
+  background: var(--focus);
+  border-color: var(--focus);
+  transform: translateY(-.2rem);
+}
+
+.abs-site-link {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  color: hsla(0, 0%, 1000%, .6);
+  font-size: 1.6rem;
+}
+.announcement-li {
+    list-style: auto;
+    margin:10px;
+}
+.announcement-li-li {
+  list-style: circle;
+    color: darkcyan;
+    margin: 10px 20px;
+}
+.announcement-li > span{
+    color:red; font-weight:bold
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 24px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.active-slider::before{
+    left: 16px !important;
+}
+.active-slider {
+    background: green;
+}
+
+
+.modal-wrapper {
+    overflow: hidden !important;
+}
+</style>

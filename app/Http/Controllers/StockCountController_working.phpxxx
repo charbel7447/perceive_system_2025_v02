@@ -1,0 +1,139 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Product\Product;
+use App\Category;
+use App\SubCategory;
+use App\SubSubCategory;
+
+use App\StockCount\StockCount;
+use App\StockCount\StockCountProduct;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
+class StockCountController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+   public function index()
+    {
+        $categories = Category::all();
+        $subcategories = SubCategory::all();
+        $subsubcategories = SubSubCategory::all();
+        $stockCounts = StockCount::with('products')->orderBy('id','desc')->get();
+        return view('stock_count.index', compact('categories','subcategories','subsubcategories','stockCounts'));
+    }
+
+    public function store(Request $request)
+    {
+        $stockCount = StockCount::create([
+            'count_date' => now(),
+            'category_id' => $request->category_id,
+            'sub_category_id' => $request->sub_categoryid,
+            'sub_sub_category_id' => $request->sub_sub_categoryid,
+            'user_id' => Auth::id(),
+            'created_by' => Auth::user()->name
+        ]);
+
+        $query = Product::query();
+
+        if ($request->category_id) $query->where('category_id', $request->category_id);
+        if ($request->sub_categoryid) $query->where('sub_categoryid', $request->sub_categoryid);
+        if ($request->sub_sub_categoryid) $query->where('sub_sub_categoryid', $request->sub_sub_categoryid);
+
+        $products = $query->get();
+
+        foreach ($products as $product) {
+            StockCountProduct::create([
+                'stock_count_id' => $stockCount->id,
+                'product_id' => $product->id,
+                'code' => $product->code,
+                'category_id' => $product->category_id,
+                'sub_category_id' => $product->sub_categoryid,
+                'sub_sub_category_id' => $product->sub_sub_categoryid,
+                'uom_id' => $product->uom_id ?? null,
+                'current_stock' => $product->current_stock,
+                'inventoried_stock' => 0,
+            ]);
+        }
+
+        return redirect()->route('stock_count.show', $stockCount->id);
+    }
+
+    public function show($id)
+    {
+        $stockCount = StockCount::with('products')->findOrFail($id);
+        return view('stock_count.show', compact('stockCount'));
+    }
+
+    // AJAX: Scan barcode → return product info
+public function scanAjax(Request $request, $stockCountId)
+{
+    $request->validate(['barcode' => 'required|string']);
+
+    $product = StockCountProduct::with(['category', 'subCategory', 'subSubCategory'])
+        ->where('stock_count_id', $stockCountId)
+        ->where('code', $request->barcode)
+        ->first();
+
+    if (!$product) {
+        return response()->json(['error' => 'Product not found in this stock count.']);
+    }
+
+    return response()->json([
+        'id' => $product->id,
+        'code' => $product->code,
+        'current_stock' => $product->current_stock,
+        'category_id' => $product->category_id,
+        'category_name' => $product->category ? $product->category->name : null,
+        'sub_category_id' => $product->sub_category_id,
+        'sub_category_name' => $product->subCategory ? $product->subCategory->name : null,
+        'sub_sub_category_id' => $product->sub_sub_category_id,
+        'sub_sub_category_name' => $product->subSubCategory ? $product->subSubCategory->name : null,
+        'inventoried_stock' => $product->inventoried_stock,
+        'scanned_at' => $product->scanned_at,
+        'variance' => $product->inventoried_stock - $product->current_stock
+    ]);
+}
+
+
+    // AJAX: Confirm scan & update inventoried_stock
+    public function confirmAjax(Request $request, $stockCountId, $productId)
+    {
+        $request->validate(['inventoried_stock' => 'required|numeric|min:0']);
+
+        $product = StockCountProduct::where('stock_count_id', $stockCountId)
+            ->where('id', $productId)
+            ->firstOrFail();
+
+        $product->inventoried_stock = $request->inventoried_stock;
+        $product->scanned_at = now();
+        $product->variance = $product->inventoried_stock - $product->current_stock;
+        $product->save();
+
+        return response()->json($product);
+    }
+
+
+        // Submit stock count -> update real inventory
+    public function submit(StockCount $stockCount)
+    {
+        foreach($stockCount->products as $item){
+            $product = Product::find($item->product_id);
+            if($product){
+                $product->current_stock = $item->inventoried_stock;
+                $product->save();
+            }
+        }
+
+        $stockCount->submitted_at = now();
+        $stockCount->save();
+
+        return response()->json(['success'=>true]);
+    }

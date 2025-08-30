@@ -1,0 +1,12 @@
+ALTER TABLE `bills` ADD `posted` INT(255) NULL AFTER `created_at`, ADD `journal_id` INT(255) NULL AFTER `posted`, ADD `posted_at` TIMESTAMP NULL AFTER `journal_id`;
+ALTER TABLE `advance_payments` ADD `posted` INT(255) NULL AFTER `created_at`, ADD `journal_id` INT(255) NULL AFTER `posted`, ADD `posted_at` TIMESTAMP NULL AFTER `journal_id`;
+ALTER TABLE `client_payments` ADD `posted` INT(255) NULL AFTER `created_at`, ADD `journal_id` INT(255) NULL AFTER `posted`, ADD `posted_at` TIMESTAMP NULL AFTER `journal_id`;
+ALTER TABLE `credit_notes` ADD `posted` INT(255) NULL AFTER `created_at`, ADD `journal_id` INT(255) NULL AFTER `posted`, ADD `posted_at` TIMESTAMP NULL AFTER `journal_id`;
+ALTER TABLE `customer_returns` ADD `posted` INT(255) NULL AFTER `created_at`, ADD `journal_id` INT(255) NULL AFTER `posted`, ADD `posted_at` TIMESTAMP NULL AFTER `journal_id`;
+ALTER TABLE `debit_notes` ADD `posted` INT(255) NULL AFTER `created_at`, ADD `journal_id` INT(255) NULL AFTER `posted`, ADD `posted_at` TIMESTAMP NULL AFTER `journal_id`;
+ALTER TABLE `expenses` ADD `posted` INT(255) NULL AFTER `created_at`, ADD `journal_id` INT(255) NULL AFTER `posted`, ADD `posted_at` TIMESTAMP NULL AFTER `journal_id`;
+ALTER TABLE `purchase_orders` ADD `posted` INT(255) NULL AFTER `created_at`, ADD `journal_id` INT(255) NULL AFTER `posted`, ADD `posted_at` TIMESTAMP NULL AFTER `journal_id`;
+ALTER TABLE `receive_orders` ADD `posted` INT(255) NULL AFTER `created_at`, ADD `journal_id` INT(255) NULL AFTER `posted`, ADD `posted_at` TIMESTAMP NULL AFTER `journal_id`;
+ALTER TABLE `sales_orders` ADD `posted` INT(255) NULL AFTER `created_at`, ADD `journal_id` INT(255) NULL AFTER `posted`, ADD `posted_at` TIMESTAMP NULL AFTER `journal_id`;
+ALTER TABLE `seller_payments` ADD `posted` INT(255) NULL AFTER `created_at`, ADD `journal_id` INT(255) NULL AFTER `posted`, ADD `posted_at` TIMESTAMP NULL AFTER `journal_id`;
+ALTER TABLE `vendor_payments` ADD `posted` INT(255) NULL AFTER `created_at`, ADD `journal_id` INT(255) NULL AFTER `posted`, ADD `posted_at` TIMESTAMP NULL AFTER `journal_id`;

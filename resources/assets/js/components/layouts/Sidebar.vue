@@ -1,0 +1,271 @@
+<template>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-inner" v-if="(installed_at == fiscal_year)">
+            <div class="sidebar-links">
+                <ul class="sidebar-list"   v-for="list in activeList">
+                    <li class="sidebar-break"></li>
+                      <li
+                        v-for="link in list.links"
+                        :key="link.path"
+                        type="button"
+                        :data-toggle="link.expand"
+                        style="direction: rtl;"
+                         :class="[link.title, currentPath === link.path ? 'active-link' : '']"
+                    >
+                        <router-link :to="link.path" class="sidebar-link"  >
+                        <i class="fa" :class="link.icon"></i>
+                            <div class="sidebar-link_inner">
+                                <span class="sidebar-text">{{ link.title }}</span>
+                            </div>
+                            <!-- <i class="fa fa-caret-right"></i> -->
+                        </router-link>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div v-else>
+            <div class="col col-12"  style="margin: 25% auto;">
+            &nbsp;
+            </div>
+        </div>
+    </div>
+</template>
+<script type="text/javascript">
+    export default {
+        computed: {
+            user() {
+                return window.apex.user
+            },
+            installed_at(){
+                 return window.apex.installed_at
+            },
+            fiscal_year(){
+                 return window.apex.fiscal_year
+            },
+             app_color() {
+                return window.apex.app_color
+            },
+             currentPath() {
+            return this.$route.path;
+        },
+            activeList() {
+                return this.lists.filter((item) => {
+                    if(item.settings_tab){
+                        return this.user.is_settings_tab
+                    }else if(item.company_tab){
+                        return this.user.is_company_tab
+                    }else if(item.sales_tab){
+                        return this.user.is_sales_tab
+                    }else if(item.procurment_tab){
+                        return this.user.is_procurment_tab
+                    }else if(item.accounting_tab){
+                        return this.user.is_accounting_tab
+                    }else if(item.admin){
+                        return this.user.is_admin
+                    }else if(item.dashboard_tab){
+                        return this.user.is_dashboard
+                    }else if(item.production_tab){
+                        return this.user.is_production_tab
+                    }else {
+                        return 0
+                    }
+                }) 
+            },
+        },
+        data() {
+            return {
+                lists: [
+                    {
+                        dashboard_tab: true,
+                        links: [
+                            {path: '/', title: 'Dashboard', icon: 'fa fa-dashboard',fix: 'fix-nav', },
+                            { path: '/sidebar_reports', title: 'General_Reports', icon: 'fa fa-home' },
+                            { path: '/general_settings', title: 'General_Setup', icon: 'fa  fa-cogs' },
+                             { path: '/custom_query', title: 'Custom_Query', icon: 'fa  fa-cogs' }
+                        ]
+                    },
+                    
+                    {
+                        sales_tab: true,
+                        links: [
+                            {path: '', title: 'Sales', icon: 'fa fa-dashboard', fix: 'fix-nav', expand: 'collapse'},
+                            {path: '/sales_orders', title: 'Sales_Orders', icon: 'fa fa-file-text-o', list: 'content'},
+                            {path: '/invoices', title: 'Client_Invoices', icon: 'fa fa-file-text-o', list: 'content'},
+                            {path: '/quotations', title: 'Quotations', icon: 'fa fa-file-text-o', list: 'content'},
+                            {path: '/clients', title: 'Clients', icon: 'fa fa-user', list: 'content'},
+                        ]
+                    },
+
+                    {
+                        procurment_tab: true,
+                        links: [
+                            {path: '', title: 'Purchase_Orders', icon: 'fa fa-cogs', fix: 'fix-nav', expand: 'collapse'}, 
+                            {path: '/receive_orders', title: 'Receive_Orders', icon: 'fa fa-file-text-o', list: 'content'},
+                            {path: '/purchase_orders', title: 'Purchase_Orders', icon: 'fa fa-file-text-o', list: 'content'},
+                           
+                            // {path: '/goods_issue', title: 'Goods Issue', icon: 'file-o'}
+                        ]
+                    },
+                    {
+                        procurment_tab: true,
+                        links: [
+                            {path: '', title: 'Procurment & Stock', icon: 'fa fa-cogs', fix: 'fix-nav', expand: 'collapse'}, 
+                            {path: '/products', title: 'Products', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/customer_returns', title: 'Customer Returns', icon: 'fa fa-cubes', list: 'content'},
+                            // {path: '/goods_issue', title: 'Goods Issue', icon: 'file-o'}
+                        ]
+                    },
+                    {
+                        accounting_tab: true,
+                        links: [
+                            {path: '', title: 'Accounting', icon: 'fa fa-dashboard', fix: 'fix-nav', expand: 'collapse'},
+                            {path: '/clients', title: 'Clients', icon: 'fa fa-user', list: 'content'},
+                            {path: '/journal_vouchers', title: 'Journal_Vouchers', icon: 'fa fa-file-text-o', list: 'content'},
+                            {path: '/journal_vouchers_movement', title: 'JV_Movement', icon: 'fa fa-file-text-o', list: 'content'},
+                            {path: '/receipt_vouchers', title: 'Receipt_Voucher', icon: 'fa fa-file-text-o', list: 'content'},
+                            {path: '/payment_vouchers', title: 'Payment_Voucher', icon: 'fa fa-file-text-o', list: 'content'},
+                            {path: '/advance_payments', title: 'Client_Advance_Payments', icon: 'fa fa-money', list: 'content'},
+                            {path: '/invoices', title: 'Client_Invoices', icon: 'fa fa-file-text-o', list: 'content'},
+                            {path: '/credit_notes', title: 'Credit_Notes', icon: 'fa fa-file-text-o', list: 'content'},
+                            {path: '/debit_notes', title: 'Debit_Notes', icon: 'fa fa-file-text-o', list: 'content'},
+                            // {path: '/client_payments', title: 'Client_Payments', icon: 'fa fa-money', list: 'content'},
+                            {path: '/statement', title: 'Client_SOA', icon: 'fa fa-money', list: 'content'},
+                            {path: '/expenses', title: 'Vendor_Expenses', icon: 'fa fa-file-text-o', list: 'content'},
+                            {path: '/bills', title: 'Vendor_Bills', icon: 'fa fa-file-text-o', list: 'content'},
+                            // {path: '/vendor_payments', title: 'Vendor_Payments', icon: 'fa fa-money', list: 'content'},
+                            {path: '/vendor_statement', title: 'Vendor_SOA', icon: 'fa fa-money', list: 'content'},
+                        ]
+                    },
+                    {
+                        procurment_tab: true,
+                        links: [
+                            {path: '', title: 'Procurment & Stock', icon: 'fa fa-cogs', fix: 'fix-nav', expand: 'collapse'}, 
+                            {path: '/products', title: 'Products', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/warehouses', title: 'Warehouses', icon: 'fa fa-home', list: 'content'},
+                            {path: '/raw_material_type', title: 'Raw_Material_Type', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/receive_orders', title: 'Receive_Orders', icon: 'fa fa-file-text-o', list: 'content'},
+                            {path: '/vendors', title: 'Vendors', icon: 'fa fa-users', list: 'content'},
+                            {path: '/purchase_orders', title: 'Purchase_Orders', icon: 'fa fa-file-text-o', list: 'content'},
+                            {path: '/transfers', title: 'Transfers', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/products_division', title: 'Products_Division', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/products_aggregation', title: 'Products_Aggregation', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/stock_movement', title: 'Stock_Movement', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/stock_count', title: 'Stock_Count', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/damaged_deteriorate', title: 'Damaged_Deteriorate', icon: 'fa fa-cubes', list: 'content'},
+                            
+                            // {path: '/goods_issue', title: 'Goods Issue', icon: 'file-o'}
+                        ]
+                    },
+
+                    {
+                        company_tab: true,
+                        links: [
+                            {path: '/', title: 'Company', icon: 'fa fa-dashboard', fix: 'fix-nav', expand: 'collapse'},
+                            // {path: '/accounts', title: 'Accounts', icon: 'fa fa-money', list: 'content'},
+                            {path: '/chart_of_accounts', title: 'Chart_of_Accounts', icon: 'fa fa-money', list: 'content'},
+                            {path: '/balance_sheet', title: 'balance_sheet', icon: 'fa fa-money', list: 'content'},
+                            {path: '/general_ledger', title: 'General Ledger', icon: 'fa fa-money', list: 'content'},
+                            {path: '/profit_loss', title: 'Profit & Loss (Income Statement)', icon: 'fa fa-money', list: 'content'},
+                            {path: '/transfer_accounts', title: 'Transfer_Accounts', icon: 'fa fa-money', list: 'content'},
+                            {path: '/deposits', title: 'Deposit', icon: 'fa fa-money', list: 'content'},
+                            {path: '/return_deposits', title: 'Return_Deposit', icon: 'fa fa-money', list: 'content'},
+                            // {path: '/employees', title: 'Employees', icon: 'fa fa-money', list: 'content'},
+                            // {path: '/payroll', title: 'Payroll', icon: 'fa fa-money', list: 'content'},
+                        ]
+                    },
+                    {
+                        sales_tab: true,
+                        links: [
+                            {path: '', title: 'Sellers', icon: 'fa fa-dashboard', fix: 'fix-nav', expand: 'collapse'},
+                            {path: '/sellers', title: 'Sellers', icon: 'fa fa-user', list: 'content'},
+                            {path: '/seller_payments_docs', title: 'Seller_Payments', icon: 'fa fa-user', list: 'content'},
+                            {path: '/seller_statement', title: 'Seller_SOA', icon: 'fa fa fa-money', list: 'content'},
+                        ]
+                    },
+                 
+                  
+                    // {
+                    //     procurment_tab: true,
+                    //     links: [
+                    //         {path: '', title: 'Shipping', icon: 'fa fa-cogs', fix: 'fix-nav', expand: 'collapse'}, 
+                    //         {path: '/shippers', title: 'Define_Shippers', icon: 'fa fa-users', list: 'content'},
+                    //         {path: '/container_orders', title: 'Shipments', icon: 'fa fa-file-text-o', list: 'content'},
+                    //         {path: '/container_receive_orders', title: 'Receive_Shipments', icon: 'fa fa-file-text-o', list: 'content'},
+                    //         {path: '/shipper_bills', title: 'Shippers_Bills', icon: 'fa fa-file-text-o', list: 'content'},
+                    //         {path: '/shipper_payments', title: 'Shippers_Payments', icon: 'fa fa-file-text-o', list: 'content'},
+                    //         {path: '/shipper_statement', title: 'Shippers_SOA', icon: 'fa fa-file-text-o', list: 'content'},
+                            
+                    //     ]
+                    // },
+                    {
+                        production_tab: true,
+                        links: [
+                            {path: '', title: 'Production', icon: 'fa fa-cogs', fix: 'fix-nav', expand: 'collapse'}, 
+                            {path: '/machines', title: 'Machines', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/finished_product', title: 'Product', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/finished_product_type', title: 'Product_Type', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/job_order', title: 'Job_Orders', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/line_production', title: 'Line_Production', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/packaging', title: 'Packaging', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/delivery_note', title: 'Delivery_Note', icon: 'fa fa-cubes', list: 'content'},
+                            {path: '/attributes', title: 'Attributes', icon: 'fa fa-cubes', list: 'content'},
+                            //  {path: '/machine_attributes', title: 'Machine Attributes', icon: 'fa fa-cubes', list: 'content'},
+                            // {path: '/goods_issue', title: 'Goods Issue', icon: 'file-o'}
+                        ]
+                    },
+                    {
+                        settings_tab: true,
+                        links: [
+                            {path: '/', title: 'General Parameters', icon: 'fa fa-dashboard', fix: 'fix-nav', expand: 'collapse'},
+                            // {path: '/deliverycondition', title: 'Delivery_Condition', icon: 'fa fa-bus', list: 'content'},
+                            // {path: '/paymentcondition', title: 'Payment_Condition', icon: 'fa fa-credit-card', list: 'content'},
+                            // {path: '/exchangerate', title: 'Exchange_Rate', icon: 'fa fa-exchange', list: 'content'},
+                            // {path: '/uom', title: 'UOM', icon: 'fa fa-balance-scale', list: 'content'},
+                            // {path: '/counters', title: 'Counters', icon: 'fa fa-cogs', list: 'content'},
+                            // {path: '/currencies', title: 'Currencies', icon: 'fa fa-money ', list: 'content'},
+                           
+                            // {path: '/categories', title: 'Categories', icon: 'fa fa-list-alt', list: 'content'},
+                            // {path: '/subcategories', title: 'Sub_Categories', icon: 'fa fa-list-alt', list: 'content'},
+                             {path: '/general_settings', title: 'General Settings', icon: 'fa fa-home', list: 'content'},
+                             {path: '/sidebar_reports', title: 'Custom Reports', icon: 'fa fa-home', list: 'content'},
+                           
+                            
+                        ]
+                    },
+                    {
+                        admin: true,
+                        links: [
+                            // {path: '', title: 'Administrator', icon: 'fa fa-cogs', fix: 'fix-nav', expand: 'collapse'},
+                            // {path: '/settings', title: 'Settings', icon: 'fa fa-cogs', list: 'content'},
+                            // {path: '/users', title: 'Users', icon:'fa fa-users', list: 'content'},
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+</script>
+<style >
+
+.content {
+  display: none;
+}
+
+.fix-nav {
+    display: block !important;
+}
+.sidebar-link {
+    transition: all 0.3s ease;
+}
+
+.active-link > .sidebar-link {
+    background-color: darkslategray !important;
+    color: white !important;
+    border-radius: 4px;
+}
+
+.active-link > .sidebar-link i {
+    color: white !important;
+}
+</style>

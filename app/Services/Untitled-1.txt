@@ -1,0 +1,57 @@
+     // vendor_payment
+        // client_payment
+        // advance_payment
+        // invoice
+        // bill
+        // credit_note
+        // debit_note
+        // expenses
+        // purchase_order
+        // sales_order
+
+        $flow = JournalFlowMapping::where('process','=',$type)->value('mappings');
+
+        if invoice i got this for example
+        [{"field":"Total Amount","account_id":"17","type":"debit"},{"field":"Sub Total","account_id":"35","type":"credit"},{"field":"VAT","account_id":"29","type":"credit"},{"field":"Charges","account_id":"52","type":"credit"},{"field":"Discount","account_id":"37","type":"debit"}]
+
+        this is my journal_voucher table
+        
+    protected $columns = [
+        'id',
+        'number',
+        'currency_id',
+        'currency_name',
+        'document_date',
+        'document_type',
+        'date',
+        'exchange_rate',
+        'vat_rate',
+        'reference',
+        'user_id',
+        'created_by',
+        'year_date',
+        'total_debit',
+        'total_credit',
+        'document_id',
+        'document_number',
+        'document_date',
+        'document_total',
+        'document_currency_id',
+        'terms'
+    ];
+
+    this is my journal voucher items table
+            'account_id', 'account_name_en', 'account_name_ar','account_code','description','debit','credit'
+
+
+            for example in invoice table i have 
+            sub_total
+            total
+            discount
+            shipping
+            vat wil be total -subtotal - discount + shipping
+
+            so please need to create journal voucher entry with items, based on the flow, and amount and data taken from invoice database if type is invoice
+            what you need also from invoices table : id as document_id ,, number as document_number ,currency_id, total as document_total and date
+
+            pls full fix logic on this service to be proper automatic AI

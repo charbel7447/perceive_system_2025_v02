@@ -1,0 +1,211 @@
+<template>
+    <div>
+
+        <input type="radio" :value="1" class="form-controlx" v-model="showFilter" />
+                        
+                                     <transition name="modal" v-if="showFilter == 1">
+                                        <div class="modal-mask">
+                                            <div class="modal-wrapper">
+                                                <div class="modal-container">
+                                                    <div class="modal-heading">Product Custom Filter</div>
+                                                    <div class="modal-body">
+                                                        <form @submit.prevent="search">
+                                                            <div class="row">
+                                                                    <div class="col col-6">
+                                                                        <label><b>Product Name</b></label><br>
+                                                                        <div class="form-group">
+                                                                            <input class="form-controlx"  v-model="product_name" type="text" placeholder="product name...">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col col-6">
+                                                                        <label><b>Quantity Greater Than</b></label><br>
+                                                                        <div class="form-group">
+                                                                            <input class="form-controlx"  v-model="quantity_greater" type="text" placeholder="quanitty greater than...">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col col-6">
+                                                                        <label><b>Vendor Name</b></label><br>
+                                                                        <div class="form-group">
+                                                                            <select class="form-controlx"  v-model="vendor_id" type="text" placeholder="vendor_id...">
+                                                                                <option v-for="vend in pvendors" :v-value="vend.id">{{vend}}</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col col-6">
+                                                                        <label><b>Category Name</b></label><br>
+                                                                        <div class="form-group">
+                                                                            <select class="form-controlx"  v-model="category" type="text" placeholder="vendor_id...">
+                                                                                <option v-for="cat in pcategories" :v-value="cat.id">{{cat}}</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col col-6">
+                                                                        <label><b>Price Min</b></label><br>
+                                                                        <div class="form-group">
+                                                                            <input class="form-controlx"  v-model="price_min" type="text" placeholder="price_min...">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col col-6">
+                                                                        <label><b>Price Max</b></label><br>
+                                                                        <div class="form-group">
+                                                                            <input class="form-controlx"  v-model="price_max" type="text" placeholder="price_max...">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col col-6">
+                                                                        <label><b>Quantity Greater Than</b></label><br>
+                                                                        <div class="form-group">
+                                                                            <input class="form-controlx" v-model="quantity_greater" type="text" placeholder="quanitty greater than...">
+                                                                        </div>
+                                                                    </div>
+                                                            </div>
+                                                            <button type="submit">Filter</button>
+                                                            <button   class="btn">
+                                                                    Cancel <input  type="checkbox" :value="0" class="form-controlx" v-model="showFilter" />
+                                                                </button>
+                                                        </form>
+                                                    </div>
+                                                    </div>
+                                            </div>
+                                            </div>
+                                    </transition>
+
+                                           
+<!-- <div class="col-md-12 container">
+    <form @submit.prevent="search">
+    <input class="form-control col-md-2" style="float: left;" v-model="product_name" type="text" placeholder="product name...">
+        <select class="form-control col-md-2" style="float: left;" v-model="vendor_id" type="text" placeholder="vendor_id...">
+            <option v-for="vend in pvendors" :v-value="vend.id">{{vend}}</option>
+        </select>
+        <select class="form-control col-md-2" style="float: left;" v-model="category" type="text" placeholder="vendor_id...">
+            <option v-for="cat in pcategories" :v-value="cat.id">{{cat}}</option>
+        </select>
+        <input class="form-control col-md-2" style="float: left;" v-model="price_min" type="text" placeholder="price_min...">
+        <input class="form-control col-md-2" style="float: left;" v-model="price_max" type="text" placeholder="price_max...">
+        <input class="form-control col-md-2" style="float: left;" v-model="quantity_greater" type="text" placeholder="quanitty greater than...">
+    <button type="submit">Filter</button>
+    </form>
+</div> -->
+
+        <panel ref="panel" :heading="heading" :resource="resource">
+            
+            <span slot="title">Products</span>
+            <!-- <router-link slot="create" to="/products/create" class="btn btn-primary">
+                New Product
+            </router-link> -->
+            <tr slot-scope="props" @click="$router.push(`${resource}/${props.item.id}`)">
+                    <td>{{ props.item.id }}</td>
+                    <td> <img width="60" :src=" '/assets/uploads/media-uploader/'+props.item.thumbnail" /></td>
+                    <!-- <td v-html="props.item.barcode"></td> -->
+                    <td>{{ props.item.description | trim(80) }}</td>
+                    <td><span class="red"><strong>({{ props.item.category.number}})</strong></span>{{ props.item.category.name}}
+                     - 
+                     <span class="red"><strong>({{ props.item.sub_category.number}})</strong></span>{{ props.item.sub_category.name}}
+                    </td>
+                    <td>
+                        <li v-for="vend in props.item.items">{{vend.vendor.company}}</li>
+                    </td> 
+                   <td v-if="props.item.min_qty >= props.item.current_stock">
+                            <span style="color:red;">Minimum Stock Reached </span> <strong style="color:red;">{{props.item.current_stock}} {{props.item.uom.unit}}</strong>
+                    </td>
+                     <td v-if="props.item.min_qty < props.item.current_stock">
+                           Available Stock: <strong style="color:red;">{{props.item.current_stock}} {{props.item.uom.unit}}</strong>
+                    </td>
+                    <td>
+                        <li v-for="vend in props.item.items">{{vend.price | formatMoney(vend.currency)}}</li>
+                    </td>
+                    <td>{{ props.item.updated_by || props.item.created_by}}</td> 
+                </tr>
+        </panel>
+        <product-filter v-if="showModal" @close="showModal = false"></product-filter>
+    </div>
+</template>
+<script type="text/javascript">
+import Vue from 'vue'
+    import Panel from '../../components/search/panel.vue'
+    import { get } from '../../lib/api'
+    import ProductFilter from '../../components/modals/ProductFilter.vue'
+    import Typeahead from '../../components/form/Typeahead.vue'
+
+    export default {
+        computed: {
+            user() {
+                return window.apex.user
+            },
+        },
+        components: { Panel,ProductFilter, Typeahead },
+        data() {
+            return {
+                pvendors: [],
+                pcategories: [],
+                quantity_greater: 0,
+                price_max: 0,
+                price_min: 0,
+                product_name: 0,
+                category: 0,
+                vendor_id: 0,
+                showFilter: 0 ,
+                showModal: false,
+                resource: '/products',
+                vendorURL: '/api/search/vendors',
+                heading: [
+                    {title: 'ID', name: 'id', sort: true},
+                    {title: 'Item Code', name: 'code', sort: true},
+                    // {title: 'Barcode', name: 'code', sort: true},
+                    {title: 'Description', name: 'description', sort: true},
+                    {title: 'Category', name: 'description', sort: true},
+                    {title: 'Vendor', name: 'description', sort: true},
+                    {title: 'Stock', name: 'description', sort: true},
+                    {title: 'Vendor Price', name: 'unit_price', sort: true},
+                    {title: 'Created By', name: 'created_by', sort: true},
+                ]
+            }
+        },
+        beforeRouteEnter(to, from, next) {
+            get('/api/products', to.query)
+                .then(res => {
+                    next(vm => vm.setData(res))
+                })
+                // catch 422
+        },
+        beforeRouteUpdate (to, from, next) {
+            get('/api/products', to.query)
+                .then(res => {
+                    this.setData(res)
+                    next()
+                })
+                //catch 422
+        },
+        mounted() {
+            this.loadOptions();
+        },
+        methods: {
+            loadOptions() {
+                get('/api/search/vendors_pr') .then(pvendors => {
+                    this.pvendors = (pvendors.data);
+                });
+                get('/api/search/categories_pr') .then(pcategories => {
+                    this.pcategories = (pcategories.data);
+                });
+            },
+            search() {
+                // get(`/api/productsf?query=${this.query}`);
+                this.$router.push(`api/products/filter?product_name=${this.product_name}
+                &vendor_id=${this.vendor_id}&category=${this.category}&price_min=${this.price_min}
+                &price_max=${this.price_max}&quantity_greater=${this.quantity_greater}`)
+            },
+            onVendorUpdated(e) {
+                // const vendor = e.target.value
+
+                Vue.set(this.vendor, 1)
+            },
+            setData(res) {
+                this.$title.set(`Products`)
+                this.$refs.panel.setData(res)
+                
+            }
+        }
+    }
+</script>
+<style>
+.red {color:red;}
+</style>

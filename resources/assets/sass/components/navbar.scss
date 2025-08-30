@@ -1,0 +1,42 @@
+.navbar {
+    height: 48px;
+    &-inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    &-brand {
+        background: #fff;
+        border-bottom: 2px solid rgba(0, 0, 0, .2);
+        // height: 48px;
+        // width: 17%;
+        width: 16.35%;
+        margin: 0 -3.5px;
+    }
+    &-logo {
+        // display: block;
+        // height: 46px;
+        // width: 158.5px;
+        // padding: 5px;
+        // margin: 0 45px;
+        display: block;
+        background: #dddddd3d;
+        height: 46px;
+        /* width: 158.5px; */
+        padding: 5px 15px;
+    }
+    &-right {
+        height: 48px;
+        width: 81%;
+        padding-right: 15px;
+        text-align: right;
+        background: #fff;
+        border-bottom: 2px solid rgba(0, 0, 0, .1);
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    &-title {
+        color: #fff;
+    }
+}

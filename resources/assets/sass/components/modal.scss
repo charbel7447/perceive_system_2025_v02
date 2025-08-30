@@ -1,0 +1,119 @@
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: table;
+  transition: opacity 0.3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 50px 0;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.modal-container {
+  width: 960px;
+  max-width: 90%;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  font-family: Lato;
+  overflow: hidden;
+}
+
+.modal-container2 {
+  width: 1060px;
+  max-width: 95%;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(61, 165, 255, 0.25);
+  transition: all 0.3s ease;
+}
+
+.modal {
+  &-heading {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #d1d5db;
+    font-weight: 600;
+    background-color: #f9fafb;
+  }
+
+  &-title {
+    font-size: 18px;
+    margin: 0;
+    color: #111827;
+  }
+
+  &-control {
+    display: inline-block !important;
+    width: 400px !important;
+  }
+
+  &-body {
+    padding: 16px;
+    font-size: 14px;
+    color: #374151;
+  }
+
+  &-footer {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border-top: 1px solid #d1d5db;
+
+    button {
+      margin-left: 8px;
+      padding: 6px 14px;
+      border-radius: 3px;
+      border: none;
+      cursor: pointer;
+      background-color: #3b82f6;
+      color: #fff;
+      font-weight: 500;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: #2563eb;
+      }
+
+      &.cancel {
+        background-color: #e5e7eb;
+        color: #111827;
+
+        &:hover {
+          background-color: #d1d5db;
+        }
+      }
+    }
+  }
+}
+
+/* Modal transitions */
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.3s ease;
+}
+
+.modal-enter {
+  opacity: 0;
+  transform: scale(1.05);
+}
+
+.modal-leave-to {
+  opacity: 0;
+  transform: scale(1.05);
+}

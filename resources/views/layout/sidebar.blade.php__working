@@ -1,0 +1,258 @@
+<div id="left-sidebar" class="sidebar">
+    <a style="color: aliceblue !important;" onclick="showHideSideBar()" class="menu_toggle" id="left-button"><i class="fa fa-toggle-on"></i></a>
+    {{-- <div class="navbar-brand">
+        <a href="{{route('dashboard.index')}}"><img src="{{ asset('assets/images/icon.svg') }}" alt="Mooli Logo" class="img-fluid logo"><span>Mooli</span></a>
+        <button type="button" class="btn-toggle-offcanvas btn btn-sm float-right"><i class="fa fa-close"></i></button>
+    </div> --}}
+    <div class="sidebar-scroll">
+        <div class="user-account">
+            <div class="user_div">
+                <img src="{{ asset('assets/images/user.png') }}" class="user-photo" alt="User Profile Picture">
+            </div>
+            <div class="dropdown">
+                <span>Sistrade BI</span><br>
+                <span>Propack</span>
+                <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown"><strong>{{ Auth::user()->name }}</strong></a>
+                <ul class="dropdown-menu dropdown-menu-right account vivify flipInY">
+                    <!-- <li class="divider"></li> -->
+                    <li>
+                        <a href="/logout">logout</a>
+                    </li>
+                    <li>
+                        <a href="/personal-settings">Personal Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </div>  
+        <?php $user_resources = auth()->user()->resources_id; 
+        $user_id = auth()->user()->id; ?>
+        <nav id="left-sidebar-nav" class="sidebar-nav">
+            @if($user_id == '6' && $user_id == '19')
+            <ul id="main-menu" class="metismenu animation-li-delay">
+                <li class="header">Main</li>
+                <li class="{{ Request::segment(1) === 'logbook' ? 'active' : null }}"><a href="/logbook"><i class="fa fa-tasks"></i> <span>Machines Log</span></a></li>
+                <li class="{{ Request::segment(2) === 'confection_logbook' ? 'active' : null }}"><a href="/confection_logbook"  style="display: non;"><i class="fa fa-tasks"></i> <span>confection_logbook</span></a></li>
+                <li class="{{ Request::segment(1) === 'plate_mounting' ? 'active' : null }}"><a href="/plate_mounting"><i class="fa fa-tasks"></i> <span>plate_mounting</span></a></li>
+                <li class="{{ Request::segment(1) === 'sleeve_report' ? 'active' : null }}"><a href="/sleeve_report"><i class="fa fa-tasks"></i> <span>sleeve_report</span></a></li>
+                <li class="{{ Request::segment(1) === 'ink_type' ? 'active' : null }}"><a href="/ink_type"><i class="fa fa-tasks"></i> <span>Ink Type</span></a></li>
+                <li class="{{ Request::segment(1) === 'employees' ? 'active' : null }}"><a href="/employees"><i class="fa fa-tasks"></i> <span>Employees</span></a></li>
+                <li class="{{ Request::segment(1) === 'mounting_tape' ? 'active' : null }}"><a href="/mounting_tape"><i class="fa fa-tasks"></i> <span>Mounting Tape</span></a></li>
+                <li class="{{ Request::segment(1) === 'rejection_type' ? 'active' : null }}"><a href="/rejection_type"><i class="fa fa-tasks"></i> <span>Rejection Type</span></a></li>
+                <li class="{{ Request::segment(1) === 'ink_type' ? 'active' : null }}"><a href="/ink_type"><i class="fa fa-tasks"></i> <span>Ink Type</span></a></li>
+                    <li class="{{ Request::segment(1) === 'mounting_tape' ? 'active' : null }}"><a href="/mounting_tape"><i class="fa fa-tasks"></i> <span>Mounting Tape</span></a></li>
+                    <li class="{{ Request::segment(1) === 'rejection_type' ? 'active' : null }}"><a href="/rejection_type"><i class="fa fa-tasks"></i> <span>Rejection Type</span></a></li>
+                    <li class="{{ Request::segment(1) === 'hardener_type' ? 'active' : null }}"><a href="/hardener_type"><i class="fa fa-tasks"></i> <span>Hardener Type</span></a></li>
+                    <li class="{{ Request::segment(1) === 'adhesive_type' ? 'active' : null }}"><a href="/adhesive_type"><i class="fa fa-tasks"></i> <span>Adhesive Type</span></a></li>
+                    <li class="{{ Request::segment(1) === 'solvent_type' ? 'active' : null }}"><a href="/solvent_type"><i class="fa fa-tasks"></i> <span>Solvent Type</span></a></li>
+                    <li class="{{ Request::segment(1) === 'anilox' ? 'active' : null }}"><a href="/anilox"><i class="fa fa-tasks"></i> <span>Aniloxes</span></a></li>
+                    <li class="{{ Request::segment(1) === 'event' ? 'active' : null }}"><a href="/event"><i class="fa fa-tasks"></i> <span>Events</span></a></li>
+                    <li class="{{ Request::segment(1) === 'lamination_combination' ? 'active' : null }}"><a href="/lamination_combination"><i class="fa fa-tasks"></i> <span>lamination_combination</span></a></li>
+                    <li class="{{ Request::segment(1) === 'settings' ? 'active' : null }}"><a href="/machines"><i class="fa fa-tasks"></i> <span>Machines</span></a></li>
+                </ul>
+            @elseif ($user_resources == '2' || $user_resources == '3' || $user_resources == '4' || $user_resources == '5' || $user_id == '9' || $user_id == '13')
+                <span class="{{ Request::segment(2) === 'logbook' ? 'active' : null }}">
+                    <a  href="/logbook"  style="color: #dedede; margin: 30px;"><i class="fa fa-tasks"></i> 
+                        <span>Machines Log</span>
+                    </a>
+                </span>
+            @elseif($user_id == '7' || $user_id == '15' || $user_id == '18')
+            <ul id="main-menu" class="metismenu animation-li-delay">
+                <li class="header">Main</li>
+                <li class="{{ Request::segment(1) === 'elements' ? 'active' : null }}">
+                    <a href="#uiElements" class="has-arrow"><i class="fa fa-shopping-cart"></i><span>Procurment & Stock</span></a>
+                    <ul>
+                        <li class="{{ Request::segment(1) === 'purchaseorders' ? 'active' : null }}"><a href="{{route('purchaseorders.index')}}"><i class="fa fa-tasks"></i> <span>Purchase Orders</span></a></li>
+                        <li class="{{ Request::segment(1) === 'materials' ? 'active' : null }}"><a href="{{route('materials.index')}}"><i class="fa fa-tasks"></i> <span>Materials & Stock</span></a></li>
+                        <li class="{{ Request::segment(2) === 'material_analysis' ? 'active' : null }}"><a href="{{route('material_analysis.index')}}"><i class="fa fa-tasks"></i> <span>Materials Analysis</span></a></li>
+                        <li class="{{ Request::segment(1) === 'settings' ? 'active' : null }}"><a href="/material_rules"><i class="fa fa-tasks"></i> <span>material_rules</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+            @elseif($user_id == '10')
+                <ul id="main-menu" class="metismenu animation-li-delay">
+                    <li class="header">Main</li>
+                    <li class="{{ Request::segment(1) === 'logbook' ? 'active' : null }}"><a href="/logbook"><i class="fa fa-tasks"></i> <span>Machines Log</span></a></li>
+                    <li class="{{ Request::segment(1) === 'plate_mounting' ? 'active' : null }}"><a href="/plate_mounting"><i class="fa fa-tasks"></i> <span>plate_mounting</span></a></li>
+                        <li class="{{ Request::segment(1) === 'sleeve_report' ? 'active' : null }}"><a href="/sleeve_report"><i class="fa fa-tasks"></i> <span>sleeve_report</span></a></li>
+                    <li class="{{ Request::segment(1) === 'ink_type' ? 'active' : null }}"><a href="/ink_type"><i class="fa fa-tasks"></i> <span>Ink Type</span></a></li>
+                    <li class="{{ Request::segment(1) === 'employees' ? 'active' : null }}"><a href="/employees"><i class="fa fa-tasks"></i> <span>Employees</span></a></li>
+                    <li class="{{ Request::segment(1) === 'mounting_tape' ? 'active' : null }}"><a href="/mounting_tape"><i class="fa fa-tasks"></i> <span>Mounting Tape</span></a></li>
+                    <li class="{{ Request::segment(1) === 'rejection_type' ? 'active' : null }}"><a href="/rejection_type"><i class="fa fa-tasks"></i> <span>Rejection Type</span></a></li>
+                    <li class="{{ Request::segment(1) === 'ink_type' ? 'active' : null }}"><a href="/ink_type"><i class="fa fa-tasks"></i> <span>Ink Type</span></a></li>
+                        <li class="{{ Request::segment(1) === 'mounting_tape' ? 'active' : null }}"><a href="/mounting_tape"><i class="fa fa-tasks"></i> <span>Mounting Tape</span></a></li>
+                        <li class="{{ Request::segment(1) === 'rejection_type' ? 'active' : null }}"><a href="/rejection_type"><i class="fa fa-tasks"></i> <span>Rejection Type</span></a></li>
+                        <li class="{{ Request::segment(1) === 'hardener_type' ? 'active' : null }}"><a href="/hardener_type"><i class="fa fa-tasks"></i> <span>Hardener Type</span></a></li>
+                        <li class="{{ Request::segment(1) === 'adhesive_type' ? 'active' : null }}"><a href="/adhesive_type"><i class="fa fa-tasks"></i> <span>Adhesive Type</span></a></li>
+                        <li class="{{ Request::segment(1) === 'solvent_type' ? 'active' : null }}"><a href="/solvent_type"><i class="fa fa-tasks"></i> <span>Solvent Type</span></a></li>
+                        <li class="{{ Request::segment(1) === 'anilox' ? 'active' : null }}"><a href="/anilox"><i class="fa fa-tasks"></i> <span>Aniloxes</span></a></li>
+                        <li class="{{ Request::segment(1) === 'event' ? 'active' : null }}"><a href="/event"><i class="fa fa-tasks"></i> <span>Events</span></a></li>
+                        <li class="{{ Request::segment(1) === 'lamination_combination' ? 'active' : null }}"><a href="/lamination_combination"><i class="fa fa-tasks"></i> <span>lamination_combination</span></a></li>
+                        <li class="{{ Request::segment(2) === 'produced_jobs' ? 'active' : null }}"><a href="/produced_jobs"  style="display: non;"><i class="fa fa-tasks"></i> <span>Job Detailed Quantites</span></a></li>
+                    </ul>
+          
+             @elseif($user_id == '23')
+             <ul id="main-menu" class="metismenu animation-li-delay"> 
+                 <li class="{{ Request::segment(1) === 'receipe_logbook' ? 'active' : null }}"><a href="/receipe_logbook"><i class="fa fa-tasks"></i> <span>Receipe LogBook</span></a></li>
+                 <li class="{{ Request::segment(1) === 'receipe_settings' ? 'active' : null }}"><a href="/receipe_settings"><i class="fa fa-tasks"></i> <span>Receipe Settings</span></a></li>
+             </ul>
+
+            @elseif($user_id == '11')
+                <ul id="main-menu" class="metismenu animation-li-delay">
+                    <li class="{{ Request::segment(1) === 'elements' ? 'active' : null }}">
+                        <a href="#uiElements" class="has-arrow"><i class="fa fa-shopping-cart"></i><span>Quality</span></a>
+                        <ul>
+                            <li class="{{ Request::segment(1) === 'receipe_logbook' ? 'active' : null }}"><a href="/receipe_logbook"><i class="fa fa-tasks"></i> <span>Receipe Logbook</span></a></li>
+                            <li class="{{ Request::segment(1) === 'receipe_settings' ? 'active' : null }}"><a href="/receipe_settings"><i class="fa fa-tasks"></i> <span>Receipe Settings</span></a></li>
+                            <li class="{{ Request::segment(1) === 'lamination_check' ? 'active' : null }}"><a href="/lamination_check"><i class="fa fa-tasks"></i> <span>Lamination Check</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="header">Main</li>
+                    <li class="{{ Request::segment(1) === 'logbook' ? 'active' : null }}"><a href="/logbook"><i class="fa fa-tasks"></i> <span>Logbooks</span></a></li>
+                    <li class="{{ Request::segment(1) === 'logbook_report' ? 'active' : null }}"><a href="/logbook_report"><i class="fa fa-tasks"></i> <span>Logbooks Report</span></a></li>
+                    <li class="{{ Request::segment(2) === 'production_cost' ? 'active' : null }}"><a href="{{route('production_cost.index')}}"><i class="fa fa-tasks"></i> <span>Production Cost</span></a></li>
+                    <li class="{{ Request::segment(1) === 'lamination_combination' ? 'active' : null }}"><a href="/lamination_combination"><i class="fa fa-tasks"></i> <span>lamination_combination</span></a></li>
+                    <li class="{{ Request::segment(2) === 'produced_jobs' ? 'active' : null }}"><a href="/produced_jobs"  style="display: non;"><i class="fa fa-tasks"></i> <span>Job Detailed Quantites</span></a></li>
+                    <li class="{{ Request::segment(2) === 'confection_logbook' ? 'active' : null }}"><a href="/confection_logbook"  style="display: non;"><i class="fa fa-tasks"></i> <span>confection_logbook</span></a></li>
+                    <li class="{{ Request::segment(1) === 'settings' ? 'active' : null }}"><a href="/machines"><i class="fa fa-tasks"></i> <span>Machines</span></a></li>
+                </ul>    
+            @elseif($user_id == '17')
+                <ul id="main-menu" class="metismenu animation-li-delay">
+                    <li class="header">Main</li>
+                    
+                        <li class="{{ Request::segment(1) === 'plate_mounting' ? 'active' : null }}"><a href="/plate_mounting"><i class="fa fa-tasks"></i> <span>plate_mounting</span></a></li>
+                        <li class="{{ Request::segment(1) === 'sleeve_report' ? 'active' : null }}"><a href="/sleeve_report"><i class="fa fa-tasks"></i> <span>sleeve_report</span></a></li>
+                        <li class="{{ Request::segment(1) === 'logbook' ? 'active' : null }}"><a href="/logbook"><i class="fa fa-tasks"></i> <span>Logbooks</span></a></li>
+                    <li class="{{ Request::segment(1) === 'logbook_report' ? 'active' : null }}"><a href="/logbook_report"><i class="fa fa-tasks"></i> <span>Logbooks Report</span></a></li>
+                    <li class="{{ Request::segment(1) === 'lamination_combination' ? 'active' : null }}"><a href="/lamination_combination"><i class="fa fa-tasks"></i> <span>lamination_combination</span></a></li>
+                    <li class="{{ Request::segment(2) === 'produced_jobs' ? 'active' : null }}"><a href="/produced_jobs"  style="display: non;"><i class="fa fa-tasks"></i> <span>Job Detailed Quantites</span></a></li>
+                    <li class="{{ Request::segment(2) === 'confection_logbook' ? 'active' : null }}"><a href="/confection_logbook"  style="display: non;"><i class="fa fa-tasks"></i> <span>confection_logbook</span></a></li>
+                </ul>  
+            @elseif($user_id == '21')
+                <ul id="main-menu" class="metismenu animation-li-delay">
+                    <li class="header">Main</li>   
+                    <li class="{{ Request::segment(2) === 'produced_jobs' ? 'active' : null }}"><a href="/produced_jobs"  style="display: non;"><i class="fa fa-tasks"></i> <span>Job Detailed Quantites</span></a></li>
+                    <li class="{{ Request::segment(2) === 'production_cost' ? 'active' : null }}"><a href="{{route('production_cost.index')}}"><i class="fa fa-tasks"></i> <span>Production Cost</span></a></li>
+                </ul>
+
+            @elseif($user_id == '22')
+                <ul id="main-menu" class="metismenu animation-li-delay">
+                    <li class="header">Main</li>   
+                    <li class="{{ Request::segment(2) === 'confection_logbook' ? 'active' : null }}"><a href="/confection_logbook"  style="display: non;"><i class="fa fa-tasks"></i> <span>confection_logbook</span></a></li>
+                </ul>
+            @else
+            <ul id="main-menu" class="metismenu animation-li-delay">
+                <li class="header">Main</li>
+                <li class="{{ Request::segment(1) === 'dashboard' ? 'active' : null }}"><a href="/"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+                
+                <li class="{{ Request::segment(2) === 'joborders' ? 'active' : null }}">
+                <a href="#uiElements" class="has-arrow"><i class="fa fa-shopping-cart"></i><span>Production</span></a>
+                    <ul>
+                        <li class="{{ Request::segment(2) === 'joborders' ? 'active' : null }}"><a href="{{route('joborders.index')}}"><i class="fa fa-tasks"></i> <span>Job Orders</span></a></li>
+                        <li class="{{ Request::segment(2) === 'production_cost' ? 'active' : null }}"><a href="{{route('production_cost.index')}}"><i class="fa fa-tasks"></i> <span>Production Cost</span></a></li>
+                    <!--     <li class="{{ Request::segment(2) === 'job_ink_colors' ? 'active' : null }}"><a href="{{route('job_ink_colors.index')}}"><i class="fa fa-tasks"></i> <span>Manage Ink</span></a></li> -->
+                        <li class="{{ Request::segment(2) === 'isp_data' ? 'active' : null }}"><a href="{{route('isp_data.index')}}" style="display: non;"><i class="fa fa-tasks"></i> <span>ISP Data</span></a></li>
+                        <!-- <li class="{{ Request::segment(2) === 'isp_data_sum' ? 'active' : null }}"><a href="{{route('isp_data_sum.index')}}"><i class="fa fa-tasks"></i> <span>ISP Data Sum</span></a></li> -->
+                      <!--   <li ><a href="{{url('/')}}/isp/live_view"><i class="fa fa-tasks"></i> <span>ISP Live View</span></a></li>
+                        <li ><a href="{{url('/')}}/isp/stoppage"><i class="fa fa-tasks"></i> <span>ISP Stoppage</span></a></li> -->
+                        <li class="{{ Request::segment(2) === 'produced_jobs' ? 'active' : null }}"><a href="/produced_jobs"  style="display: non;"><i class="fa fa-tasks"></i> <span>Job Detailed Quantites</span></a></li>
+                        <li class="{{ Request::segment(2) === 'logbook' ? 'active' : null }}"><a href="/logbook"  style="display: non;"><i class="fa fa-tasks"></i> <span>Machines Log</span></a></li>
+                        <li class="{{ Request::segment(2) === 'confection_logbook' ? 'active' : null }}"><a href="/confection_logbook"  style="display: non;"><i class="fa fa-tasks"></i> <span>confection_logbook</span></a></li>
+                        
+                        <li class="{{ Request::segment(2) === 'stoppage' ? 'active' : null }}"><a href="/stoppage"  style="display: non;"><i class="fa fa-tasks"></i> <span>Stoppage Log</span></a></li>
+                        <li class="{{ Request::segment(1) === 'lot_tracking' ? 'active' : null }}"><a href="/lot_tracking"><i class="fa fa-tasks"></i> <span>lot_tracking</span></a></li>
+                        <li class="{{ Request::segment(1) === 'sleeve_report' ? 'active' : null }}"><a href="/sleeve_report"><i class="fa fa-tasks"></i> <span>sleeve_report</span></a></li>
+                        <li class="{{ Request::segment(1) === 'plate_mounting' ? 'active' : null }}"><a href="/plate_mounting"><i class="fa fa-tasks"></i> <span>plate_mounting</span></a></li>
+                        <li class="{{ Request::segment(1) === 'monthly_report' ? 'active' : null }}"><a href="/monthly_report"><i class="fa fa-tasks"></i> <span>MiraFlex Monthly Report</span></a></li>
+                        
+                    </ul>
+                </li>
+          
+
+                <li class="{{ Request::segment(1) === 'elements' ? 'active' : null }}">
+                    <a href="#uiElements" class="has-arrow"><i class="fa fa-shopping-cart"></i><span>Procurment & Stock</span></a>
+                    <ul>
+                        
+                        <li class="{{ Request::segment(1) === 'stock_study' ? 'active' : null }}"><a href="/stock_study"><i class="fa fa-tasks"></i> <span>Stock Study Report</span></a></li>
+                        <li class="{{ Request::segment(1) === 'min_stock' ? 'active' : null }}"><a href="{{route('min_stock.index')}}"><i class="fa fa-tasks"></i> <span>min_stock</span></a></li>
+                        <li class="{{ Request::segment(1) === 'purchaseorders' ? 'active' : null }}"><a href="{{route('purchaseorders.index')}}"><i class="fa fa-tasks"></i> <span>Purchase Orders</span></a></li>
+                        <li class="{{ Request::segment(1) === 'purchase_items' ? 'active' : null }}"><a href="{{route('purchase_items.index')}}"><i class="fa fa-tasks"></i> <span>Purchase Items</span></a></li>
+                        <li class="{{ Request::segment(1) === 'materials' ? 'active' : null }}"><a href="{{route('materials.index')}}"><i class="fa fa-tasks"></i> <span>Materials & Stock</span></a></li>
+                        <li class="{{ Request::segment(2) === 'material_analysis' ? 'active' : null }}"><a href="{{route('material_analysis.index')}}"><i class="fa fa-tasks"></i> <span>Materials Analysis</span></a></li>
+                    </ul>
+                </li>
+               
+                <li class="{{ Request::segment(1) === 'elements' ? 'active' : null }}">
+                    <a href="#uiElements" class="has-arrow"><i class="fa fa-shopping-cart"></i><span>Shipping</span></a>
+                    <ul>
+                        <li class="{{ Request::segment(1) === 'finished_products' ? 'active' : null }}"><a href="{{route('finished_products.index')}}"><i class="fa fa-tasks"></i> <span>Finished Products</span></a></li>
+                    </ul>
+                </li>
+
+                <li class="{{ Request::segment(1) === 'elements' ? 'active' : null }}">
+                    <a href="#uiElements" class="has-arrow"><i class="fa fa-shopping-cart"></i><span>Image Compare</span></a>
+                    <ul>
+                        <li class="{{ Request::segment(1) === 'compare_image' ? 'active' : null }}"><a href="{{route('compare_image.index')}}"><i class="fa fa-tasks"></i> <span>compare_image</span></a></li>
+                        <li class="{{ Request::segment(1) === 'receipe_settings' ? 'active' : null }}"><a href="/receipe_settings"><i class="fa fa-tasks"></i> <span>Receipe Settings</span></a></li>
+                    </ul>
+                </li>
+                
+
+                <li class="{{ Request::segment(1) === 'elements' ? 'active' : null }}">
+                    <a href="#uiElements" class="has-arrow"><i class="fa fa-shopping-cart"></i><span>Quality</span></a>
+                    <ul>
+                        <li class="{{ Request::segment(1) === 'receipe_logbook' ? 'active' : null }}"><a href="/receipe_logbook"><i class="fa fa-tasks"></i> <span>Receipe Logbook</span></a></li>
+                        <li class="{{ Request::segment(1) === 'receipe_settings' ? 'active' : null }}"><a href="/receipe_settings"><i class="fa fa-tasks"></i> <span>Receipe Settings</span></a></li>
+                        <li class="{{ Request::segment(1) === 'lamination_check' ? 'active' : null }}"><a href="/lamination_check"><i class="fa fa-tasks"></i> <span>Lamination Check</span></a></li>
+                    </ul>
+                </li>
+
+                <li class="{{ Request::segment(1) === 'elements' ? 'active' : null }}">
+                    <a href="#uiElements" class="has-arrow"><i class="fa fa-shopping-cart"></i><span>Settings</span></a>
+                    <ul>
+                        <li class="{{ Request::segment(1) === 'settings' ? 'active' : null }}"><a href="/warehouses"><i class="fa fa-tasks"></i> <span>Warehouses</span></a></li>
+                        <li class="{{ Request::segment(1) === 'settings' ? 'active' : null }}"><a href="/material_rules"><i class="fa fa-tasks"></i> <span>material_rules</span></a></li>
+                        <li class="{{ Request::segment(1) === 'settings' ? 'active' : null }}"><a href="/machines"><i class="fa fa-tasks"></i> <span>Machines</span></a></li>
+                        <li class="{{ Request::segment(1) === 'settings' ? 'active' : null }}"><a href="/uom"><i class="fa fa-tasks"></i> <span>UOM</span></a></li>
+                        <li class="{{ Request::segment(1) === 'ink_type' ? 'active' : null }}"><a href="/ink_type"><i class="fa fa-tasks"></i> <span>Ink Type</span></a></li>
+                        <li class="{{ Request::segment(1) === 'mounting_tape' ? 'active' : null }}"><a href="/mounting_tape"><i class="fa fa-tasks"></i> <span>Mounting Tape</span></a></li>
+                        <li class="{{ Request::segment(1) === 'rejection_type' ? 'active' : null }}"><a href="/rejection_type"><i class="fa fa-tasks"></i> <span>Rejection Type</span></a></li>
+                        <li class="{{ Request::segment(1) === 'hardener_type' ? 'active' : null }}"><a href="/hardener_type"><i class="fa fa-tasks"></i> <span>Hardener Type</span></a></li>
+                        <li class="{{ Request::segment(1) === 'adhesive_type' ? 'active' : null }}"><a href="/adhesive_type"><i class="fa fa-tasks"></i> <span>Adhesive Type</span></a></li>
+                        <li class="{{ Request::segment(1) === 'solvent_type' ? 'active' : null }}"><a href="/solvent_type"><i class="fa fa-tasks"></i> <span>Solvent Type</span></a></li>
+                        <li class="{{ Request::segment(1) === 'anilox' ? 'active' : null }}"><a href="/anilox"><i class="fa fa-tasks"></i>Aniloxes<span></span></a></li>
+                        <li class="{{ Request::segment(1) === 'settings' ? 'active' : null }}"><a href="/counters"><i class="fa fa-tasks"></i> <span>Counters</span></a></li>
+                        <li class="{{ Request::segment(1) === 'settings' ? 'active' : null }}"><a href="/employees"><i class="fa fa-tasks"></i> <span>Employees</span></a></li>
+                        <li class="{{ Request::segment(1) === 'settings' ? 'active' : null }}"><a href="/users"><i class="fa fa-tasks"></i> <span>Users</span></a></li>
+                        <li class="{{ Request::segment(1) === 'settings' ? 'active' : null }}"><a href="/settings"><i class="fa fa-tasks"></i> <span>Settings</span></a></li>
+                        <li class="{{ Request::segment(1) === 'update_db' ? 'active' : null }}"><a href="/update_db"><i class="fa fa-tasks"></i> <span>update_db</span></a></li>
+                        <li class="{{ Request::segment(1) === 'event' ? 'active' : null }}"><a href="/event"><i class="fa fa-tasks"></i> <span>Events</span></a></li>
+                        <li class="{{ Request::segment(1) === 'lamination_combination' ? 'active' : null }}"><a href="/lamination_combination"><i class="fa fa-tasks"></i> <span>lamination_combination</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+            @endif
+        </nav>     
+    </div>
+</div>
+
+<script>
+function showHideSideBar() {
+    var x = document.getElementById("left-sidebar");
+    var y = document.getElementById("main-content");
+    var z = document.getElementById("left-button");
+    if ( (x.style.width === "10px") && (y.style.width === "100%")) {
+      x.style.width = "270px";
+      y.style.width = "calc(100% - 270px)";
+      z.style.left = "255px"
+    } else {
+      x.style.width = "10px";
+      y.style.width = "100%";
+      z.style.left = "-10px"
+    }
+  }
+</script>
+<style>
+    /* a:not([href]) {
+    color: #fff !important;
+    } */
+</style>

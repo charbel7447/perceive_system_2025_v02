@@ -1,0 +1,219 @@
+<?php
+
+namespace App\Services;
+
+use App\JournalVoucher\JournalVoucher;
+use App\JournalVoucher\JournalVoucherMovement as JournalMovement;
+use App\JournalVoucher\JournalFlowMapping;
+use App\JournalVoucher\Item as JournalVoucherItem;
+use App\ChartOfAccount;
+use Illuminate\Support\Facades\DB;
+use Exception;
+use Auth;
+
+class JournalService
+{
+    /**
+     * Create a journal voucher from given document data and type.
+     *
+     * @param  array   $documentData
+     * @param  string  $type
+     * @return JournalVoucher|null
+     */
+    public function create_journal_voucher(array $documentData, string $type): ?JournalVoucher
+    {
+
+        //credit note amount_received_lbp	amount_received
+        //debit note amount_received_lbp	amount_received
+        // advance_payments amount_received	amount_received_usd	amount_received_lbp
+        //client_payment amount_received is total amount.	amount_received_usd	amount_received_lbp	amount_received_lbprate	vat_paid the sum is the total
+        //vendor_payment 	amount_paid is the total	 amount_paid_usd amount_paid_lbp is the second currency with rate to assume as isd amount_paid_lbprate	
+        //expenses amount_paid	amount_paid_lbp
+        DB::beginTransaction();
+
+        try {
+            // Fetch flow mapping JSON
+            $flow = JournalFlowMapping::where('process', $type)->value('mappings');
+
+            if (is_string($flow)) {
+                $flow = json_decode($flow, true);
+            }
+
+            if (!$flow || empty($flow)) {
+                throw new Exception("No journal mapping found for type: $type");
+            }
+
+            // Determine document type ID
+            $types = [
+                'invoice' => 1,
+                'bill' => 2,
+                'purchase_order' => 3,
+                'sales_order' => 4,
+            ];
+            $type_id = $types[$type] ?? 5;
+
+            // Create Journal Voucher
+            $voucher = JournalVoucher::create([
+                'number'              => counter()->next('journal_vouchers'),
+                'document_type'       => $type_id,
+                'document_id'         => $documentData['id'] ?? null,
+                'document_number'     => $documentData['number'] ?? null,
+                'document_total'      => $documentData['total'] ?? 0,
+                'document_currency_id'=> $documentData['currency_id'] ?? null,
+                'date'                => $documentData['date'] ?? now(),
+                'user_id'             => auth()->id(),
+                'created_by'          => Auth::user()->name,
+                'year_date'           => now()->format('Y'),
+                'currency_id'         => $documentData['currency_id'] ?? null,
+                'currency_name'       => $documentData['currency_name'] ?? null,
+                'exchange_rate'       => $documentData['exchangerate'] ?? 1,
+                'vat_rate'            => $documentData['vatrate'] ?? 0,
+                'reference'           => $documentData['number'] ?? null,
+                'total_debit'         => 0,
+                'total_credit'        => 0,
+                'status_id'        => 1,
+                // 'posted_at'        => now(),
+                // 'posted_by'        => "System".$type,
+
+            ]);
+
+            // Prepare item values based on document
+            $fieldValues = [
+                'Sub Total'     => floatval($documentData['sub_total'] ?? 0),
+                'Total Amount'  => floatval($documentData['total'] ?? 0),
+                'Discount'      => floatval($documentData['discount'] ?? 0),
+                'Charges'       => floatval($documentData['shipping'] ?? 0),
+            ];
+
+            // VAT = Total - SubTotal - Charges + Discount
+            $fieldValues['VAT'] = round(
+                $fieldValues['Total Amount'] - $fieldValues['Sub Total'] - $fieldValues['Charges'] + $fieldValues['Discount'],
+                2
+            );
+
+            $items = [];
+            $totalDebit = 0;
+            $totalCredit = 0;
+
+            foreach ($flow as $row) {
+                $amount = $fieldValues[$row['field']] ?? 0;
+
+                if (abs($amount) < 0.0001) {
+                    continue; // skip zero values
+                }
+
+                // Fetch account info
+                $account = ChartOfAccount::find($row['account_id']);
+
+                if (!$account) {
+                    throw new Exception("Account not found for ID: {$row['account_id']}");
+                }
+
+                $debit = $row['type'] === 'debit' ? $amount : 0;
+                $credit = $row['type'] === 'credit' ? $amount : 0;
+
+                $item = [
+                    'journal_voucher_id' => $voucher->id,
+                    'account_id'         => $account->id,
+                    'account_code'       => $account->code,
+                    'account_name_en'    => $account->name_en,
+                    'account_name_ar'    => $account->name_ar,
+                    'description'        => "{$row['field']} for Doc #" . ($documentData['number'] ?? ''),
+                    'debit'              => $debit,
+                    'credit'             => $credit,
+                ];
+
+                JournalVoucherItem::create($item);
+
+                $totalDebit += $debit;
+                $totalCredit += $credit;
+            }
+
+            $voucher->update([
+                'total_debit'  => $totalDebit,
+                'total_credit' => $totalCredit,
+            ]);
+
+            // Step 5: Create Journal Movements
+              // Determine document_name
+        $documentNames = [
+            1 => 'Sales Invoice',
+            2 => 'Purchase Invoice (Vendor Bill)',
+            3 => 'Purchase Order',
+            4 => 'Sales Order',
+            5 => 'Manual Journal Entry (No linked doc)',
+        ];
+
+        // Create Journal Movement
+        JournalMovement::create([
+            'journal_voucher_id' => $voucher->id,
+            'number' => $voucher->number,
+            'currency_id' => $voucher->currency_id,
+            'currency_name' => $voucher->currency_name,
+            'document_type' => $voucher->document_type,
+            'document_id' => $voucher->document_id,
+            'document_number' => $voucher->document_number,
+            'document_date' => $voucher->date,
+            'document_total' => $voucher->document_total,
+            'document_currency_id' => $voucher->document_currency_id,
+            'date' => $voucher->date,
+            'total_debit' => $totalDebit,
+            'total_credit' => $totalCredit,
+            'exchange_rate' => $voucher->exchange_rate,
+            'vat_rate' => $voucher->vat_rate,
+            'reference' => $voucher->reference,
+            'user_id' => $voucher->user_id,
+            'created_by' => Auth::user()->name,
+            'year_date' => $voucher->year_date,
+            'status_id' => $voucher->status_id ?? null,
+            'terms' => $voucher->terms ?? null,
+            'document_name' => $documentNames[$voucher->document_type] ?? null,
+            'type' => 'Automatically by '.$documentNames[$voucher->document_type].'#' . $voucher->number,
+            'movement_date' => now(),
+            'items' => json_encode($items),
+        ]);
+
+
+            DB::commit();
+            return $voucher;
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new \Exception("Journal creation failed: " . $e->getMessage(), 0, $e);
+        }
+    }
+
+     public function create_journal_movement(JournalVoucher $voucher, array $data, array $flow): void
+    {
+        $fieldValues = [
+            'Sub Total'     => floatval($data['sub_total'] ?? 0),
+            'Total Amount'  => floatval($data['total'] ?? 0),
+            'Discount'      => floatval($data['discount'] ?? 0),
+            'Charges'       => floatval($data['shipping'] ?? 0),
+        ];
+
+        $fieldValues['VAT'] = round(
+            ($fieldValues['Total Amount'] - $fieldValues['Sub Total'] - $fieldValues['Charges'] + $fieldValues['Discount']),
+            2
+        );
+
+        foreach ($flow as $row) {
+            $amount = $fieldValues[$row['field']] ?? 0;
+
+            if (abs($amount) < 0.0001) continue;
+
+            $account = ChartOfAccount::find($row['account_id']);
+
+            JournalMovement::create([
+                'journal_voucher_id' => $voucher->id,
+                'account_id'         => $row['account_id'],
+                'account_code'       => $account->code ?? null,
+                'account_name_en'    => $account->name_en ?? null,
+                'account_name_ar'    => $account->name_ar ?? null,
+                'description'        => "{$row['field']} for Doc #" . ($data['number'] ?? ''),
+                'debit'              => $row['type'] === 'debit'  ? $amount : 0,
+                'credit'             => $row['type'] === 'credit' ? $amount : 0,
+            ]);
+        }
+    }
+}

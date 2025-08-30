@@ -1,0 +1,39 @@
+<script type="text/javascript">
+    export default {
+        props: {
+            id: {
+                type: Number,
+                required: true
+            }
+        },
+        render: function (createElement) {
+            const status = this.statusLookup(this.id)
+            return createElement(
+                'span',
+                {
+                    'class': ['status', `status-${status}`]
+                },
+                this.clean(status)
+            )
+        },
+        methods: {
+            statusLookup(id) {
+                const list = {
+                    1: 'draft',
+                    5: 'partially-paid',
+                    3: 'paid',
+                    4: 'void',
+                    2: 'sent',
+                    6: 'confirmed',
+                    7: 'ADJUSTED',
+                }
+                return list[id]
+            },
+            clean(str) {
+                return str.replace(/(\-[a-z])/g, function($1){
+                    return $1.replace('-',' ')
+                }).toUpperCase()
+            }
+        }
+    }
+</script>
