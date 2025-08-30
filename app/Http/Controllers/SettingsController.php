@@ -240,39 +240,48 @@ public function updateSystemLive()
     return response()->stream(function () use ($steps, $basePath, $logFile) {
         foreach ($steps as $stepName => $cmd) {
             $header = "=== STEP: $stepName ===\n";
-
-            // Write to log file
             File::append($logFile, $header);
 
             echo json_encode(['step' => $stepName, 'line' => trim($header)]) . "\n";
             flush();
 
+            // Run command and capture full output (stdout + stderr)
             $process = proc_open(
                 $cmd,
-                [1 => ['pipe','r'], 2 => ['pipe','r']],
+                [
+                    1 => ['pipe', 'w'], // stdout
+                    2 => ['pipe', 'w']  // stderr
+                ],
                 $pipes
             );
 
             if (is_resource($process)) {
-                while (!feof($pipes[1]) || !feof($pipes[2])) {
-                    if ($line = fgets($pipes[1])) {
-                        File::append($logFile, $line); // ✅ save
+                // Read raw output
+                $stdout = stream_get_contents($pipes[1]);
+                $stderr = stream_get_contents($pipes[2]);
+
+                fclose($pipes[1]);
+                fclose($pipes[2]);
+
+                proc_close($process);
+
+                // Combine stdout + stderr (like terminal)
+                $fullOutput = $stdout . $stderr;
+
+                // ✅ Save full raw log exactly as terminal
+                File::append($logFile, $fullOutput);
+
+                // ✅ Also stream line by line to browser (JSON)
+                foreach (explode("\n", $fullOutput) as $line) {
+                    if (trim($line) !== '') {
                         echo json_encode(['step' => $stepName, 'line' => $line]) . "\n";
                         flush();
                     }
-                    if ($err = fgets($pipes[2])) {
-                        File::append($logFile, $err); // ✅ save errors too
-                        echo json_encode(['step' => $stepName, 'line' => $err]) . "\n";
-                        flush();
-                    }
                 }
-                fclose($pipes[1]);
-                fclose($pipes[2]);
-                proc_close($process);
             }
         }
 
-        // ✅ version update logic same as before ...
+        // ✅ Version update as before
         $latestVersion = $this->fetchLatestVersion();
         $envPath = $basePath.'/.env';
         $envContent = File::get($envPath);
