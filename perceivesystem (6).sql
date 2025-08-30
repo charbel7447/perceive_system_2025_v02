@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 25, 2025 at 10:25 AM
+-- Generation Time: Aug 30, 2025 at 06:11 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,7 +41,7 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`id`, `currency_id`, `name`, `balance`, `created_at`, `updated_at`) VALUES
-(1, 1, 'USD Account', -10.5, NULL, '2025-08-03 10:13:15'),
+(1, 1, 'USD Account', 0, NULL, '2025-08-03 10:13:15'),
 (2, 2, 'OMR Account', 0, NULL, NULL);
 
 -- --------------------------------------------------------
@@ -513,10 +513,11 @@ INSERT INTO `chart_accounts` (`id`, `code`, `name_en`, `name_ar`, `class_code`, 
 (1015, '60101', 'Purchase of Goods', 'Purchase of Goods', '6', 2, NULL, NULL, NULL, NULL, NULL, 1, '2025-08-11 19:52:36', '2025-08-11 19:53:56'),
 (1016, '60184', 'customs broker', 'customs broker', '6', 2, NULL, NULL, NULL, NULL, NULL, 1, '2025-08-11 19:53:32', '2025-08-11 19:53:32'),
 (1017, '60185', 'Customs Tariffs', 'Customs Tariffs', '6', 1020, '1141', 'VAT Paid on Purchases', NULL, NULL, NULL, 1, '2025-08-11 19:53:49', '2025-08-13 20:05:56'),
-(1018, '46101', 'Payables on Consignments', 'مستحقات على الشحنات', '4', NULL, NULL, NULL, NULL, NULL, NULL, 2, '2025-08-11 20:02:53', '2025-08-11 20:03:28'),
+(1018, '46101', 'Payables on Consignments', 'مستحقات على الشحنات', '4', NULL, NULL, NULL, NULL, NULL, NULL, 1, '2025-08-11 20:02:53', '2025-08-30 16:11:22'),
 (1019, '46102', 'Other Operating Creditor Accounts', 'حسابات دائنة تشغيلية أخرى', '4', 1020, '1141', 'VAT Paid on Purchases', NULL, NULL, NULL, 1, '2025-08-11 20:03:20', '2025-08-18 20:12:47'),
 (1020, '1141', 'VAT Paid on Purchases', 'ضريبة مسددة على شراء السلع', '1', NULL, NULL, NULL, NULL, NULL, NULL, 1, '2025-08-12 23:22:27', '2025-08-13 20:02:42'),
-(1025, '2900000', 'company1', 'شسيشسي', '5', NULL, NULL, NULL, NULL, NULL, NULL, 1, '2025-08-22 19:11:03', '2025-08-22 19:17:26');
+(1027, '2900004', 'Client 1', 'الزبون', '2', NULL, NULL, NULL, NULL, NULL, NULL, 1, '2025-08-26 13:41:37', '2025-08-26 13:41:37'),
+(1028, '5900001', 'Company 1', 'البائع ١', '5', NULL, NULL, NULL, NULL, NULL, NULL, 1, '2025-08-26 13:50:52', '2025-08-26 13:50:52');
 
 -- --------------------------------------------------------
 
@@ -616,6 +617,13 @@ CREATE TABLE `clients` (
   `client_dropdown_1_id` int(255) DEFAULT NULL,
   `client_dropdown_2_id` int(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Dumping data for table `clients`
+--
+
+INSERT INTO `clients` (`id`, `ref_number`, `name`, `name_ar`, `email`, `username`, `seller_id`, `email_verified`, `email_verify_token`, `phone`, `address`, `state`, `city`, `zipcode`, `country`, `password`, `remember_token`, `image`, `created_at`, `updated_at`, `field1`, `field2`, `field3`, `field4`, `field5`, `field6`, `field7`, `field8`, `field9`, `field10`, `facebook_id`, `google_id`, `allow_mobile`, `loyalty_point`, `company`, `person`, `currency_id`, `vat_status`, `total_revenue`, `unused_credit`, `work_phone`, `billing_address`, `shipping_address`, `user_id`, `account_id`, `account_code`, `created_by`, `to_be_paid`, `paid`, `balance`, `last_payment_date`, `is_customer`, `balance_status`, `price_class`, `tax_id`, `paymentcondition_id`, `deliverycondition_id`, `paymentcondition_name`, `deliverycondition_name`, `postal_code`, `status`, `client_dropdown_1_id`, `client_dropdown_2_id`) VALUES
+(1, '2900004', 'Client 1', 'الزبون', 'client1@company1.com', 'client1@company1.com', NULL, NULL, NULL, '71000000', 'Zahle', 'Zahle', 'Zahle', '10000', 'Lebanon', NULL, NULL, NULL, '2025-08-26 08:41:37', '2025-08-26 08:58:37', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Company 1', 'Client 1', 1, 1, 0, 0, NULL, 'Zahle', 'Zahle', 1, 2, '2900004', 'Charbel El Kabbouchi', 0.00, 0.00, 0.00, '2025-08-26', NULL, '0', 0, NULL, 1, 1, '14 DAYS', 'Delivery Condition', NULL, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1077,7 +1085,7 @@ INSERT INTO `counters` (`id`, `key`, `prefix`, `value`, `created_at`, `updated_a
 (5, 'client_payment', 'CP-', '2500000', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (6, 'expense', 'EX-', '2500000', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (7, 'purchase_order', 'PO-', '2500000', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
-(8, 'bill', 'BL-', '2500001', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
+(8, 'bill', 'BL-', '2500000', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (9, 'vendor_payment', 'VP-', '2500000', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (10, 'receive_order', 'RO-', '2500000', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (11, 'goods_issue', 'GI-', '2500000', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
@@ -1091,14 +1099,14 @@ INSERT INTO `counters` (`id`, `key`, `prefix`, `value`, `created_at`, `updated_a
 (19, 'subcategory', '', '41', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (20, 'subsubcategory', '-', '100', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (21, 'warehouse', 'WH-', '2500000', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
-(22, 'product', NULL, '2500004', '2021-08-07 18:00:00', '2023-09-16 14:19:35'),
+(22, 'product', NULL, '2500005', '2021-08-07 18:00:00', '2023-09-16 14:19:35'),
 (23, 'machines', 'RS-', '100', '2022-08-16 02:00:00', '2022-08-16 02:00:00'),
 (24, 'product_type', '', '100', '2022-08-16 02:00:00', '2022-08-16 02:00:00'),
 (25, 'finished_product', '', '100', '2022-08-16 02:00:00', '2022-08-16 02:00:00'),
 (26, 'attributes', 'AT-', '1000', '2022-08-16 02:00:00', '2022-08-16 02:00:00'),
 (27, 'raw_material_type', 'RMT-', '1001', '2022-08-16 02:00:00', '2022-08-16 02:00:00'),
 (28, 'damaged_request', 'DR--', '2500000', '2022-08-16 02:00:00', '2022-08-16 02:00:00'),
-(29, 'notifications', 'N-', '2500061', '2022-08-16 02:00:00', '2022-08-16 02:00:00'),
+(29, 'notifications', 'N-', '2500000', '2022-08-16 02:00:00', '2022-08-16 02:00:00'),
 (30, 'seller_payments', 'SP-', '2500000', NULL, NULL),
 (31, 'seller_payments_docs', 'SPD-', '2500000', NULL, NULL),
 (32, 'container_order', 'CO-', '2500000', NULL, NULL),
@@ -1106,14 +1114,14 @@ INSERT INTO `counters` (`id`, `key`, `prefix`, `value`, `created_at`, `updated_a
 (34, 'shipper_bill', 'SBL-', '2500000', NULL, NULL),
 (35, 'shipper_payment', 'SPP-', '2500000', NULL, NULL),
 (36, 'customer_returns', 'CRR-', '2500000', NULL, NULL),
-(37, 'journal_vouchers', 'JV-', '2500001', NULL, NULL),
+(37, 'journal_vouchers', 'JV-', '2500000', NULL, NULL),
 (38, 'third_parties_extras', 'TPE-', '25000001', NULL, NULL),
 (39, 'vat_account', 'VA-', '25000001', NULL, NULL),
 (40, 'receipt_voucher', 'RV-', '2500000', NULL, NULL),
 (41, 'payment_voucher', 'PV-', '2500000', NULL, NULL),
-(42, 'clients_code', NULL, '2900004', NULL, NULL),
-(43, 'vendors_code', NULL, '2900001', NULL, NULL),
-(44, 'product_lots', NULL, '711', NULL, NULL);
+(42, 'clients_code', NULL, '2900005', NULL, NULL),
+(43, 'vendors_code', NULL, '5900002', NULL, NULL),
+(44, 'product_lots', NULL, '816', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2452,52 +2460,6 @@ CREATE TABLE `notifications` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `notifications`
---
-
-INSERT INTO `notifications` (`id`, `user_id`, `manager_id`, `number`, `document_type`, `description`, `link`, `document_number`, `document_id`, `qty`, `date`, `viewed`, `status`, `created_by`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'N-2500021', 'invoices', 'New Invoice Created IN-2500005', 'invoices/', 'IN-2500005', 1, NULL, '2025-08-16 12:21:51', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-16 12:21:51', '2025-08-16 12:21:51'),
-(2, 1, 1, 'N-2500022', 'invoices', 'Invoice IN-2500005 Approved', 'invoices/', 'IN-2500005', 1, NULL, '2025-08-16 12:21:56', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-16 12:21:56', '2025-08-16 12:21:56'),
-(3, 1, 1, 'N-2500023', 'invoices', 'New Invoice Created IN-2500006', 'invoices/', 'IN-2500006', 2, NULL, '2025-08-16 21:05:54', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-16 21:05:54', '2025-08-16 21:05:54'),
-(4, 1, 1, 'N-2500024', 'invoices', 'Invoice IN-2500006 Approved', 'invoices/', 'IN-2500006', 2, NULL, '2025-08-16 21:05:56', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-16 21:05:56', '2025-08-16 21:05:56'),
-(5, 1, 1, 'N-2500025', 'invoices', 'New Invoice Created IN-2500007', 'invoices/', 'IN-2500007', 1, NULL, '2025-08-17 14:18:54', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-17 14:18:54', '2025-08-17 14:18:54'),
-(6, 1, 1, 'N-2500026', 'invoices', 'Invoice IN-2500007 Approved', 'invoices/', 'IN-2500007', 1, NULL, '2025-08-17 14:19:05', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-17 14:19:05', '2025-08-17 14:19:05'),
-(7, 1, 1, 'N-2500027', 'invoices', 'New Invoice Created IN-2500008', 'invoices/', 'IN-2500008', 1, NULL, '2025-08-17 14:25:20', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-17 14:25:20', '2025-08-17 14:25:20'),
-(8, 1, 1, 'N-2500028', 'invoices', 'Invoice IN-2500008 Approved', 'invoices/', 'IN-2500008', 1, NULL, '2025-08-17 14:25:23', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-17 14:25:23', '2025-08-17 14:25:23'),
-(9, 1, 1, 'N-2500029', 'invoices', 'New Invoice Created IN-2500009', 'invoices/', 'IN-2500009', 2, NULL, '2025-08-17 15:02:45', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-17 15:02:45', '2025-08-17 15:02:45'),
-(10, 1, 1, 'N-2500030', 'invoices', 'Invoice IN-2500009 Approved', 'invoices/', 'IN-2500009', 2, NULL, '2025-08-17 15:02:47', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-17 15:02:47', '2025-08-17 15:02:47'),
-(11, 1, 1, 'N-2500031', 'invoices', 'New Invoice Created IN-2500010', 'invoices/', 'IN-2500010', 1, NULL, '2025-08-17 20:44:26', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-17 20:44:26', '2025-08-17 20:44:26'),
-(12, 1, 1, 'N-2500032', 'invoices', 'Invoice IN-2500010 Approved', 'invoices/', 'IN-2500010', 1, NULL, '2025-08-17 20:44:37', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-17 20:44:37', '2025-08-17 20:44:37'),
-(13, 1, 1, 'N-2500033', 'purchases', 'Supplier Invoice BL-2500006 Created', 'bills/', 'BL-2500006', 1, NULL, '2025-08-18 20:02:42', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-18 20:02:42', '2025-08-18 20:02:42'),
-(14, 1, 1, 'N-2500034', 'purchases', 'Supplier Invoice BL-2500006 Approved', 'bills/', 'BL-2500006', 1, NULL, '2025-08-18 20:02:57', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-18 20:02:57', '2025-08-18 20:02:57'),
-(15, 1, 1, 'N-2500035', 'purchases', 'Supplier Invoice BL-2500007 Created', 'bills/', 'BL-2500007', 1, NULL, '2025-08-18 21:04:09', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-18 21:04:09', '2025-08-18 21:04:09'),
-(16, 1, 1, 'N-2500036', 'purchases', 'Supplier Invoice BL-2500007 Approved', 'bills/', 'BL-2500007', 1, NULL, '2025-08-18 21:04:27', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-18 21:04:27', '2025-08-18 21:04:27'),
-(17, 1, 1, 'N-2500037', 'invoices', 'New Invoice Created IN-2500011', 'invoices/', 'IN-2500011', 2, NULL, '2025-08-22 19:24:39', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-22 19:24:39', '2025-08-22 19:24:39'),
-(18, 1, 3, 'N-2500038', 'invoices', 'Invoice IN-2500011 Approved', 'invoices/', 'IN-2500011', 2, NULL, '2025-08-22 19:24:42', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-22 19:24:42', '2025-08-22 19:24:42'),
-(19, 1, 1, 'N-2500039', 'purchases', 'Supplier Invoice BL-2500008 Created', 'bills/', 'BL-2500008', 1, NULL, '2025-08-22 20:06:20', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-22 20:06:20', '2025-08-22 20:06:20'),
-(20, 1, 1, 'N-2500040', 'purchases', 'Supplier Invoice BL-2500008 Approved', 'bills/', 'BL-2500008', 1, NULL, '2025-08-22 20:06:24', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-22 20:06:24', '2025-08-22 20:06:24'),
-(21, 1, 1, 'N-2500041', 'purchases', 'New Purchase Order Created PO-2500001', 'purchase_orders/', 'PO-2500001', 1, NULL, '2025-08-23 08:32:08', NULL, 'manager', 'Charbel El Kabbouchi', '2025-08-23 08:32:08', '2025-08-23 08:32:08'),
-(22, 1, 1, 'N-2500042', 'purchases', 'Purchase Order PO-2500001 Approved', 'purchase_orders/', 'PO-2500001', 1, NULL, '2025-08-23 08:32:10', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-23 08:32:10', '2025-08-23 08:32:10'),
-(23, 1, 1, 'N-2500043', 'purchases', 'New Purchase Order Created PO-2500002', 'purchase_orders/', 'PO-2500002', 2, NULL, '2025-08-23 08:52:34', NULL, 'manager', 'Charbel El Kabbouchi', '2025-08-23 08:52:34', '2025-08-23 08:52:34'),
-(24, 1, 1, 'N-2500044', 'purchases', 'Purchase Order PO-2500002 Approved', 'purchase_orders/', 'PO-2500002', 2, NULL, '2025-08-23 08:52:35', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-23 08:52:35', '2025-08-23 08:52:35'),
-(25, 1, 1, 'N-2500045', 'purchases', 'New Purchase Order Created PO-2500003', 'purchase_orders/', 'PO-2500003', 3, NULL, '2025-08-23 09:20:00', NULL, 'manager', 'Charbel El Kabbouchi', '2025-08-23 09:20:00', '2025-08-23 09:20:00'),
-(26, 1, 1, 'N-2500046', 'purchases', 'Purchase Order PO-2500003 Approved', 'purchase_orders/', 'PO-2500003', 3, NULL, '2025-08-23 09:20:02', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-23 09:20:02', '2025-08-23 09:20:02'),
-(27, 1, 1, 'N-2500047', 'purchases', 'New Purchase Order Created PO-2500004', 'purchase_orders/', 'PO-2500004', 4, NULL, '2025-08-23 09:33:12', NULL, 'manager', 'Charbel El Kabbouchi', '2025-08-23 09:33:12', '2025-08-23 09:33:12'),
-(28, 1, 1, 'N-2500048', 'purchases', 'Purchase Order PO-2500004 Approved', 'purchase_orders/', 'PO-2500004', 4, NULL, '2025-08-23 09:33:13', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-23 09:33:13', '2025-08-23 09:33:13'),
-(29, 1, 1, 'N-2500049', 'purchases', 'Purchase Order PO-2500005 Approved', 'purchase_orders/', 'PO-2500005', 5, NULL, '2025-08-23 09:56:28', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-23 09:56:28', '2025-08-23 09:56:28'),
-(30, 1, 1, 'N-2500050', 'purchases', 'Purchase Order PO-2500006 Approved', 'purchase_orders/', 'PO-2500006', 6, NULL, '2025-08-23 10:29:19', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-23 10:29:19', '2025-08-23 10:29:19'),
-(31, 1, 1, 'N-2500051', 'invoices', 'New Invoice Created IN-2500012', 'invoices/', 'IN-2500012', 3, NULL, '2025-08-24 07:10:44', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-24 07:10:44', '2025-08-24 07:10:44'),
-(32, 1, 3, 'N-2500052', 'invoices', 'Invoice IN-2500012 Approved', 'invoices/', 'IN-2500012', 3, NULL, '2025-08-24 07:10:46', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-24 07:10:47', '2025-08-24 07:10:47'),
-(33, 1, 1, 'N-2500053', 'invoices', 'New Invoice Created IN-2500013', 'invoices/', 'IN-2500013', 4, NULL, '2025-08-24 08:51:10', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-24 08:51:10', '2025-08-24 08:51:10'),
-(34, 1, 3, 'N-2500054', 'invoices', 'Invoice IN-2500013 Approved', 'invoices/', 'IN-2500013', 4, NULL, '2025-08-24 08:51:59', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-24 08:51:59', '2025-08-24 08:51:59'),
-(35, 1, 1, 'N-2500055', 'invoices', 'New Invoice Created IN-2500014', 'invoices/', 'IN-2500014', 5, NULL, '2025-08-24 21:48:28', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-24 21:48:28', '2025-08-24 21:48:28'),
-(36, 1, 1, 'N-2500056', 'purchases', 'Supplier Invoice BL-2500009 Created', 'bills/', 'BL-2500009', 2, NULL, '2025-08-24 22:05:15', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-24 22:05:15', '2025-08-24 22:05:15'),
-(37, 1, 1, 'N-2500057', 'purchases', 'Supplier Invoice BL-2500009 Approved', 'bills/', 'BL-2500009', 2, NULL, '2025-08-24 22:05:20', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-24 22:05:20', '2025-08-24 22:05:20'),
-(38, 1, 1, 'N-2500058', 'purchases', 'Purchase Order PO-2500007 Approved', 'purchase_orders/', 'PO-2500007', 1, NULL, '2025-08-25 06:55:54', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-25 06:55:54', '2025-08-25 06:55:54'),
-(39, 1, 1, 'N-2500059', 'purchases', 'Purchase Order PO-2500008 Approved', 'purchase_orders/', 'PO-2500008', 2, NULL, '2025-08-25 07:04:27', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-25 07:04:28', '2025-08-25 07:04:28'),
-(40, 1, 1, 'N-2500060', 'purchases', 'Supplier Invoice BL-2500000 Created', 'bills/', 'BL-2500000', 1, NULL, '2025-08-25 08:17:34', NULL, 'user', 'Charbel El Kabbouchi', '2025-08-25 08:17:34', '2025-08-25 08:17:34');
-
 -- --------------------------------------------------------
 
 --
@@ -2622,7 +2584,7 @@ CREATE TABLE `payment_options` (
 --
 
 INSERT INTO `payment_options` (`id`, `name`, `balance`, `created_at`, `updated_at`, `user_id`, `created_by`) VALUES
-(1, 'Cash', 64597.442, '2023-11-05 22:03:46', '2023-11-05 22:03:46', 1, 'Charbel El Kabbouchi'),
+(1, 'Cash', 84097.442, '2023-11-05 22:03:46', '2023-11-05 22:03:46', 1, 'Charbel El Kabbouchi'),
 (2, 'Cheque', 969501.830, '2023-11-05 22:04:01', '2023-11-05 22:04:01', 1, 'Charbel El Kabbouchi'),
 (3, 'Bank Transfer', 198897.620, '2023-11-05 22:04:05', '2023-11-05 22:04:05', 1, 'Charbel El Kabbouchi'),
 (4, 'Other', 37965.450, '2023-11-05 22:04:12', '2023-11-05 22:04:12', 1, 'Charbel El Kabbouchi'),
@@ -3032,7 +2994,8 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `barcode`, `title`, `summary`, `description`, `category_id`, `sub_category_id`, `sub_categoryid`, `sub_sub_categoryid`, `sub_sub_category_id`, `image`, `product_image_gallery`, `price`, `unitprice`, `original_price`, `sale_price`, `special_price`, `tax_percentage`, `badge`, `status`, `slug`, `attributes`, `sold_count`, `deleted_at`, `created_at`, `updated_at`, `field1`, `field2`, `field3`, `field4`, `field5`, `field6`, `field7`, `field8`, `field9`, `field10`, `added_by`, `user_id`, `brand_id`, `product_type`, `code`, `new`, `featured`, `best_selling`, `deal_of_the_day`, `deal_date`, `discount`, `discount_type`, `minimum_order_qty`, `free_shipping`, `colors`, `featured_status`, `request_status`, `published`, `variation`, `choice_options`, `refundable`, `min_qty`, `meta_image`, `color_image`, `category_ids`, `name`, `tag`, `purchase_price`, `tax`, `tax_type`, `tax_model`, `thumbnail`, `images`, `details`, `unit`, `shipping_cost`, `unit_price`, `current_stock`, `lot_qty`, `on_hold_qty`, `multiply_qty`, `special_image`, `top_search`, `warehouse_id`, `volume_box`, `ct_box`, `weight_box`, `warehouse_qty`, `currency_id`, `updated_by`, `created_by`, `tax_name`, `tax_rate`, `uom_id`, `minimum_stock`, `vendor_id`, `product_rating`, `rating_value`, `nb_boxes_1`, `nb_boxes_1_price`, `nb_boxes_2`, `nb_boxes_2_price`, `nb_boxes_3`, `nb_boxes_3_price`, `digital_product_type`, `video_provider`, `video_url`, `meta_title`, `meta_description`, `size`, `location`, `class_a_price`, `class_b_price`, `class_c_price`, `item_box`, `upc_number`, `body`, `document1`, `document2`, `document3`, `product_dropdown_1_id`, `product_dropdown_2_id`) VALUES
-(2500003, 'iVBORw0KGgoAAAANSUhEUgAAEpAAAAAeAQMAAAAPqHhZAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAapJREFUeJztklFKAwEUAwUP4JG8mkftMfyyVjB1HSKiqIyQ+SmF7HSbl5vzhYebN+4u3x8vn7fnAy+B+8P3BJ5envgocOUYOL3+RLgawunwDu8MLVDf4XR48Hv/4n8bWFR4OjZ6f/6kyfD1PfyA4qPAFTa1Sf2qgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhU2KhhbQndNgYFFhk6KhBXTnNBhYVNikaGgB3TkNBhYVNikaWkB3ToOBRYVNioYW0J3TYGBRYZOioQV05zQYWFTYpGhoAd05DQYWFTYpGlpAd06DgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhU2KhhbQndNgYFFhk6KhBXTnNBhYVNikaGgB3TkNBhYVNikaWkB3ToOBRYVNioYW0J3TYGBRYZOioQV05zQYWFTYpGhoAd05DQYWFTYpGlpAd06DgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhb+a1DOYGkV2vlEZ9wAAAABJRU5ErkJggg==', 'Rez 20KG', 'Rez 20KG', 'Rez 20KG', 1, '[\"1\"]', 1, NULL, '[\"\"]', 9999999, '[\"9999999\"]', 15.00, 15.00, 15, 10.00, 0.00, 0, NULL, 'publish', '2500003', '[]', NULL, NULL, '2025-08-25 09:54:44', '2025-08-25 10:08:16', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'seller', 1, NULL, 'physical', '2500003', NULL, NULL, NULL, NULL, NULL, 0, 'flat', 0, 0, '[]', 1, 1, 1, '[]', '[]', 1, 1, 'def.png', '[]', '[{\"id\":\"1\",\"position\":1}]', 'Rez 20KG', 'Rez 20KG', 15.00, 0, 'percent', 'exclude', 'placeholder.png', '[\"placeholder.png\"]', 'Rez 20KG', 'KG', 0, 15.00, 20, 20.000, 0.00, 0, 0, 0, 1, NULL, NULL, NULL, NULL, 1, 'Charbel El Kabbouchi', 'Charbel El Kabbouchi', NULL, NULL, 1, 0, 1, 1, 33, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, NULL, 'youtube', NULL, NULL, NULL, '0', '0', 0.00, 0.00, 0.00, 1.00, NULL, '1', NULL, NULL, NULL, NULL, NULL);
+(2500003, 'iVBORw0KGgoAAAANSUhEUgAAEpAAAAAeAQMAAAAPqHhZAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAapJREFUeJztklFKAwEUAwUP4JG8mkftMfyyVjB1HSKiqIyQ+SmF7HSbl5vzhYebN+4u3x8vn7fnAy+B+8P3BJ5envgocOUYOL3+RLgawunwDu8MLVDf4XR48Hv/4n8bWFR4OjZ6f/6kyfD1PfyA4qPAFTa1Sf2qgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhU2KhhbQndNgYFFhk6KhBXTnNBhYVNikaGgB3TkNBhYVNikaWkB3ToOBRYVNioYW0J3TYGBRYZOioQV05zQYWFTYpGhoAd05DQYWFTYpGlpAd06DgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhU2KhhbQndNgYFFhk6KhBXTnNBhYVNikaGgB3TkNBhYVNikaWkB3ToOBRYVNioYW0J3TYGBRYZOioQV05zQYWFTYpGhoAd05DQYWFTYpGlpAd06DgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhb+a1DOYGkV2vlEZ9wAAAABJRU5ErkJggg==', 'Rez 20KG', 'Rez 20KG', 'Rez 20KG', 1, '[\"1\"]', 1, NULL, '[\"\"]', 9999999, '[\"9999999\"]', 15.00, 15.00, 15, 100.64, 0.00, 0, NULL, 'publish', '2500003', '[]', NULL, NULL, '2025-08-25 09:54:44', '2025-08-26 08:55:11', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'seller', 1, NULL, 'physical', '2500003', NULL, NULL, NULL, NULL, NULL, 0, 'flat', 0, 0, '[]', 1, 1, 1, '[]', '[]', 1, 1, 'def.png', '[]', '[{\"id\":\"1\",\"position\":1}]', 'Rez 20KG', 'Rez 20KG', 100.64, 0, 'percent', 'exclude', 'placeholder.png', '[\"placeholder.png\"]', 'Rez 20KG', 'KG', 0, 15.00, 0, 20.000, 0.00, 0, 0, 0, 1, NULL, NULL, NULL, NULL, 1, 'Charbel El Kabbouchi', 'Charbel El Kabbouchi', NULL, NULL, 1, 0, 2, 5, 33, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, NULL, 'youtube', NULL, NULL, NULL, '0', '0', 0.00, 0.00, 0.00, 1.00, NULL, '1', NULL, NULL, NULL, NULL, NULL),
+(2500004, 'iVBORw0KGgoAAAANSUhEUgAAEpAAAAAeAQMAAAAPqHhZAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAa5JREFUeJztkktqQmEYQ4UuoEvq1rLUu4yOahWqTcGQWEonyTcR4c/RPE7ny+H0fa+X7++Xz5cz3fXBG32/Pfi4KtSD+/GD4+snbncn3O6g//CD8OjBw/9wkPB3LkoIsguQ8vk9/AFCPbhfZON2x2mT+ieC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqR8fg+f6rtMJNnwR20AAAAASUVORK5CYII=', 'Product 1', 'Product 1', 'Product 1', 1, '[\"1\"]', 1, NULL, '[\"\"]', 9999999, '[\"9999999\"]', 7.00, 7.00, 7, 50.32, 0.00, 0, NULL, 'publish', '2500004', '[]', NULL, NULL, '2025-08-26 08:43:14', '2025-08-26 08:55:11', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'seller', 1, NULL, 'physical', '2500004', NULL, NULL, NULL, NULL, NULL, 0, 'flat', 0, 0, '[]', 1, 1, 1, '[]', '[]', 1, 1, 'def.png', '[]', '[{\"id\":\"1\",\"position\":1}]', 'Product 1', 'Product 1', 50.32, 0, 'percent', 'exclude', 'placeholder.png', '[\"placeholder.png\"]', 'Product 1', 'KG', 0, 7.00, 0, 1.000, 0.00, 0, 0, 0, 1, NULL, NULL, NULL, NULL, 1, 'Charbel El Kabbouchi', 'Charbel El Kabbouchi', NULL, NULL, 1, 0, 2, 5, 29, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, NULL, 'youtube', NULL, NULL, NULL, '0', '0', 0.00, 0.00, 0.00, 1.00, NULL, '1', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3400,7 +3363,8 @@ INSERT INTO `product_conversions` (`id`, `product_id`, `base_uom_id`, `base_qty`
 (1, 2500000, NULL, 1, 0.100, 5, 'Pallet', 'Pallet', '2025-08-07 13:15:36', '2025-08-23 08:31:28'),
 (2, 2500001, NULL, 1, 0.100, 5, 'Pallet', 'Pallet', '2025-08-23 08:31:51', '2025-08-23 08:31:51'),
 (3, 2500002, NULL, 1, 0.002, 5, 'Pallet', 'Pallet', '2025-08-23 08:51:41', '2025-08-23 08:51:41'),
-(4, 2500003, NULL, 1, 0.100, 2, 'Pallet', 'Pallet', '2025-08-25 06:55:27', '2025-08-25 06:55:27');
+(4, 2500003, NULL, 1, 0.100, 2, 'Pallet', 'Pallet', '2025-08-25 06:55:27', '2025-08-25 06:55:27'),
+(5, 2500004, NULL, 1, 0.100, 2, 'Pallet', 'Pallet', '2025-08-26 13:43:29', '2025-08-26 13:43:29');
 
 -- --------------------------------------------------------
 
@@ -3469,7 +3433,8 @@ CREATE TABLE `product_inventories` (
 --
 
 INSERT INTO `product_inventories` (`id`, `product_id`, `sku`, `stock_count`, `sold_count`, `created_at`, `updated_at`) VALUES
-(1, 2500003, '2500003', 0, 0, '2025-08-25 06:54:44', '2025-08-25 06:55:27');
+(1, 2500003, '2500003', 0, 0, '2025-08-25 06:54:44', '2025-08-26 13:51:27'),
+(2, 2500004, '2500004', 0, 0, '2025-08-26 13:43:14', '2025-08-26 13:51:55');
 
 -- --------------------------------------------------------
 
@@ -3494,7 +3459,8 @@ CREATE TABLE `product_items` (
 --
 
 INSERT INTO `product_items` (`id`, `product_id`, `vendor_id`, `reference`, `supplier_item_nb`, `price`, `currency_id`, `created_at`, `updated_at`) VALUES
-(1, 2500003, 1, 'reference', NULL, 10, 1, '2025-08-25 06:55:27', '2025-08-25 06:55:27');
+(1, 2500003, 2, 'reference', NULL, 100, 1, '2025-08-25 06:55:27', '2025-08-26 13:51:27'),
+(2, 2500004, 2, 'reference', NULL, 50, 1, '2025-08-26 13:43:14', '2025-08-26 13:51:55');
 
 -- --------------------------------------------------------
 
@@ -3517,7 +3483,13 @@ CREATE TABLE `product_log` (
 
 INSERT INTO `product_log` (`id`, `body`, `comment`, `items`, `created_at`, `updated_at`) VALUES
 (1, '[{\"id\":2500003,\"barcode\":\"iVBORw0KGgoAAAANSUhEUgAAAJAAAAAeAQMAAAD5MgVTAAAABlBMVEX\\/\\/\\/8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAB5JREFUKJFj6N61Y92LV4t3QeA7re5dDKNCo0KEhQB+IXE06KVd+AAAAABJRU5ErkJggg==\",\"title\":\"Rez 20KG\",\"summary\":\"Rez 20KG\",\"description\":\"Rez 20KG\",\"category_id\":1,\"sub_category_id\":\"[\\\"1\\\"]\",\"sub_categoryid\":1,\"sub_sub_categoryid\":null,\"sub_sub_category_id\":\"[\\\"\\\"]\",\"image\":9999999,\"product_image_gallery\":\"[\\\"9999999\\\"]\",\"price\":15,\"unitprice\":0,\"original_price\":15,\"sale_price\":10,\"special_price\":0,\"tax_percentage\":0,\"badge\":null,\"status\":\"publish\",\"slug\":\"2500003\",\"attributes\":\"[]\",\"sold_count\":null,\"deleted_at\":null,\"created_at\":\"2025-08-25T06:54:44.000000Z\",\"updated_at\":\"2025-08-25T06:54:44.000000Z\",\"field1\":null,\"field2\":null,\"field3\":null,\"field4\":null,\"field5\":null,\"field6\":null,\"field7\":null,\"field8\":null,\"field9\":null,\"field10\":null,\"added_by\":\"seller\",\"user_id\":1,\"brand_id\":null,\"product_type\":\"physical\",\"code\":\"2500003\",\"new\":null,\"featured\":null,\"best_selling\":null,\"deal_of_the_day\":null,\"deal_date\":null,\"discount\":0,\"discount_type\":\"flat\",\"minimum_order_qty\":0,\"free_shipping\":0,\"colors\":\"[]\",\"featured_status\":1,\"request_status\":1,\"published\":1,\"variation\":\"[]\",\"choice_options\":\"[]\",\"refundable\":1,\"min_qty\":1,\"meta_image\":\"def.png\",\"color_image\":\"[]\",\"category_ids\":\"[{\\\"id\\\":\\\"1\\\",\\\"position\\\":1}]\",\"name\":\"Rez 20KG\",\"tag\":\"Rez 20KG\",\"purchase_price\":15,\"tax\":0,\"tax_type\":\"percent\",\"tax_model\":\"exclude\",\"thumbnail\":\"placeholder.png\",\"images\":\"[\\\"placeholder.png\\\"]\",\"details\":\"Rez 20KG\",\"unit\":\"KG\",\"shipping_cost\":0,\"unit_price\":15,\"current_stock\":0,\"lot_qty\":\"20.000\",\"on_hold_qty\":\"0.00\",\"multiply_qty\":0,\"special_image\":0,\"top_search\":0,\"warehouse_id\":1,\"volume_box\":null,\"ct_box\":null,\"weight_box\":null,\"warehouse_qty\":null,\"currency_id\":1,\"updated_by\":null,\"created_by\":\"Charbel El Kabbouchi\",\"tax_name\":null,\"tax_rate\":null,\"uom_id\":1,\"minimum_stock\":0,\"vendor_id\":0,\"product_rating\":1,\"rating_value\":\"-50\",\"nb_boxes_1\":0,\"nb_boxes_1_price\":0,\"nb_boxes_2\":0,\"nb_boxes_2_price\":0,\"nb_boxes_3\":0,\"nb_boxes_3_price\":0,\"digital_product_type\":null,\"video_provider\":\"youtube\",\"video_url\":null,\"meta_title\":null,\"meta_description\":null,\"size\":\"0\",\"location\":\"0\",\"class_a_price\":0,\"class_b_price\":0,\"class_c_price\":0,\"item_box\":1,\"upc_number\":null,\"body\":null,\"document1\":null,\"document2\":null,\"document3\":null,\"product_dropdown_1_id\":null,\"product_dropdown_2_id\":null,\"text\":\"2500003 - Rez 20KG - <span style=\\\"color:red;\\\">[(0 KG)]<\\/span>\"}]', 'Store', '[]', '2025-08-25 06:54:44', '2025-08-25 06:54:44'),
-(2, '[{\"id\":2500003,\"barcode\":\"iVBORw0KGgoAAAANSUhEUgAAEpAAAAAeAQMAAAAPqHhZAAAABlBMVEX\\/\\/\\/8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAapJREFUeJztklFKAwEUAwUP4JG8mkftMfyyVjB1HSKiqIyQ+SmF7HSbl5vzhYebN+4u3x8vn7fnAy+B+8P3BJ5envgocOUYOL3+RLgawunwDu8MLVDf4XR48Hv\\/4n8bWFR4OjZ6f\\/6kyfD1PfyA4qPAFTa1Sf2qgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhU2KhhbQndNgYFFhk6KhBXTnNBhYVNikaGgB3TkNBhYVNikaWkB3ToOBRYVNioYW0J3TYGBRYZOioQV05zQYWFTYpGhoAd05DQYWFTYpGlpAd06DgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhU2KhhbQndNgYFFhk6KhBXTnNBhYVNikaGgB3TkNBhYVNikaWkB3ToOBRYVNioYW0J3TYGBRYZOioQV05zQYWFTYpGhoAd05DQYWFTYpGlpAd06DgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhb+a1DOYGkV2vlEZ9wAAAABJRU5ErkJggg==\",\"title\":\"Rez 20KG\",\"summary\":\"Rez 20KG\",\"description\":\"Rez 20KG\",\"category_id\":1,\"sub_category_id\":\"[\\\"1\\\"]\",\"sub_categoryid\":1,\"sub_sub_categoryid\":null,\"sub_sub_category_id\":\"[\\\"\\\"]\",\"image\":9999999,\"product_image_gallery\":\"[\\\"9999999\\\"]\",\"price\":15,\"unitprice\":15,\"original_price\":15,\"sale_price\":10,\"special_price\":0,\"tax_percentage\":0,\"badge\":null,\"status\":\"publish\",\"slug\":\"2500003\",\"attributes\":\"[]\",\"sold_count\":null,\"deleted_at\":null,\"created_at\":\"2025-08-25T06:54:44.000000Z\",\"updated_at\":\"2025-08-25T06:55:27.000000Z\",\"field1\":null,\"field2\":null,\"field3\":null,\"field4\":null,\"field5\":null,\"field6\":null,\"field7\":null,\"field8\":null,\"field9\":null,\"field10\":null,\"added_by\":\"seller\",\"user_id\":1,\"brand_id\":null,\"product_type\":\"physical\",\"code\":\"2500003\",\"new\":null,\"featured\":null,\"best_selling\":null,\"deal_of_the_day\":null,\"deal_date\":null,\"discount\":0,\"discount_type\":\"flat\",\"minimum_order_qty\":0,\"free_shipping\":0,\"colors\":\"[]\",\"featured_status\":1,\"request_status\":1,\"published\":1,\"variation\":\"[]\",\"choice_options\":\"[]\",\"refundable\":1,\"min_qty\":1,\"meta_image\":\"def.png\",\"color_image\":\"[]\",\"category_ids\":\"[{\\\"id\\\":\\\"1\\\",\\\"position\\\":1}]\",\"name\":\"Rez 20KG\",\"tag\":\"Rez 20KG\",\"purchase_price\":15,\"tax\":0,\"tax_type\":\"percent\",\"tax_model\":\"exclude\",\"thumbnail\":\"placeholder.png\",\"images\":\"[\\\"placeholder.png\\\"]\",\"details\":\"Rez 20KG\",\"unit\":\"KG\",\"shipping_cost\":0,\"unit_price\":15,\"current_stock\":0,\"lot_qty\":\"20.000\",\"on_hold_qty\":\"0.00\",\"multiply_qty\":0,\"special_image\":0,\"top_search\":0,\"warehouse_id\":1,\"volume_box\":null,\"ct_box\":null,\"weight_box\":null,\"warehouse_qty\":null,\"currency_id\":1,\"updated_by\":\"Charbel El Kabbouchi\",\"created_by\":\"Charbel El Kabbouchi\",\"tax_name\":null,\"tax_rate\":null,\"uom_id\":1,\"minimum_stock\":0,\"vendor_id\":1,\"product_rating\":1,\"rating_value\":\"33\",\"nb_boxes_1\":0,\"nb_boxes_1_price\":0,\"nb_boxes_2\":0,\"nb_boxes_2_price\":0,\"nb_boxes_3\":0,\"nb_boxes_3_price\":0,\"digital_product_type\":null,\"video_provider\":\"youtube\",\"video_url\":null,\"meta_title\":null,\"meta_description\":null,\"size\":\"0\",\"location\":\"0\",\"class_a_price\":0,\"class_b_price\":0,\"class_c_price\":0,\"item_box\":1,\"upc_number\":null,\"body\":\"1\",\"document1\":null,\"document2\":null,\"document3\":null,\"product_dropdown_1_id\":null,\"product_dropdown_2_id\":null,\"text\":\"2500003 - Rez 20KG - <span style=\\\"color:red;\\\">[(0 KG)]<\\/span>\"}]', 'Update', '[{\"id\":1,\"product_id\":2500003,\"vendor_id\":1,\"reference\":\"reference\",\"supplier_item_nb\":null,\"price\":10,\"currency_id\":1,\"created_at\":\"2025-08-25T06:55:27.000000Z\",\"updated_at\":\"2025-08-25T06:55:27.000000Z\",\"text\":10}]', '2025-08-25 06:55:27', '2025-08-25 06:55:27');
+(2, '[{\"id\":2500003,\"barcode\":\"iVBORw0KGgoAAAANSUhEUgAAEpAAAAAeAQMAAAAPqHhZAAAABlBMVEX\\/\\/\\/8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAapJREFUeJztklFKAwEUAwUP4JG8mkftMfyyVjB1HSKiqIyQ+SmF7HSbl5vzhYebN+4u3x8vn7fnAy+B+8P3BJ5envgocOUYOL3+RLgawunwDu8MLVDf4XR48Hv\\/4n8bWFR4OjZ6f\\/6kyfD1PfyA4qPAFTa1Sf2qgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhU2KhhbQndNgYFFhk6KhBXTnNBhYVNikaGgB3TkNBhYVNikaWkB3ToOBRYVNioYW0J3TYGBRYZOioQV05zQYWFTYpGhoAd05DQYWFTYpGlpAd06DgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhU2KhhbQndNgYFFhk6KhBXTnNBhYVNikaGgB3TkNBhYVNikaWkB3ToOBRYVNioYW0J3TYGBRYZOioQV05zQYWFTYpGhoAd05DQYWFTYpGlpAd06DgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhb+a1DOYGkV2vlEZ9wAAAABJRU5ErkJggg==\",\"title\":\"Rez 20KG\",\"summary\":\"Rez 20KG\",\"description\":\"Rez 20KG\",\"category_id\":1,\"sub_category_id\":\"[\\\"1\\\"]\",\"sub_categoryid\":1,\"sub_sub_categoryid\":null,\"sub_sub_category_id\":\"[\\\"\\\"]\",\"image\":9999999,\"product_image_gallery\":\"[\\\"9999999\\\"]\",\"price\":15,\"unitprice\":15,\"original_price\":15,\"sale_price\":10,\"special_price\":0,\"tax_percentage\":0,\"badge\":null,\"status\":\"publish\",\"slug\":\"2500003\",\"attributes\":\"[]\",\"sold_count\":null,\"deleted_at\":null,\"created_at\":\"2025-08-25T06:54:44.000000Z\",\"updated_at\":\"2025-08-25T06:55:27.000000Z\",\"field1\":null,\"field2\":null,\"field3\":null,\"field4\":null,\"field5\":null,\"field6\":null,\"field7\":null,\"field8\":null,\"field9\":null,\"field10\":null,\"added_by\":\"seller\",\"user_id\":1,\"brand_id\":null,\"product_type\":\"physical\",\"code\":\"2500003\",\"new\":null,\"featured\":null,\"best_selling\":null,\"deal_of_the_day\":null,\"deal_date\":null,\"discount\":0,\"discount_type\":\"flat\",\"minimum_order_qty\":0,\"free_shipping\":0,\"colors\":\"[]\",\"featured_status\":1,\"request_status\":1,\"published\":1,\"variation\":\"[]\",\"choice_options\":\"[]\",\"refundable\":1,\"min_qty\":1,\"meta_image\":\"def.png\",\"color_image\":\"[]\",\"category_ids\":\"[{\\\"id\\\":\\\"1\\\",\\\"position\\\":1}]\",\"name\":\"Rez 20KG\",\"tag\":\"Rez 20KG\",\"purchase_price\":15,\"tax\":0,\"tax_type\":\"percent\",\"tax_model\":\"exclude\",\"thumbnail\":\"placeholder.png\",\"images\":\"[\\\"placeholder.png\\\"]\",\"details\":\"Rez 20KG\",\"unit\":\"KG\",\"shipping_cost\":0,\"unit_price\":15,\"current_stock\":0,\"lot_qty\":\"20.000\",\"on_hold_qty\":\"0.00\",\"multiply_qty\":0,\"special_image\":0,\"top_search\":0,\"warehouse_id\":1,\"volume_box\":null,\"ct_box\":null,\"weight_box\":null,\"warehouse_qty\":null,\"currency_id\":1,\"updated_by\":\"Charbel El Kabbouchi\",\"created_by\":\"Charbel El Kabbouchi\",\"tax_name\":null,\"tax_rate\":null,\"uom_id\":1,\"minimum_stock\":0,\"vendor_id\":1,\"product_rating\":1,\"rating_value\":\"33\",\"nb_boxes_1\":0,\"nb_boxes_1_price\":0,\"nb_boxes_2\":0,\"nb_boxes_2_price\":0,\"nb_boxes_3\":0,\"nb_boxes_3_price\":0,\"digital_product_type\":null,\"video_provider\":\"youtube\",\"video_url\":null,\"meta_title\":null,\"meta_description\":null,\"size\":\"0\",\"location\":\"0\",\"class_a_price\":0,\"class_b_price\":0,\"class_c_price\":0,\"item_box\":1,\"upc_number\":null,\"body\":\"1\",\"document1\":null,\"document2\":null,\"document3\":null,\"product_dropdown_1_id\":null,\"product_dropdown_2_id\":null,\"text\":\"2500003 - Rez 20KG - <span style=\\\"color:red;\\\">[(0 KG)]<\\/span>\"}]', 'Update', '[{\"id\":1,\"product_id\":2500003,\"vendor_id\":1,\"reference\":\"reference\",\"supplier_item_nb\":null,\"price\":10,\"currency_id\":1,\"created_at\":\"2025-08-25T06:55:27.000000Z\",\"updated_at\":\"2025-08-25T06:55:27.000000Z\",\"text\":10}]', '2025-08-25 06:55:27', '2025-08-25 06:55:27'),
+(3, '[{\"id\":2500004,\"barcode\":\"iVBORw0KGgoAAAANSUhEUgAAAJAAAAAeAQMAAAD5MgVTAAAABlBMVEX\\/\\/\\/8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAB1JREFUKJFj6N61Y92LV4t3QeG67l0Mo0KjQoSFALoLd+KrP4MhAAAAAElFTkSuQmCC\",\"title\":\"Product 1\",\"summary\":\"Product 1\",\"description\":\"Product 1\",\"category_id\":1,\"sub_category_id\":\"[\\\"1\\\"]\",\"sub_categoryid\":1,\"sub_sub_categoryid\":null,\"sub_sub_category_id\":\"[\\\"\\\"]\",\"image\":9999999,\"product_image_gallery\":\"[\\\"9999999\\\"]\",\"price\":7,\"unitprice\":0,\"original_price\":7,\"sale_price\":5,\"special_price\":0,\"tax_percentage\":0,\"badge\":null,\"status\":\"publish\",\"slug\":\"2500004\",\"attributes\":\"[]\",\"sold_count\":null,\"deleted_at\":null,\"created_at\":\"2025-08-26T05:43:14.000000Z\",\"updated_at\":\"2025-08-26T05:43:14.000000Z\",\"field1\":null,\"field2\":null,\"field3\":null,\"field4\":null,\"field5\":null,\"field6\":null,\"field7\":null,\"field8\":null,\"field9\":null,\"field10\":null,\"added_by\":\"seller\",\"user_id\":1,\"brand_id\":null,\"product_type\":\"physical\",\"code\":\"2500004\",\"new\":null,\"featured\":null,\"best_selling\":null,\"deal_of_the_day\":null,\"deal_date\":null,\"discount\":0,\"discount_type\":\"flat\",\"minimum_order_qty\":0,\"free_shipping\":0,\"colors\":\"[]\",\"featured_status\":1,\"request_status\":1,\"published\":1,\"variation\":\"[]\",\"choice_options\":\"[]\",\"refundable\":1,\"min_qty\":1,\"meta_image\":\"def.png\",\"color_image\":\"[]\",\"category_ids\":\"[{\\\"id\\\":\\\"1\\\",\\\"position\\\":1}]\",\"name\":\"Product 1\",\"tag\":\"Product 1\",\"purchase_price\":7,\"tax\":0,\"tax_type\":\"percent\",\"tax_model\":\"exclude\",\"thumbnail\":\"placeholder.png\",\"images\":\"[\\\"placeholder.png\\\"]\",\"details\":\"Product 1\",\"unit\":\"KG\",\"shipping_cost\":0,\"unit_price\":7,\"current_stock\":0,\"lot_qty\":null,\"on_hold_qty\":\"0.00\",\"multiply_qty\":0,\"special_image\":0,\"top_search\":0,\"warehouse_id\":1,\"volume_box\":null,\"ct_box\":null,\"weight_box\":null,\"warehouse_qty\":null,\"currency_id\":1,\"updated_by\":null,\"created_by\":\"Charbel El Kabbouchi\",\"tax_name\":null,\"tax_rate\":null,\"uom_id\":1,\"minimum_stock\":0,\"vendor_id\":0,\"product_rating\":1,\"rating_value\":\"-40\",\"nb_boxes_1\":0,\"nb_boxes_1_price\":0,\"nb_boxes_2\":0,\"nb_boxes_2_price\":0,\"nb_boxes_3\":0,\"nb_boxes_3_price\":0,\"digital_product_type\":null,\"video_provider\":\"youtube\",\"video_url\":null,\"meta_title\":null,\"meta_description\":null,\"size\":\"0\",\"location\":\"0\",\"class_a_price\":0,\"class_b_price\":0,\"class_c_price\":0,\"item_box\":1,\"upc_number\":null,\"body\":null,\"document1\":null,\"document2\":null,\"document3\":null,\"product_dropdown_1_id\":null,\"product_dropdown_2_id\":null,\"text\":\"2500004 - Product 1 - <span style=\\\"color:red;\\\">[(0 KG)]<\\/span>\"}]', 'Store', '[{\"id\":2,\"product_id\":2500004,\"vendor_id\":1,\"reference\":\"reference\",\"supplier_item_nb\":null,\"price\":5,\"currency_id\":1,\"created_at\":\"2025-08-26T05:43:14.000000Z\",\"updated_at\":\"2025-08-26T05:43:14.000000Z\",\"text\":5}]', '2025-08-26 13:43:14', '2025-08-26 13:43:14'),
+(4, '[{\"id\":2500004,\"barcode\":\"iVBORw0KGgoAAAANSUhEUgAAEpAAAAAeAQMAAAAPqHhZAAAABlBMVEX\\/\\/\\/8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAa5JREFUeJztkktqQmEYQ4UuoEvq1rLUu4yOahWqTcGQWEonyTcR4c\\/RPE7ny+H0fa+X7++Xz5cz3fXBG32\\/Pfi4KtSD+\\/GD4+snbncn3O6g\\/\\/CD8OjBw\\/9wkPB3LkoIsguQ8vk9\\/AFCPbhfZON2x2mT+ieC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqR8fg+f6rtMJNnwR20AAAAASUVORK5CYII=\",\"title\":\"Product 1\",\"summary\":\"Product 1\",\"description\":\"Product 1\",\"category_id\":1,\"sub_category_id\":\"[\\\"1\\\"]\",\"sub_categoryid\":1,\"sub_sub_categoryid\":null,\"sub_sub_category_id\":\"[\\\"\\\"]\",\"image\":9999999,\"product_image_gallery\":\"[\\\"9999999\\\"]\",\"price\":7,\"unitprice\":7,\"original_price\":7,\"sale_price\":5,\"special_price\":0,\"tax_percentage\":0,\"badge\":null,\"status\":\"publish\",\"slug\":\"2500004\",\"attributes\":\"[]\",\"sold_count\":null,\"deleted_at\":null,\"created_at\":\"2025-08-26T05:43:14.000000Z\",\"updated_at\":\"2025-08-26T05:43:29.000000Z\",\"field1\":null,\"field2\":null,\"field3\":null,\"field4\":null,\"field5\":null,\"field6\":null,\"field7\":null,\"field8\":null,\"field9\":null,\"field10\":null,\"added_by\":\"seller\",\"user_id\":1,\"brand_id\":null,\"product_type\":\"physical\",\"code\":\"2500004\",\"new\":null,\"featured\":null,\"best_selling\":null,\"deal_of_the_day\":null,\"deal_date\":null,\"discount\":0,\"discount_type\":\"flat\",\"minimum_order_qty\":0,\"free_shipping\":0,\"colors\":\"[]\",\"featured_status\":1,\"request_status\":1,\"published\":1,\"variation\":\"[]\",\"choice_options\":\"[]\",\"refundable\":1,\"min_qty\":1,\"meta_image\":\"def.png\",\"color_image\":\"[]\",\"category_ids\":\"[{\\\"id\\\":\\\"1\\\",\\\"position\\\":1}]\",\"name\":\"Product 1\",\"tag\":\"Product 1\",\"purchase_price\":7,\"tax\":0,\"tax_type\":\"percent\",\"tax_model\":\"exclude\",\"thumbnail\":\"placeholder.png\",\"images\":\"[\\\"placeholder.png\\\"]\",\"details\":\"Product 1\",\"unit\":\"KG\",\"shipping_cost\":0,\"unit_price\":7,\"current_stock\":0,\"lot_qty\":null,\"on_hold_qty\":\"0.00\",\"multiply_qty\":0,\"special_image\":0,\"top_search\":0,\"warehouse_id\":1,\"volume_box\":null,\"ct_box\":null,\"weight_box\":null,\"warehouse_qty\":null,\"currency_id\":1,\"updated_by\":\"Charbel El Kabbouchi\",\"created_by\":\"Charbel El Kabbouchi\",\"tax_name\":null,\"tax_rate\":null,\"uom_id\":1,\"minimum_stock\":0,\"vendor_id\":1,\"product_rating\":1,\"rating_value\":\"29\",\"nb_boxes_1\":0,\"nb_boxes_1_price\":0,\"nb_boxes_2\":0,\"nb_boxes_2_price\":0,\"nb_boxes_3\":0,\"nb_boxes_3_price\":0,\"digital_product_type\":null,\"video_provider\":\"youtube\",\"video_url\":null,\"meta_title\":null,\"meta_description\":null,\"size\":\"0\",\"location\":\"0\",\"class_a_price\":0,\"class_b_price\":0,\"class_c_price\":0,\"item_box\":1,\"upc_number\":null,\"body\":\"1\",\"document1\":null,\"document2\":null,\"document3\":null,\"product_dropdown_1_id\":null,\"product_dropdown_2_id\":null,\"text\":\"2500004 - Product 1 - <span style=\\\"color:red;\\\">[(0 KG)]<\\/span>\"}]', 'Update', '[{\"id\":2,\"product_id\":2500004,\"vendor_id\":1,\"reference\":\"reference\",\"supplier_item_nb\":null,\"price\":5,\"currency_id\":1,\"created_at\":\"2025-08-26T05:43:14.000000Z\",\"updated_at\":\"2025-08-26T05:43:14.000000Z\",\"text\":5}]', '2025-08-26 13:43:29', '2025-08-26 13:43:29'),
+(5, '[{\"id\":2500003,\"barcode\":\"iVBORw0KGgoAAAANSUhEUgAAEpAAAAAeAQMAAAAPqHhZAAAABlBMVEX\\/\\/\\/8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAapJREFUeJztklFKAwEUAwUP4JG8mkftMfyyVjB1HSKiqIyQ+SmF7HSbl5vzhYebN+4u3x8vn7fnAy+B+8P3BJ5envgocOUYOL3+RLgawunwDu8MLVDf4XR48Hv\\/4n8bWFR4OjZ6f\\/6kyfD1PfyA4qPAFTa1Sf2qgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhU2KhhbQndNgYFFhk6KhBXTnNBhYVNikaGgB3TkNBhYVNikaWkB3ToOBRYVNioYW0J3TYGBRYZOioQV05zQYWFTYpGhoAd05DQYWFTYpGlpAd06DgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhU2KhhbQndNgYFFhk6KhBXTnNBhYVNikaGgB3TkNBhYVNikaWkB3ToOBRYVNioYW0J3TYGBRYZOioQV05zQYWFTYpGhoAd05DQYWFTYpGlpAd06DgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhb+a1DOYGkV2vlEZ9wAAAABJRU5ErkJggg==\",\"title\":\"Rez 20KG\",\"summary\":\"Rez 20KG\",\"description\":\"Rez 20KG\",\"category_id\":1,\"sub_category_id\":\"[\\\"1\\\"]\",\"sub_categoryid\":1,\"sub_sub_categoryid\":null,\"sub_sub_category_id\":\"[\\\"\\\"]\",\"image\":9999999,\"product_image_gallery\":\"[\\\"9999999\\\"]\",\"price\":15,\"unitprice\":15,\"original_price\":15,\"sale_price\":10,\"special_price\":0,\"tax_percentage\":0,\"badge\":null,\"status\":\"publish\",\"slug\":\"2500003\",\"attributes\":\"[]\",\"sold_count\":null,\"deleted_at\":null,\"created_at\":\"2025-08-25T06:54:44.000000Z\",\"updated_at\":\"2025-08-26T05:43:59.000000Z\",\"field1\":null,\"field2\":null,\"field3\":null,\"field4\":null,\"field5\":null,\"field6\":null,\"field7\":null,\"field8\":null,\"field9\":null,\"field10\":null,\"added_by\":\"seller\",\"user_id\":1,\"brand_id\":null,\"product_type\":\"physical\",\"code\":\"2500003\",\"new\":null,\"featured\":null,\"best_selling\":null,\"deal_of_the_day\":null,\"deal_date\":null,\"discount\":0,\"discount_type\":\"flat\",\"minimum_order_qty\":0,\"free_shipping\":0,\"colors\":\"[]\",\"featured_status\":1,\"request_status\":1,\"published\":1,\"variation\":\"[]\",\"choice_options\":\"[]\",\"refundable\":1,\"min_qty\":1,\"meta_image\":\"def.png\",\"color_image\":\"[]\",\"category_ids\":\"[{\\\"id\\\":\\\"1\\\",\\\"position\\\":1}]\",\"name\":\"Rez 20KG\",\"tag\":\"Rez 20KG\",\"purchase_price\":15,\"tax\":0,\"tax_type\":\"percent\",\"tax_model\":\"exclude\",\"thumbnail\":\"placeholder.png\",\"images\":\"[\\\"placeholder.png\\\"]\",\"details\":\"Rez 20KG\",\"unit\":\"KG\",\"shipping_cost\":0,\"unit_price\":15,\"current_stock\":0,\"lot_qty\":\"20.000\",\"on_hold_qty\":\"0.00\",\"multiply_qty\":0,\"special_image\":0,\"top_search\":0,\"warehouse_id\":1,\"volume_box\":null,\"ct_box\":null,\"weight_box\":null,\"warehouse_qty\":null,\"currency_id\":1,\"updated_by\":\"Charbel El Kabbouchi\",\"created_by\":\"Charbel El Kabbouchi\",\"tax_name\":null,\"tax_rate\":null,\"uom_id\":1,\"minimum_stock\":0,\"vendor_id\":1,\"product_rating\":5,\"rating_value\":\"33\",\"nb_boxes_1\":0,\"nb_boxes_1_price\":0,\"nb_boxes_2\":0,\"nb_boxes_2_price\":0,\"nb_boxes_3\":0,\"nb_boxes_3_price\":0,\"digital_product_type\":null,\"video_provider\":\"youtube\",\"video_url\":null,\"meta_title\":null,\"meta_description\":null,\"size\":\"0\",\"location\":\"0\",\"class_a_price\":0,\"class_b_price\":0,\"class_c_price\":0,\"item_box\":1,\"upc_number\":null,\"body\":\"1\",\"document1\":null,\"document2\":null,\"document3\":null,\"product_dropdown_1_id\":null,\"product_dropdown_2_id\":null,\"text\":\"2500003 - Rez 20KG - <span style=\\\"color:red;\\\">[(0 KG)]<\\/span>\"}]', 'Update', '[{\"id\":1,\"product_id\":2500003,\"vendor_id\":1,\"reference\":\"reference\",\"supplier_item_nb\":null,\"price\":10,\"currency_id\":1,\"created_at\":\"2025-08-24T22:55:27.000000Z\",\"updated_at\":\"2025-08-24T22:55:27.000000Z\",\"text\":10}]', '2025-08-26 13:43:59', '2025-08-26 13:43:59'),
+(6, '[{\"id\":2500004,\"barcode\":\"iVBORw0KGgoAAAANSUhEUgAAEpAAAAAeAQMAAAAPqHhZAAAABlBMVEX\\/\\/\\/8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAa5JREFUeJztkktqQmEYQ4UuoEvq1rLUu4yOahWqTcGQWEonyTcR4c\\/RPE7ny+H0fa+X7++Xz5cz3fXBG32\\/Pfi4KtSD+\\/GD4+snbncn3O6g\\/\\/CD8OjBw\\/9wkPB3LkoIsguQ8vk9\\/AFCPbhfZON2x2mT+ieC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqR8fg+f6rtMJNnwR20AAAAASUVORK5CYII=\",\"title\":\"Product 1\",\"summary\":\"Product 1\",\"description\":\"Product 1\",\"category_id\":1,\"sub_category_id\":\"[\\\"1\\\"]\",\"sub_categoryid\":1,\"sub_sub_categoryid\":null,\"sub_sub_category_id\":\"[\\\"\\\"]\",\"image\":9999999,\"product_image_gallery\":\"[\\\"9999999\\\"]\",\"price\":7,\"unitprice\":7,\"original_price\":7,\"sale_price\":5,\"special_price\":0,\"tax_percentage\":0,\"badge\":null,\"status\":\"publish\",\"slug\":\"2500004\",\"attributes\":\"[]\",\"sold_count\":null,\"deleted_at\":null,\"created_at\":\"2025-08-26T05:43:14.000000Z\",\"updated_at\":\"2025-08-26T05:44:14.000000Z\",\"field1\":null,\"field2\":null,\"field3\":null,\"field4\":null,\"field5\":null,\"field6\":null,\"field7\":null,\"field8\":null,\"field9\":null,\"field10\":null,\"added_by\":\"seller\",\"user_id\":1,\"brand_id\":null,\"product_type\":\"physical\",\"code\":\"2500004\",\"new\":null,\"featured\":null,\"best_selling\":null,\"deal_of_the_day\":null,\"deal_date\":null,\"discount\":0,\"discount_type\":\"flat\",\"minimum_order_qty\":0,\"free_shipping\":0,\"colors\":\"[]\",\"featured_status\":1,\"request_status\":1,\"published\":1,\"variation\":\"[]\",\"choice_options\":\"[]\",\"refundable\":1,\"min_qty\":1,\"meta_image\":\"def.png\",\"color_image\":\"[]\",\"category_ids\":\"[{\\\"id\\\":\\\"1\\\",\\\"position\\\":1}]\",\"name\":\"Product 1\",\"tag\":\"Product 1\",\"purchase_price\":7,\"tax\":0,\"tax_type\":\"percent\",\"tax_model\":\"exclude\",\"thumbnail\":\"placeholder.png\",\"images\":\"[\\\"placeholder.png\\\"]\",\"details\":\"Product 1\",\"unit\":\"KG\",\"shipping_cost\":0,\"unit_price\":7,\"current_stock\":0,\"lot_qty\":\"1.000\",\"on_hold_qty\":\"0.00\",\"multiply_qty\":0,\"special_image\":0,\"top_search\":0,\"warehouse_id\":1,\"volume_box\":null,\"ct_box\":null,\"weight_box\":null,\"warehouse_qty\":null,\"currency_id\":1,\"updated_by\":\"Charbel El Kabbouchi\",\"created_by\":\"Charbel El Kabbouchi\",\"tax_name\":null,\"tax_rate\":null,\"uom_id\":1,\"minimum_stock\":0,\"vendor_id\":1,\"product_rating\":5,\"rating_value\":\"29\",\"nb_boxes_1\":0,\"nb_boxes_1_price\":0,\"nb_boxes_2\":0,\"nb_boxes_2_price\":0,\"nb_boxes_3\":0,\"nb_boxes_3_price\":0,\"digital_product_type\":null,\"video_provider\":\"youtube\",\"video_url\":null,\"meta_title\":null,\"meta_description\":null,\"size\":\"0\",\"location\":\"0\",\"class_a_price\":0,\"class_b_price\":0,\"class_c_price\":0,\"item_box\":1,\"upc_number\":null,\"body\":\"1\",\"document1\":null,\"document2\":null,\"document3\":null,\"product_dropdown_1_id\":null,\"product_dropdown_2_id\":null,\"text\":\"2500004 - Product 1 - <span style=\\\"color:red;\\\">[(0 KG)]<\\/span>\"}]', 'Update', '[{\"id\":2,\"product_id\":2500004,\"vendor_id\":1,\"reference\":\"reference\",\"supplier_item_nb\":null,\"price\":5,\"currency_id\":1,\"created_at\":\"2025-08-26T05:43:14.000000Z\",\"updated_at\":\"2025-08-26T05:43:14.000000Z\",\"text\":5}]', '2025-08-26 13:44:14', '2025-08-26 13:44:14'),
+(7, '[{\"id\":2500003,\"barcode\":\"iVBORw0KGgoAAAANSUhEUgAAEpAAAAAeAQMAAAAPqHhZAAAABlBMVEX\\/\\/\\/8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAapJREFUeJztklFKAwEUAwUP4JG8mkftMfyyVjB1HSKiqIyQ+SmF7HSbl5vzhYebN+4u3x8vn7fnAy+B+8P3BJ5envgocOUYOL3+RLgawunwDu8MLVDf4XR48Hv\\/4n8bWFR4OjZ6f\\/6kyfD1PfyA4qPAFTa1Sf2qgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhU2KhhbQndNgYFFhk6KhBXTnNBhYVNikaGgB3TkNBhYVNikaWkB3ToOBRYVNioYW0J3TYGBRYZOioQV05zQYWFTYpGhoAd05DQYWFTYpGlpAd06DgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhU2KhhbQndNgYFFhk6KhBXTnNBhYVNikaGgB3TkNBhYVNikaWkB3ToOBRYVNioYW0J3TYGBRYZOioQV05zQYWFTYpGhoAd05DQYWFTYpGlpAd06DgUWFTYqGFtCd02BgUWGToqEFdOc0GFhU2KRoaAHdOQ0GFhU2KRpaQHdOg4FFhb+a1DOYGkV2vlEZ9wAAAABJRU5ErkJggg==\",\"title\":\"Rez 20KG\",\"summary\":\"Rez 20KG\",\"description\":\"Rez 20KG\",\"category_id\":1,\"sub_category_id\":\"[\\\"1\\\"]\",\"sub_categoryid\":1,\"sub_sub_categoryid\":null,\"sub_sub_category_id\":\"[\\\"\\\"]\",\"image\":9999999,\"product_image_gallery\":\"[\\\"9999999\\\"]\",\"price\":15,\"unitprice\":15,\"original_price\":15,\"sale_price\":10,\"special_price\":0,\"tax_percentage\":0,\"badge\":null,\"status\":\"publish\",\"slug\":\"2500003\",\"attributes\":\"[]\",\"sold_count\":null,\"deleted_at\":null,\"created_at\":\"2025-08-25T06:54:44.000000Z\",\"updated_at\":\"2025-08-26T05:51:27.000000Z\",\"field1\":null,\"field2\":null,\"field3\":null,\"field4\":null,\"field5\":null,\"field6\":null,\"field7\":null,\"field8\":null,\"field9\":null,\"field10\":null,\"added_by\":\"seller\",\"user_id\":1,\"brand_id\":null,\"product_type\":\"physical\",\"code\":\"2500003\",\"new\":null,\"featured\":null,\"best_selling\":null,\"deal_of_the_day\":null,\"deal_date\":null,\"discount\":0,\"discount_type\":\"flat\",\"minimum_order_qty\":0,\"free_shipping\":0,\"colors\":\"[]\",\"featured_status\":1,\"request_status\":1,\"published\":1,\"variation\":\"[]\",\"choice_options\":\"[]\",\"refundable\":1,\"min_qty\":1,\"meta_image\":\"def.png\",\"color_image\":\"[]\",\"category_ids\":\"[{\\\"id\\\":\\\"1\\\",\\\"position\\\":1}]\",\"name\":\"Rez 20KG\",\"tag\":\"Rez 20KG\",\"purchase_price\":15,\"tax\":0,\"tax_type\":\"percent\",\"tax_model\":\"exclude\",\"thumbnail\":\"placeholder.png\",\"images\":\"[\\\"placeholder.png\\\"]\",\"details\":\"Rez 20KG\",\"unit\":\"KG\",\"shipping_cost\":0,\"unit_price\":15,\"current_stock\":0,\"lot_qty\":\"20.000\",\"on_hold_qty\":\"0.00\",\"multiply_qty\":0,\"special_image\":0,\"top_search\":0,\"warehouse_id\":1,\"volume_box\":null,\"ct_box\":null,\"weight_box\":null,\"warehouse_qty\":null,\"currency_id\":1,\"updated_by\":\"Charbel El Kabbouchi\",\"created_by\":\"Charbel El Kabbouchi\",\"tax_name\":null,\"tax_rate\":null,\"uom_id\":1,\"minimum_stock\":0,\"vendor_id\":2,\"product_rating\":5,\"rating_value\":\"33\",\"nb_boxes_1\":0,\"nb_boxes_1_price\":0,\"nb_boxes_2\":0,\"nb_boxes_2_price\":0,\"nb_boxes_3\":0,\"nb_boxes_3_price\":0,\"digital_product_type\":null,\"video_provider\":\"youtube\",\"video_url\":null,\"meta_title\":null,\"meta_description\":null,\"size\":\"0\",\"location\":\"0\",\"class_a_price\":0,\"class_b_price\":0,\"class_c_price\":0,\"item_box\":1,\"upc_number\":null,\"body\":\"1\",\"document1\":null,\"document2\":null,\"document3\":null,\"product_dropdown_1_id\":null,\"product_dropdown_2_id\":null,\"text\":\"2500003 - Rez 20KG - <span style=\\\"color:red;\\\">[(0 KG)]<\\/span>\"}]', 'Update', '[{\"id\":1,\"product_id\":2500003,\"vendor_id\":2,\"reference\":\"reference\",\"supplier_item_nb\":null,\"price\":10,\"currency_id\":1,\"created_at\":\"2025-08-24T22:55:27.000000Z\",\"updated_at\":\"2025-08-26T05:51:27.000000Z\",\"text\":10}]', '2025-08-26 13:51:27', '2025-08-26 13:51:27'),
+(8, '[{\"id\":2500004,\"barcode\":\"iVBORw0KGgoAAAANSUhEUgAAEpAAAAAeAQMAAAAPqHhZAAAABlBMVEX\\/\\/\\/8AAABVwtN+AAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAa5JREFUeJztkktqQmEYQ4UuoEvq1rLUu4yOahWqTcGQWEonyTcR4c\\/RPE7ny+H0fa+X7++Xz5cz3fXBG32\\/Pfi4KtSD+\\/GD4+snbncn3O6g\\/\\/CD8OjBw\\/9wkPB3LkoIsguQ8vk9\\/AFCPbhfZON2x2mT+ieC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqTcpJIorYsSguwCpNykkiitixKC7AKk3KSSKK2LEoLsAqR8fg+f6rtMJNnwR20AAAAASUVORK5CYII=\",\"title\":\"Product 1\",\"summary\":\"Product 1\",\"description\":\"Product 1\",\"category_id\":1,\"sub_category_id\":\"[\\\"1\\\"]\",\"sub_categoryid\":1,\"sub_sub_categoryid\":null,\"sub_sub_category_id\":\"[\\\"\\\"]\",\"image\":9999999,\"product_image_gallery\":\"[\\\"9999999\\\"]\",\"price\":7,\"unitprice\":7,\"original_price\":7,\"sale_price\":5,\"special_price\":0,\"tax_percentage\":0,\"badge\":null,\"status\":\"publish\",\"slug\":\"2500004\",\"attributes\":\"[]\",\"sold_count\":null,\"deleted_at\":null,\"created_at\":\"2025-08-26T05:43:14.000000Z\",\"updated_at\":\"2025-08-26T05:51:55.000000Z\",\"field1\":null,\"field2\":null,\"field3\":null,\"field4\":null,\"field5\":null,\"field6\":null,\"field7\":null,\"field8\":null,\"field9\":null,\"field10\":null,\"added_by\":\"seller\",\"user_id\":1,\"brand_id\":null,\"product_type\":\"physical\",\"code\":\"2500004\",\"new\":null,\"featured\":null,\"best_selling\":null,\"deal_of_the_day\":null,\"deal_date\":null,\"discount\":0,\"discount_type\":\"flat\",\"minimum_order_qty\":0,\"free_shipping\":0,\"colors\":\"[]\",\"featured_status\":1,\"request_status\":1,\"published\":1,\"variation\":\"[]\",\"choice_options\":\"[]\",\"refundable\":1,\"min_qty\":1,\"meta_image\":\"def.png\",\"color_image\":\"[]\",\"category_ids\":\"[{\\\"id\\\":\\\"1\\\",\\\"position\\\":1}]\",\"name\":\"Product 1\",\"tag\":\"Product 1\",\"purchase_price\":7,\"tax\":0,\"tax_type\":\"percent\",\"tax_model\":\"exclude\",\"thumbnail\":\"placeholder.png\",\"images\":\"[\\\"placeholder.png\\\"]\",\"details\":\"Product 1\",\"unit\":\"KG\",\"shipping_cost\":0,\"unit_price\":7,\"current_stock\":0,\"lot_qty\":\"1.000\",\"on_hold_qty\":\"0.00\",\"multiply_qty\":0,\"special_image\":0,\"top_search\":0,\"warehouse_id\":1,\"volume_box\":null,\"ct_box\":null,\"weight_box\":null,\"warehouse_qty\":null,\"currency_id\":1,\"updated_by\":\"Charbel El Kabbouchi\",\"created_by\":\"Charbel El Kabbouchi\",\"tax_name\":null,\"tax_rate\":null,\"uom_id\":1,\"minimum_stock\":0,\"vendor_id\":2,\"product_rating\":5,\"rating_value\":\"29\",\"nb_boxes_1\":0,\"nb_boxes_1_price\":0,\"nb_boxes_2\":0,\"nb_boxes_2_price\":0,\"nb_boxes_3\":0,\"nb_boxes_3_price\":0,\"digital_product_type\":null,\"video_provider\":\"youtube\",\"video_url\":null,\"meta_title\":null,\"meta_description\":null,\"size\":\"0\",\"location\":\"0\",\"class_a_price\":0,\"class_b_price\":0,\"class_c_price\":0,\"item_box\":1,\"upc_number\":null,\"body\":\"1\",\"document1\":null,\"document2\":null,\"document3\":null,\"product_dropdown_1_id\":null,\"product_dropdown_2_id\":null,\"text\":\"2500004 - Product 1 - <span style=\\\"color:red;\\\">[(0 KG)]<\\/span>\"}]', 'Update', '[{\"id\":2,\"product_id\":2500004,\"vendor_id\":2,\"reference\":\"reference\",\"supplier_item_nb\":null,\"price\":5,\"currency_id\":1,\"created_at\":\"2025-08-26T05:43:14.000000Z\",\"updated_at\":\"2025-08-26T05:51:55.000000Z\",\"text\":5}]', '2025-08-26 13:51:55', '2025-08-26 13:51:55');
 
 -- --------------------------------------------------------
 
@@ -3584,7 +3556,8 @@ CREATE TABLE `product_taxes` (
 --
 
 INSERT INTO `product_taxes` (`id`, `product_id`, `name`, `rate`, `tax_authority`, `created_at`, `updated_at`) VALUES
-(1, 2500003, 'Vat', 5.00, 'tax_authority', '2025-08-25 06:55:27', '2025-08-25 06:55:27');
+(1, 2500003, 'Vat', 5.00, 'tax_authority', '2025-08-25 06:55:27', '2025-08-25 06:55:27'),
+(2, 2500004, 'Vat', 5.00, 'tax_authority', '2025-08-26 13:43:14', '2025-08-26 13:43:14');
 
 -- --------------------------------------------------------
 
@@ -4723,7 +4696,7 @@ CREATE TABLE `segments` (
 --
 
 INSERT INTO `segments` (`id`, `body`) VALUES
-(1, 'http://127.0.0.1:8000/api/products');
+(1, 'http://app.perceive-agency.com/api/products');
 
 -- --------------------------------------------------------
 
@@ -4934,7 +4907,7 @@ CREATE TABLE `settings` (
 INSERT INTO `settings` (`id`, `key`, `value`, `created_at`, `updated_at`) VALUES
 (1, 'currency_id', '1', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (2, 'app_title', 'PerceiveSystem', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
-(3, 'uploaded_logo', '7wTbMGYBNjCOgPNXVtYmTlCsSoRyMAki.png', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
+(3, 'uploaded_logo', 'CEtQS3MokBBQdOWgYOitIMZ2bvcWwXo3.png', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (4, 'company_name', 'PerceiveSystem', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (5, 'company_type', '0', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (6, 'company_address', 'Beirut Office  \r\nBeirut Beirut , Beirut, Lebanon', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
@@ -4948,7 +4921,7 @@ INSERT INTO `settings` (`id`, `key`, `value`, `created_at`, `updated_at`) VALUES
 (14, 'footer_line_1', 'PerceiveSystem Support LLC', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (15, 'footer_line_2', 'sales@perceive-agency.com  •   www.perceive-agency.com   •   Tel.: +(961) 71 38 7447  •', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (16, 'footer_line_3', NULL, '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
-(17, 'header', 'siLxLwJaaU03oX1UZLVb89hEyclmwr4e.png', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
+(17, 'header', 'BgE7vfXGUXLF3M4WGVabLppf1m1ap3Pe.png', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (18, 'footer', NULL, '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (19, 'header-html', 'C:\\xampp\\htdocs\\perceive_system_2025_v02\\storage\\app/header.html', '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
 (20, 'footer-html', NULL, '2021-08-07 18:00:00', '2021-08-07 18:00:00'),
@@ -5026,7 +4999,9 @@ INSERT INTO `settings` (`id`, `key`, `value`, `created_at`, `updated_at`) VALUES
 (92, 'product_dropdown_2', NULL, NULL, NULL),
 (93, 'client_dropdown_1', 'Special Client', NULL, NULL),
 (94, 'client_dropdown_2', NULL, NULL, NULL),
-(95, 'global_vat_percentage', '5', NULL, NULL);
+(95, 'global_vat_percentage', '5', NULL, NULL),
+(96, 'update_link', 'https://raw.githubusercontent.com/charbel7447/perceive_system_2025_v02/main/VERSION.txt', NULL, NULL),
+(97, 'update_description', 'https://raw.githubusercontent.com/charbel7447/perceive_system_2025_v02/main/versionDescription.txt', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5212,6 +5187,7 @@ CREATE TABLE `sidebar_links` (
   `tab_type` varchar(50) DEFAULT NULL,
   `sort_order` int(11) DEFAULT 0,
   `extra_class` varchar(100) DEFAULT NULL,
+  `manual_type` int(255) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -5220,77 +5196,79 @@ CREATE TABLE `sidebar_links` (
 -- Dumping data for table `sidebar_links`
 --
 
-INSERT INTO `sidebar_links` (`id`, `title`, `route_path`, `icon`, `parent_id`, `is_main`, `tab_type`, `sort_order`, `extra_class`, `created_at`, `updated_at`) VALUES
-(4, 'Custom Query', '/custom_query', 'fa fa-database', 60, 0, 'dashboard_tab', 4, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:37'),
-(5, 'Sales', NULL, 'fa fa-shopping-cart', NULL, 1, 'sales_tab', 1, 'Sales_Tab', '2025-08-24 07:40:03', '2025-08-25 07:23:37'),
-(6, 'Sales Orders', '/sales_orders', 'fa fa-file-invoice', 5, 0, 'sales_tab', 1, 'Sales _Orders', '2025-08-24 07:40:03', '2025-08-25 07:23:37'),
-(7, 'Client Invoices', '/invoices', 'fa fa-file-invoice-dollar', 5, 0, 'sales_tab', 2, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:37'),
-(8, 'Quotations', '/quotations', 'fa fa-file-signature', 5, 0, 'sales_tab', 3, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:37'),
-(9, 'Clients', '/clients', 'fa fa-user-tie', 5, 0, 'sales_tab', 4, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(15, 'Customer Returns', '/customer_returns', 'fa fa-undo-alt', 16, 0, 'procurment_tab', 2, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(16, 'Procurment & Stock', NULL, 'fa fa-truck-loading', NULL, 1, 'procurment_tab', 3, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(17, 'Products', '/products', 'fa fa-box', 16, 0, 'procurment_tab', 1, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(18, 'Warehouses', '/warehouses', 'fa fa-warehouse', 16, 0, 'procurment_tab', 2, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(19, 'Raw Material Type', '/raw_material_type', 'fa fa-cogs', 16, 0, 'procurment_tab', 3, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(20, 'Receive Orders', '/receive_orders', 'fa fa-truck', 16, 0, 'procurment_tab', 4, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(21, 'Vendors', '/vendors', 'fa fa-users', 16, 0, 'procurment_tab', 5, NULL, '2025-08-24 07:40:03', '2025-08-24 07:40:03'),
-(22, 'Purchase Orders', '/purchase_orders', 'fa fa-file-invoice', 16, 0, 'procurment_tab', 6, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(23, 'Transfers', '/transfers', 'fa fa-exchange-alt', 16, 0, 'procurment_tab', 7, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(24, 'Products Division', '/products_division', 'fa fa-project-diagram', 16, 0, 'procurment_tab', 8, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(25, 'Products Aggregation', '/products_aggregation', 'fa fa-layer-group', 16, 0, 'procurment_tab', 9, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(26, 'Stock Movement', '/stock_movement', 'fa fa-random', 16, 0, 'procurment_tab', 10, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(27, 'Stock Count', '/stock_count', 'fa fa-clipboard-check', 16, 0, 'procurment_tab', 11, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(28, 'Damaged Deteriorate', '/damaged_deteriorate', 'fa fa-exclamation-triangle', 16, 0, 'procurment_tab', 12, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(29, 'Accounting', NULL, 'fa fa-calculator', NULL, 1, 'accounting_tab', 1, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(30, 'Clients', '/clients', 'fa fa-user-tie', 29, 0, 'accounting_tab', 1, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(31, 'Journal Vouchers', '/journal_vouchers', 'fa fa-book', 29, 0, 'accounting_tab', 2, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(32, 'JV Movement', '/journal_vouchers_movement', 'fa fa-exchange-alt', 29, 0, 'accounting_tab', 3, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(33, 'Receipt Voucher', '/receipt_vouchers', 'fa fa-receipt', 29, 0, 'accounting_tab', 4, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(34, 'Payment Voucher', '/payment_vouchers', 'fa fa-money-check-alt', 29, 0, 'accounting_tab', 5, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(36, 'Client Invoices', '/invoices', 'fa fa-file-invoice-dollar', 29, 0, 'accounting_tab', 7, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:37'),
-(37, 'Credit Notes', '/credit_notes', 'fa fa-file-contract', 29, 0, 'accounting_tab', 8, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(38, 'Debit Notes', '/debit_notes', 'fa fa-file-invoice', 29, 0, 'accounting_tab', 9, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(39, 'Client SOA', '/statement', 'fa fa-balance-scale', 29, 0, 'accounting_tab', 10, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(40, 'Vendor Expenses', '/expenses', 'fa fa-money-bill-wave', 29, 0, 'accounting_tab', 11, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(41, 'Vendor Bills', '/bills', 'fa fa-file-invoice-dollar', 29, 0, 'accounting_tab', 12, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(42, 'Vendor SOA', '/vendor_statement', 'fa fa-file-alt', 29, 0, 'accounting_tab', 13, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(43, 'Company', NULL, 'fa fa-building', NULL, 1, 'company_tab', 1, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(44, 'Chart of Accounts', '/chart_of_accounts', 'fa fa-project-diagram', 43, 0, 'company_tab', 1, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(45, 'Balance Sheet', '/balance_sheet', 'fa fa-chart-line', 43, 0, 'company_tab', 2, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(46, 'General Ledger', '/general_ledger', 'fa fa-book-open', 43, 0, 'company_tab', 3, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(47, 'Profit & Loss (Income Statement)', '/profit_loss', 'fa fa-chart-pie', 43, 0, 'company_tab', 4, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(60, 'General Parameters', NULL, 'fa fa-cogs', NULL, 1, 'settings_tab', 1, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(61, 'General Settings', '/general_settings', 'fa fa-sliders-h', 60, 0, 'settings_tab', 1, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(62, 'Custom Reports', '/sidebar_reports', 'fa fa-chart-bar', 60, 0, 'settings_tab', 2, NULL, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
-(65, 'Journal Flow', '/journal_vouchers_flow', 'fa fa-bus', 61, 0, 'settings_tab', 2, NULL, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
-(66, 'Third Parties Extras', '/third_parties_extras', 'fa fa-bus', 61, 0, 'settings_tab', 3, NULL, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
-(67, 'Delivery Condition', '/deliverycondition', 'fa fa-bus', 61, 0, 'settings_tab', 4, NULL, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
-(68, 'Payment Condition', '/paymentcondition', 'fa fa-credit-card', 61, 0, 'settings_tab', 5, NULL, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
-(69, 'Payment Options', '/payment_options', 'fa fa-credit-card', 61, 0, 'settings_tab', 6, NULL, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
-(70, 'VAT Rate', '/vatrate', 'fa fa-exchange', 61, 0, 'settings_tab', 7, NULL, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
-(71, 'Exchange Rate', '/exchangerate', 'fa fa-exchange', 61, 0, 'settings_tab', 8, NULL, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
-(72, 'UOM', '/uom', 'fa fa-balance-scale', 61, 0, 'settings_tab', 9, NULL, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
-(73, 'Counters', '/counters', 'fa fa-cogs', 61, 0, 'settings_tab', 10, NULL, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
-(74, 'Currencies', '/currencies', 'fa fa-money', 61, 0, 'settings_tab', 11, NULL, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
-(75, 'Categories', '/categories', 'fa fa-list-alt', 61, 0, 'settings_tab', 12, NULL, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
-(76, 'Sub Categories', '/subcategories', 'fa fa-list-alt', 61, 0, 'settings_tab', 13, NULL, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
-(77, 'Brands', '/brands', 'fa fa-list-alt', 61, 0, 'settings_tab', 14, NULL, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
-(78, 'Trial Balance Report', '/trial_balance_report', 'fa fa-balance-scale', 62, 0, 'settings_tab', 1, 'Trial_balance_Report', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(79, 'Price Changes', '/price_changes_report/create', 'fa fa-chart-line', 62, 0, 'settings_tab', 2, 'Price_Changes', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(80, 'Cost Changes', '/cost_changes_report/create', 'fa fa-chart-line', 62, 0, 'settings_tab', 3, 'Cost_Changes', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(81, 'Sales Orders', '/sales_orders_report/create', 'fa fa-file-invoice', 62, 0, 'settings_tab', 4, 'Sales_Orders_Report', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(82, 'Sales Invoice', '/invoices_report/create', 'fa fa-file-invoice-dollar', 62, 0, 'settings_tab', 5, 'Sales_Invoice', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(83, 'Quotations', '/quotations_report/create', 'fa fa-file-signature', 62, 0, 'settings_tab', 6, 'Quotations', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(84, 'Receive Orders', '/receive_orders_report/create', 'fa fa-truck', 62, 0, 'settings_tab', 7, 'Receive_Orders', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(85, 'Purchase Orders', '/purchase_orders_report/create', 'fa fa-file-invoice', 62, 0, 'settings_tab', 8, 'Purchase_Orders', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(86, 'Products', '/products_report/create', 'fa fa-box', 62, 0, 'settings_tab', 9, 'Products', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(87, 'Products Catalogue Landscape', '/products_catalogue/create', 'fa fa-book', 62, 0, 'settings_tab', 10, 'Products_Catalogue_Landscape', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(88, 'Products Catalogue Portrait', '/products_catalogue/show', 'fa fa-book', 62, 0, 'settings_tab', 11, 'Products_Catalogue_Portrait', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(89, 'Client SOA', '/statement', 'fa fa-balance-scale', 62, 0, 'settings_tab', 12, 'Client_SOA', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(90, 'Client Balance', '/clients_balance_report/create', 'fa fa-balance-scale', 62, 0, 'settings_tab', 13, 'Client_Balance', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(91, 'Sellers Payments', '/seller_payments_docs_report/create', 'fa fa-money-bill-wave', 62, 0, 'settings_tab', 14, 'Sellers_Payments', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(92, 'Payment Options', '/payment_options_report/create', 'fa fa-credit-card', 62, 0, 'settings_tab', 15, 'Payment_Options', '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
-(93, 'Import Tools', '/import_tools', 'fa fa-file-import', 62, 0, 'settings_tab', 16, 'Import_Tools', '2025-08-25 07:59:31', '2025-08-25 07:59:31');
+INSERT INTO `sidebar_links` (`id`, `title`, `route_path`, `icon`, `parent_id`, `is_main`, `tab_type`, `sort_order`, `extra_class`, `manual_type`, `created_at`, `updated_at`) VALUES
+(4, 'Custom Query', '/custom_query', 'fa fa-database', 60, 0, 'dashboard_tab', 4, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:37'),
+(5, 'Sales', NULL, 'fa fa-shopping-cart', NULL, 1, 'sales_tab', 1, 'Sales_Tab', 0, '2025-08-24 07:40:03', '2025-08-25 07:23:37'),
+(6, 'Sales Orders', '/sales_orders', 'fa fa-file-invoice', 5, 0, 'sales_tab', 1, 'Sales _Orders', 0, '2025-08-24 07:40:03', '2025-08-25 07:23:37'),
+(7, 'Client Invoices', '/invoices', 'fa fa-file-invoice-dollar', 5, 0, 'sales_tab', 2, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:37'),
+(8, 'Quotations', '/quotations', 'fa fa-file-signature', 5, 0, 'sales_tab', 3, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:37'),
+(9, 'Clients', '/clients', 'fa fa-user-tie', 5, 0, 'sales_tab', 4, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(15, 'Customer Returns', '/customer_returns', 'fa fa-undo-alt', 16, 0, 'procurment_tab', 2, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(16, 'Procurment & Stock', NULL, 'fa fa-truck-loading', NULL, 1, 'procurment_tab', 3, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(17, 'Products', '/products', 'fa fa-box', 16, 0, 'procurment_tab', 1, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(18, 'Warehouses', '/warehouses', 'fa fa-warehouse', 16, 0, 'procurment_tab', 2, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(19, 'Raw Material Type', '/raw_material_type', 'fa fa-cogs', 16, 0, 'procurment_tab', 3, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(20, 'Receive Orders', '/receive_orders', 'fa fa-truck', 16, 0, 'procurment_tab', 4, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(21, 'Vendors', '/vendors', 'fa fa-users', 16, 0, 'procurment_tab', 5, NULL, 0, '2025-08-24 07:40:03', '2025-08-24 07:40:03'),
+(22, 'Purchase Orders', '/purchase_orders', 'fa fa-file-invoice', 16, 0, 'procurment_tab', 6, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(23, 'Transfers', '/transfers', 'fa fa-exchange-alt', 16, 0, 'procurment_tab', 7, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(24, 'Products Division', '/products_division', 'fa fa-project-diagram', 16, 0, 'procurment_tab', 8, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(25, 'Products Aggregation', '/products_aggregation', 'fa fa-layer-group', 16, 0, 'procurment_tab', 9, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(26, 'Stock Movement', '/stock_movement', 'fa fa-random', 16, 0, 'procurment_tab', 10, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(27, 'Stock Count', '/stock_count', 'fa fa-clipboard-check', 16, 0, 'procurment_tab', 11, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(28, 'Damaged Deteriorate', '/damaged_deteriorate', 'fa fa-exclamation-triangle', 16, 0, 'procurment_tab', 12, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(29, 'Accounting', NULL, 'fa fa-calculator', NULL, 1, 'accounting_tab', 1, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(30, 'Clients', '/clients', 'fa fa-user-tie', 29, 0, 'accounting_tab', 1, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(31, 'Journal Vouchers', '/journal_vouchers', 'fa fa-book', 29, 0, 'accounting_tab', 2, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(32, 'JV Movement', '/journal_vouchers_movement', 'fa fa-exchange-alt', 29, 0, 'accounting_tab', 3, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(33, 'Receipt Voucher', '/receipt_vouchers', 'fa fa-receipt', 29, 0, 'accounting_tab', 4, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(34, 'Payment Voucher', '/payment_vouchers', 'fa fa-money-check-alt', 29, 0, 'accounting_tab', 5, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(36, 'Client Invoices', '/invoices', 'fa fa-file-invoice-dollar', 29, 0, 'accounting_tab', 7, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:37'),
+(37, 'Credit Notes', '/credit_notes', 'fa fa-file-contract', 29, 0, 'accounting_tab', 8, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(38, 'Debit Notes', '/debit_notes', 'fa fa-file-invoice', 29, 0, 'accounting_tab', 9, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(39, 'Client SOA', '/statement', 'fa fa-balance-scale', 29, 0, 'accounting_tab', 10, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(40, 'Vendor Expenses', '/expenses', 'fa fa-money-bill-wave', 29, 0, 'accounting_tab', 11, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(41, 'Vendor Bills', '/bills', 'fa fa-file-invoice-dollar', 29, 0, 'accounting_tab', 12, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(42, 'Vendor SOA', '/vendor_statement', 'fa fa-file-alt', 29, 0, 'accounting_tab', 13, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(43, 'Company', NULL, 'fa fa-building', NULL, 1, 'company_tab', 1, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(44, 'Chart of Accounts', '/chart_of_accounts', 'fa fa-project-diagram', 43, 0, 'company_tab', 1, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(45, 'Balance Sheet', '/balance_sheet', 'fa fa-chart-line', 43, 0, 'company_tab', 2, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(46, 'General Ledger', '/general_ledger', 'fa fa-book-open', 43, 0, 'company_tab', 3, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(47, 'Profit & Loss (Income Statement)', '/profit_loss', 'fa fa-chart-pie', 43, 0, 'company_tab', 4, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(60, 'General Parameters', NULL, 'fa fa-cogs', NULL, 1, 'settings_tab', 1, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(61, 'General Settings', '/general_settings', 'fa fa-sliders-h', 60, 0, 'settings_tab', 1, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(62, 'Custom Reports', '/sidebar_reports', 'fa fa-chart-bar', 60, 0, 'settings_tab', 2, NULL, 0, '2025-08-24 07:40:03', '2025-08-25 07:23:38'),
+(65, 'Journal Flow', '/journal_vouchers_flow', 'fa fa-bus', 61, 0, 'settings_tab', 2, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(66, 'Third Parties Extras', '/third_parties_extras', 'fa fa-bus', 61, 0, 'settings_tab', 3, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(67, 'Delivery Condition', '/deliverycondition', 'fa fa-bus', 61, 0, 'settings_tab', 4, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(68, 'Payment Condition', '/paymentcondition', 'fa fa-credit-card', 61, 0, 'settings_tab', 5, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(69, 'Payment Options', '/payment_options', 'fa fa-credit-card', 61, 0, 'settings_tab', 6, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(70, 'VAT Rate', '/vatrate', 'fa fa-exchange', 61, 0, 'settings_tab', 7, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(71, 'Exchange Rate', '/exchangerate', 'fa fa-exchange', 61, 0, 'settings_tab', 8, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(72, 'UOM', '/uom', 'fa fa-balance-scale', 61, 0, 'settings_tab', 9, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(73, 'Counters', '/counters', 'fa fa-cogs', 61, 0, 'settings_tab', 10, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(74, 'Currencies', '/currencies', 'fa fa-money', 61, 0, 'settings_tab', 11, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(75, 'Categories', '/categories', 'fa fa-list-alt', 61, 0, 'settings_tab', 12, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(76, 'Sub Categories', '/subcategories', 'fa fa-list-alt', 61, 0, 'settings_tab', 13, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(77, 'Brands', '/brands', 'fa fa-list-alt', 61, 0, 'settings_tab', 14, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(78, 'Trial Balance Report', '/trial_balance_report', 'fa fa-balance-scale', 62, 0, 'settings_tab', 1, 'Trial_balance_Report', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(79, 'Price Changes', '/price_changes_report/create', 'fa fa-chart-line', 62, 0, 'settings_tab', 2, 'Price_Changes', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(80, 'Cost Changes', '/cost_changes_report/create', 'fa fa-chart-line', 62, 0, 'settings_tab', 3, 'Cost_Changes', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(81, 'Sales Orders', '/sales_orders_report/create', 'fa fa-file-invoice', 62, 0, 'settings_tab', 4, 'Sales_Orders_Report', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(82, 'Sales Invoice', '/invoices_report/create', 'fa fa-file-invoice-dollar', 62, 0, 'settings_tab', 5, 'Sales_Invoice', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(83, 'Quotations', '/quotations_report/create', 'fa fa-file-signature', 62, 0, 'settings_tab', 6, 'Quotations', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(84, 'Receive Orders', '/receive_orders_report/create', 'fa fa-truck', 62, 0, 'settings_tab', 7, 'Receive_Orders', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(85, 'Purchase Orders', '/purchase_orders_report/create', 'fa fa-file-invoice', 62, 0, 'settings_tab', 8, 'Purchase_Orders', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(86, 'Products', '/products_report/create', 'fa fa-box', 62, 0, 'settings_tab', 9, 'Products', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(87, 'Products Catalogue Landscape', '/products_catalogue/create', 'fa fa-book', 62, 0, 'settings_tab', 10, 'Products_Catalogue_Landscape', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(88, 'Products Catalogue Portrait', '/products_catalogue/show', 'fa fa-book', 62, 0, 'settings_tab', 11, 'Products_Catalogue_Portrait', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(89, 'Client SOA', '/statement', 'fa fa-balance-scale', 62, 0, 'settings_tab', 12, 'Client_SOA', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(90, 'Client Balance', '/clients_balance_report/create', 'fa fa-balance-scale', 62, 0, 'settings_tab', 13, 'Client_Balance', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(91, 'Sellers Payments', '/seller_payments_docs_report/create', 'fa fa-money-bill-wave', 62, 0, 'settings_tab', 14, 'Sellers_Payments', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(92, 'Payment Options', '/payment_options_report/create', 'fa fa-credit-card', 62, 0, 'settings_tab', 15, 'Payment_Options', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(93, 'Import Tools', '/import_tools', 'fa fa-file-import', 62, 0, 'settings_tab', 16, 'Import_Tools', 0, '2025-08-25 07:59:31', '2025-08-25 07:59:31'),
+(94, 'Users', '/users', 'fa fa-users', 61, 0, 'settings_tab', 15, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54'),
+(95, 'Settings', '/settings', 'fa fa-sliders-h', 61, 0, 'settings_tab', 16, NULL, 0, '2025-08-25 07:57:54', '2025-08-25 07:57:54');
 
 -- --------------------------------------------------------
 
@@ -5349,15 +5327,6 @@ CREATE TABLE `stock_counts` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `stock_counts`
---
-
-INSERT INTO `stock_counts` (`id`, `count_date`, `category_id`, `sub_category_id`, `sub_sub_category_id`, `submitted_at`, `user_id`, `created_by`, `created_at`, `updated_at`) VALUES
-(23, '2025-08-25', NULL, NULL, NULL, NULL, NULL, 'Charbel El Kabbouchi', '2025-08-25 07:09:57', '2025-08-25 07:09:57'),
-(24, '2025-08-25', NULL, NULL, NULL, '2025-08-25 07:14:47', NULL, 'Charbel El Kabbouchi', '2025-08-25 07:12:14', '2025-08-25 07:12:14'),
-(25, '2025-08-25', NULL, NULL, NULL, NULL, NULL, 'Charbel El Kabbouchi', '2025-08-25 07:13:33', '2025-08-25 07:13:33');
-
 -- --------------------------------------------------------
 
 --
@@ -5382,14 +5351,6 @@ CREATE TABLE `stock_count_lots` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `stock_count_lots`
---
-
-INSERT INTO `stock_count_lots` (`id`, `stock_count_id`, `lot_id`, `product_id`, `code`, `category_id`, `sub_category_id`, `sub_sub_category_id`, `uom_id`, `current_stock`, `balance`, `inventoried_stock`, `variance`, `scanned_at`, `created_at`, `updated_at`) VALUES
-(1, 24, 3, 2500003, '2500003707', 1, 1, NULL, 1, 20.000, 20.000, 20.000, 0.000, '2025-08-25 07:12:19', '2025-08-25 07:12:14', '2025-08-25 07:12:19'),
-(2, 25, 3, 2500003, '2500003707', 1, 1, NULL, 1, 20.000, 20.000, 20.000, 0.000, '2025-08-25 07:13:37', '2025-08-25 07:13:33', '2025-08-25 07:13:37');
 
 -- --------------------------------------------------------
 
@@ -5594,7 +5555,22 @@ CREATE TABLE `test6` (
 --
 
 INSERT INTO `test6` (`id`, `body`) VALUES
-(1, 'x');
+(1, '1.6.7'),
+(2, 'C:\\xampp\\htdocs\\perceive_system_2025_v02');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `test7`
+--
+
+CREATE TABLE `test7` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(191) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -5941,8 +5917,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `manager_id`, `name`, `title`, `telephone`, `extension`, `mobile_number`, `email`, `password`, `is_admin`, `is_active`, `is_settings_tab`, `is_procurment_tab`, `is_sales_tab`, `is_accounting_tab`, `is_company_tab`, `is_dashboard`, `is_deliverycondition_tab`, `is_paymentcondition_tab`, `is_exchangerate_tab`, `is_uom_tab`, `is_counters_tab`, `is_currencies_tab`, `is_warehouses_tab`, `is_categories_tab`, `is_subcategories_tab`, `is_deliverycondition_create`, `is_deliverycondition_edit`, `is_deliverycondition_delete`, `is_deliverycondition_view`, `is_paymentcondition_create`, `is_paymentcondition_edit`, `is_paymentcondition_delete`, `is_paymentcondition_view`, `is_exchangerate_create`, `is_exchangerate_edit`, `is_exchangerate_delete`, `is_exchangerate_view`, `is_uom_create`, `is_uom_edit`, `is_uom_delete`, `is_uom_view`, `is_counters_create`, `is_counters_edit`, `is_counters_delete`, `is_counters_view`, `is_currencies_create`, `is_currencies_edit`, `is_currencies_delete`, `is_currencies_view`, `is_warehouses_create`, `is_warehouses_edit`, `is_warehouses_delete`, `is_warehouses_view`, `is_categories_create`, `is_categories_edit`, `is_categories_delete`, `is_categories_view`, `is_subcategories_create`, `is_subcategories_edit`, `is_subcategories_delete`, `is_subcategories_view`, `is_accounts_tab`, `is_transferaccounts_tab`, `is_deposit_tab`, `is_returndeposit_tab`, `is_employees_tab`, `is_payroll_tab`, `is_accounts_create`, `is_accounts_edit`, `is_accounts_delete`, `is_accounts_view`, `is_transferaccounts_create`, `is_transferaccounts_edit`, `is_transferaccounts_delete`, `is_transferaccounts_view`, `is_deposit_create`, `is_deposit_edit`, `is_deposit_delete`, `is_deposit_view`, `is_returndeposit_create`, `is_returndeposit_edit`, `is_returndeposit_delete`, `is_returndeposit_view`, `is_employees_create`, `is_employees_edit`, `is_employees_delete`, `is_employees_view`, `is_payroll_create`, `is_payroll_edit`, `is_payroll_delete`, `is_payroll_view`, `is_clients_tab`, `is_quotations_tab`, `is_salesorders_tab`, `is_clients_create`, `is_clients_edit`, `is_clients_delete`, `is_clients_view`, `is_quotations_create`, `is_quotations_edit`, `is_quotations_delete`, `is_quotations_view`, `is_salesorders_create`, `is_salesorders_edit`, `is_salesorders_delete`, `is_salesorders_view`, `is_advancepayments_tab`, `is_invoices_tab`, `is_creditnotes_tab`, `is_debitnotes_tab`, `is_clientpayments_tab`, `is_clientsoa_tab`, `is_vendorexpenses_tab`, `is_bills_tab`, `is_vendorpayments_tab`, `is_vendorsoa_tab`, `is_advancepayments_create`, `is_advancepayments_edit`, `is_advancepayments_delete`, `is_advancepayments_view`, `is_invoices_create`, `is_invoices_edit`, `is_invoices_delete`, `is_invoices_view`, `is_creditnotes_create`, `is_creditnotes_edit`, `is_creditnotes_delete`, `is_creditnotes_view`, `is_debitnotes_create`, `is_debitnotes_edit`, `is_debitnotes_delete`, `is_debitnotes_view`, `is_clientpayments_create`, `is_clientpayments_edit`, `is_clientpayments_delete`, `is_clientpayments_view`, `is_clientsoa_create`, `is_clientsoa_edit`, `is_clientsoa_delete`, `is_clientsoa_view`, `is_vendorexpenses_create`, `is_vendorexpenses_edit`, `is_vendorexpenses_delete`, `is_vendorexpenses_view`, `is_bills_create`, `is_bills_edit`, `is_bills_delete`, `is_bills_view`, `is_vendorpayments_create`, `is_vendorpayments_edit`, `is_vendorpayments_delete`, `is_vendorpayments_view`, `is_vendorsoa_create`, `is_vendorsoa_edit`, `is_vendorsoa_delete`, `is_vendorsoa_view`, `is_products_tab`, `is_receiveorders_tab`, `is_vendors_tab`, `is_purchaseorders_tab`, `is_transfers_tab`, `is_productsdivision_tab`, `is_productsaggregation_tab`, `is_products_create`, `is_products_edit`, `is_products_delete`, `is_products_view`, `is_receiveorders_create`, `is_receiveorders_edit`, `is_receiveorders_delete`, `is_receiveorders_view`, `is_vendors_create`, `is_vendors_edit`, `is_vendors_delete`, `is_vendors_view`, `is_purchaseorders_create`, `is_purchaseorders_edit`, `is_purchaseorders_delete`, `is_purchaseorders_view`, `is_transfers_create`, `is_transfers_edit`, `is_transfers_delete`, `is_transfers_view`, `is_productsdivision_create`, `is_productsdivision_edit`, `is_productsdivision_delete`, `is_productsdivision_view`, `is_productsaggregation_create`, `is_productsaggregation_edit`, `is_productsaggregation_delete`, `is_productsaggregation_view`, `is_displayoverview_tab`, `is_displaysales_tab`, `is_displayaccounting_tab`, `is_displaystock_tab`, `is_displayproduction_tab`, `is_stockmovement_tab`, `is_stockmovement_view`, `is_production_tab`, `email_signature`, `remember_token`, `created_at`, `updated_at`, `is_shipping_tab`, `is_Define_Shippers_tab`, `is_Define_Shippers_create`, `is_Define_Shippers_edit`, `is_Define_Shippers_delete`, `is_Define_Shippers_view`, `is_Shipments_tab`, `is_Shipments_create`, `is_Shipments_edit`, `is_Shipments_delete`, `is_Shipments_view`, `is_Receive_Shipments_tab`, `is_Receive_Shipments_create`, `is_Receive_Shipments_edit`, `is_Receive_Shipments_delete`, `is_Receive_Shipments_view`, `is_Shippers_Bills_tab`, `is_Shippers_Bills_create`, `is_Shippers_Bills_edit`, `is_Shippers_Bills_delete`, `is_Shippers_Bills_view`, `is_Shippers_Payments_tab`, `is_Shippers_Payments_edit`, `is_Shippers_Payments_delete`, `is_Shippers_Payments_view`, `is_Shippers_SOA_tab`, `is_Shippers_SOA_create`, `is_Shippers_SOA_edit`, `is_Shippers_SOA_delete`, `is_Shippers_SOA_view`, `is_Shippers_Payments_create`, `is_journalvoucher_tab`, `is_journalvoucher_create`, `is_journalvoucher_edit`, `is_journalvoucher_delete`, `is_journalvoucher_view`, `is_trialbalance_tab`) VALUES
-(1, 1, 'Charbel El Kabbouchi', 'Administrator', '+000 00 123 456', '100', '+000 00 123 456', 'charbelkabbouchi@gmail.com', '$2y$10$ekbfuge9xKneECym3FE0yOwR1GF19gb/.El.sDgm3ChsrCNpzTsxa', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 'Best Regards', 'tYQf2QFcsgyhwzGzDOQN0ymo9MdjQy7IyYYTPj3xgQk6Y8cVCgCtU8sSZSjC', '2021-08-08 13:09:40', '2025-08-04 06:58:03', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-(11, NULL, 'test', 'test', NULL, NULL, NULL, 'test@test.com', '$2y$10$R9Bir8v34lu9zdA2pgudsOnGJ9qv9fmG.Q.jn0EjTDWCI0aYuET9K', 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 'Best Regards', NULL, '2025-08-24 20:31:05', '2025-08-24 20:31:05', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 0);
+(1, 1, 'Charbel El Kabbouchi', 'Administrator', '+000 00 123 456', '100', '+000 00 123 456', 'charbelkabbouchi@gmail.com', '$2y$10$ekbfuge9xKneECym3FE0yOwR1GF19gb/.El.sDgm3ChsrCNpzTsxa', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 'Best Regards', 'gd9rYSBFgKPuo9REyLtUcMOBDIsqm6BHPx3aFjQFoieHC4gfq9aKM7kDgSoc', '2021-08-08 13:09:40', '2025-08-04 06:58:03', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(11, NULL, 'Mohammad', 'test', NULL, 'test@test.com', NULL, 'test@test.com', '$2y$10$r7DVZ8AKeKKKEndGZXk/POZkgivdWYNrP.eFAvjm6/MGXc5SylMIe', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 'Best Regards', NULL, '2025-08-24 20:31:05', '2025-08-25 16:43:50', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -5955,7 +5931,7 @@ CREATE TABLE `user_dashboards` (
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(191) NOT NULL,
   `widgets` text DEFAULT NULL,
-  `layout` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`layout`)),
+  `layout` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -5965,9 +5941,7 @@ CREATE TABLE `user_dashboards` (
 --
 
 INSERT INTO `user_dashboards` (`id`, `user_id`, `name`, `widgets`, `layout`, `created_at`, `updated_at`) VALUES
-(6, 11, 'Custom 1', '[{\"id\":1,\"name\":\"Total Sales\",\"description\":\"Sales this month\"}]', NULL, '2025-08-24 20:31:19', '2025-08-24 20:31:32'),
-(7, 1, 'MyDashboard', '[{\"lib_id\":\"1\",\"x\":0,\"y\":0,\"w\":12,\"h\":3},{\"lib_id\":\"3\",\"x\":0,\"y\":3,\"w\":4,\"h\":3},{\"lib_id\":\"2\",\"x\":4,\"y\":3,\"w\":8,\"h\":3}]', NULL, '2025-08-24 22:31:11', '2025-08-24 22:31:50'),
-(8, 1, '2025', '[{\"lib_id\":\"2\",\"x\":0,\"y\":0,\"w\":6,\"h\":3},{\"lib_id\":\"1\",\"x\":6,\"y\":0,\"w\":6,\"h\":3}]', NULL, '2025-08-25 08:15:17', '2025-08-25 08:15:58');
+(7, 1, 'MyDashboard', '[{\"lib_id\":\"1\",\"x\":0,\"y\":0,\"w\":12,\"h\":3},{\"lib_id\":\"3\",\"x\":0,\"y\":3,\"w\":4,\"h\":3},{\"lib_id\":\"2\",\"x\":4,\"y\":3,\"w\":8,\"h\":3}]', NULL, '2025-08-24 22:31:11', '2025-08-24 22:31:50');
 
 -- --------------------------------------------------------
 
@@ -6058,7 +6032,7 @@ CREATE TABLE `vendors` (
 --
 
 INSERT INTO `vendors` (`id`, `user_id`, `account_id`, `account_code`, `name_ar`, `person`, `company`, `email`, `discount`, `work_phone`, `mobile_number`, `vat_number`, `vat_status`, `currency_id`, `billing_address`, `shipping_address`, `payment_details`, `total_expense`, `created_by`, `created_at`, `updated_at`, `shipping_process`, `balance`, `paid`, `last_payment_date`) VALUES
-(1, 1, 5, '2900000', 'شسيشسي', 'test', 'company1', NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, NULL, NULL, 0, 'Charbel El Kabbouchi', '2025-08-22 19:15:05', '2025-08-24 22:05:20', 0, 0.000, 0.000, '2025-08-22');
+(2, 1, 5, '5900001', 'البائع ١', 'Vendor 1', 'Company 1', 'vendor1@company1.com', 0, NULL, NULL, NULL, 1, 1, 'Address', 'Address', 'Address', 0, 'Charbel El Kabbouchi', '2025-08-26 13:50:52', '2025-08-26 13:55:49', 0, 0.000, 0.000, '2025-08-26');
 
 -- --------------------------------------------------------
 
@@ -7478,6 +7452,12 @@ ALTER TABLE `test6`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `test7`
+--
+ALTER TABLE `test7`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `third_parties_extras`
 --
 ALTER TABLE `third_parties_extras`
@@ -7698,13 +7678,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `chart_accounts`
 --
 ALTER TABLE `chart_accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1027;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1029;
 
 --
 -- AUTO_INCREMENT for table `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `clients__`
@@ -8112,7 +8092,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `oauth_clients`
@@ -8208,7 +8188,7 @@ ALTER TABLE `price_changes_report_items`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` double NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2500004;
+  MODIFY `id` double NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2500005;
 
 --
 -- AUTO_INCREMENT for table `products_aggregation`
@@ -8280,7 +8260,7 @@ ALTER TABLE `product_categories`
 -- AUTO_INCREMENT for table `product_conversions`
 --
 ALTER TABLE `product_conversions`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `product_dropdown1`
@@ -8298,19 +8278,19 @@ ALTER TABLE `product_dropdown2`
 -- AUTO_INCREMENT for table `product_inventories`
 --
 ALTER TABLE `product_inventories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `product_items`
 --
 ALTER TABLE `product_items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `product_log`
 --
 ALTER TABLE `product_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `product_sub_categories`
@@ -8328,7 +8308,7 @@ ALTER TABLE `product_sub_sub_categories`
 -- AUTO_INCREMENT for table `product_taxes`
 --
 ALTER TABLE `product_taxes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `product_units`
@@ -8604,7 +8584,7 @@ ALTER TABLE `seller_statement_items`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT for table `shippers`
@@ -8652,7 +8632,7 @@ ALTER TABLE `shipper_statement_items`
 -- AUTO_INCREMENT for table `sidebar_links`
 --
 ALTER TABLE `sidebar_links`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT for table `statement`
@@ -8670,13 +8650,13 @@ ALTER TABLE `statement_items`
 -- AUTO_INCREMENT for table `stock_counts`
 --
 ALTER TABLE `stock_counts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `stock_count_lots`
 --
 ALTER TABLE `stock_count_lots`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `stock_count_products`
@@ -8736,7 +8716,13 @@ ALTER TABLE `test5`
 -- AUTO_INCREMENT for table `test6`
 --
 ALTER TABLE `test6`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `test7`
+--
+ALTER TABLE `test7`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `third_parties_extras`
@@ -8790,7 +8776,7 @@ ALTER TABLE `vat_rate`
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `vendor_bills_report`
