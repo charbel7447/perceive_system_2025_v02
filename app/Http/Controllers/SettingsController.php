@@ -225,14 +225,26 @@ public function updateSystemLive()
     }
 
     $basePath = base_path();
+    $logDir = $basePath . '/npmOutput';
+    $logFile = $logDir . '/npm_' . date('Y-m-d_H-i-s') . '.log';
+
+    if (!File::exists($logDir)) {
+        File::makeDirectory($logDir, 0755, true);
+    }
+
     $steps = [
-        'Pull Git' => "cd $basePath && git fetch origin main 2>&1 && git reset --hard origin/main 2>&1",
+        'Pull Git'       => "cd $basePath && git fetch origin main 2>&1 && git reset --hard origin/main 2>&1",
         'Build Frontend' => "cd $basePath && npm run dev 2>&1",
     ];
 
-    return response()->stream(function () use ($steps, $basePath) {
+    return response()->stream(function () use ($steps, $basePath, $logFile) {
         foreach ($steps as $stepName => $cmd) {
-            echo json_encode(['step' => $stepName, 'line' => "=== STEP: $stepName ==="]) . "\n";
+            $header = "=== STEP: $stepName ===\n";
+
+            // Write to log file
+            File::append($logFile, $header);
+
+            echo json_encode(['step' => $stepName, 'line' => trim($header)]) . "\n";
             flush();
 
             $process = proc_open(
@@ -244,10 +256,12 @@ public function updateSystemLive()
             if (is_resource($process)) {
                 while (!feof($pipes[1]) || !feof($pipes[2])) {
                     if ($line = fgets($pipes[1])) {
+                        File::append($logFile, $line); // ✅ save
                         echo json_encode(['step' => $stepName, 'line' => $line]) . "\n";
                         flush();
                     }
                     if ($err = fgets($pipes[2])) {
+                        File::append($logFile, $err); // ✅ save errors too
                         echo json_encode(['step' => $stepName, 'line' => $err]) . "\n";
                         flush();
                     }
@@ -258,7 +272,7 @@ public function updateSystemLive()
             }
         }
 
-        // ✅ Update APP_VERSION
+        // ✅ version update logic same as before ...
         $latestVersion = $this->fetchLatestVersion();
         $envPath = $basePath.'/.env';
         $envContent = File::get($envPath);
@@ -276,40 +290,15 @@ public function updateSystemLive()
         File::put($envPath, $envContent);
         Artisan::call('config:clear');
 
-        echo json_encode(['step' => 'Done', 'line' => "✅ System updated to version: $latestVersion"]) . "\n";
+        $doneMsg = "✅ System updated to version: $latestVersion\n";
+        File::append($logFile, $doneMsg);
 
-        echo json_encode(['step' => 'Done', 'line' => "✅ System updated to version: $oldEnvVersion. ' '.$latestVersion "]) . "\n";
+        echo json_encode(['step' => 'Done', 'line' => $doneMsg]) . "\n";
         flush();
-
-        // ✅ Conditional table creation & fetch
-        if ($oldEnvVersion === '1.6.6' && $latestVersion === '1.6.7') {
-            // Update test6
-            DB::table('test6')->where('id', 1)->update(['body' => $latestVersion]);
-
-            // Ensure DB connection is active
-            DB::connection()->getPdo();
-
-            // Create test7 if not exists
-            if (!Schema::hasTable('test7')) {
-                Schema::create('test7', function (Blueprint $table) {
-                    $table->id();
-                    $table->string('name');
-                    $table->integer('quantity')->default(0);
-                    $table->timestamps();
-                });
-
-                echo json_encode(['step' => 'DB', 'line' => "✅ Table 'test7' created"]) . "\n";
-                flush();
-            }
-
-            // Fetch data from test7
-            $data = DB::table('test7')->get();
-            echo json_encode(['step' => 'DB', 'line' => "Fetched ".count($data)." rows from 'test7'"]) . "\n";
-            flush();
-        }
-
     }, 200, ['Content-Type' => 'text/event-stream']);
 }
+
+
 private function fetchLatestVersion()
 {
     $update_url = DB::table('settings')->where('key', 'update_url')->value('value');
