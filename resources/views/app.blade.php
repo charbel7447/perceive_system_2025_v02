@@ -59,6 +59,7 @@
             license_email: "{{settings()->get('license_email')}}",
             global_vat_percentage: "{{settings()->get('global_vat_percentage')}}",
             activity: {!! $activity !!},
+            update_description: "{{settings()->get('update_description')}}",
             user: {
                 id: {{auth()->user()->id}},
                 name: "{{auth()->user()->name}}",

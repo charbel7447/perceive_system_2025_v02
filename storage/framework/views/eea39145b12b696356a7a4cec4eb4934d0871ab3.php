@@ -59,6 +59,7 @@
             license_email: "<?php echo e(settings()->get('license_email')); ?>",
             global_vat_percentage: "<?php echo e(settings()->get('global_vat_percentage')); ?>",
             activity: <?php echo $activity; ?>,
+            update_description: "<?php echo e(settings()->get('update_description')); ?>",
             user: {
                 id: <?php echo e(auth()->user()->id); ?>,
                 name: "<?php echo e(auth()->user()->name); ?>",

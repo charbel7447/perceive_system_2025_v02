@@ -987,7 +987,10 @@ export default {
     computed: {
         second_currency() {
             return window.apex.second_currency
-        }
+        },
+        update_description(){
+                return window.apex.update_description
+        },
     },
     components: { ErrorText, Typeahead, ImageUploadPreview, Spinner },
     mixins: [form],
@@ -1103,7 +1106,7 @@ async performUpdate() {
    },
 async getVersionDescription() {
     try {
-      const res = await fetch('https://raw.githubusercontent.com/charbel7447/perceive_system_2025_v02/main/versionDescription.txt');
+      const res = await fetch(this.update_description);
       let text = await res.text();
 
       // Highlight the latest version (current update)

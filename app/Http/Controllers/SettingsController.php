@@ -310,18 +310,28 @@ public function updateSystemLive()
 
     }, 200, ['Content-Type' => 'text/event-stream']);
 }
+private function fetchLatestVersion()
+{
+    $update_url = DB::table('settings')->where('key', 'update_url')->value('value');
 
-    private function fetchLatestVersion()
-    {
-        try {
-            $latest = trim(file_get_contents(
-                'https://raw.githubusercontent.com/charbel7447/perceive_system_2025_v02/main/VERSION.txt'
-            ));
-            return $latest ?: "1.0.0";
-        } catch (\Exception $e) {
-            return "1.0.0";
+    try {
+        // fallback if DB is empty
+        $url = $update_url ?: 'https://raw.githubusercontent.com/charbel7447/perceive_system_2025_v02/main/VERSION.txt';
+
+        // Ensure URL is valid (prepend https if missing)
+        if (!preg_match('/^https?:\/\//i', $url)) {
+            $url = 'https://' . ltrim($url, '/');
         }
+
+        $latest = @file_get_contents($url);
+
+        return $latest ? trim($latest) : "1.0.0";
+    } catch (\Exception $e) {
+        \Log::error("Failed to fetch latest version: " . $e->getMessage());
+        return "1.0.0";
     }
+}
+
 
 
 public function store(Request $request)
