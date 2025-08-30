@@ -21,7 +21,7 @@
                         <div class="row">
                             <div class="col col-8">
                                 <div class="form-group">
-                                    <label>App Title</label>
+                                    <label>App Title 11</label>
                                     <input type="text" class="form-control" v-model="form.app_title">
                                     <error-text :error="error.app_title"></error-text>
                                 </div>
