@@ -215,124 +215,88 @@ class SettingsController extends Controller
 
 
    public function updateSystemLive()
-    {
-        if (!auth()->user()->is_admin) {
-            return response()->json([
-                'saved' => false,
-                'message' => 'Unauthorized.'
-            ]);
-        }
-
-        $basePath = base_path();
-        $logDir   = $basePath . '/npmOutput';
-        $logFile  = $logDir . '/npm_' . date('Y-m-d_H-i-s') . '.log';
-
-        if (!File::exists($logDir)) {
-            File::makeDirectory($logDir, 0755, true);
-        }
-
-        // Steps: Git + NPM
-        $steps = [
-            'Pull Git'       => "cd $basePath && git fetch origin main 2>&1 && git reset --hard origin/main 2>&1",
-            'Build Frontend' => $this->getNpmCommand($basePath),
-        ];
-
-        return response()->stream(function () use ($steps, $logFile, $basePath) {
-            foreach ($steps as $stepName => $cmd) {
-                File::append($logFile, "=== STEP: $stepName ===\n");
-                echo json_encode(['step' => $stepName, 'line' => "=== STEP: $stepName ==="]) . "\n";
-                flush();
-
-                $process = proc_open(
-                    $cmd,
-                    [1 => ['pipe', 'w'], 2 => ['pipe', 'w']],
-                    $pipes
-                );
-
-                if (is_resource($process)) {
-                    while (!feof($pipes[1]) || !feof($pipes[2])) {
-                        if ($line = fgets($pipes[1])) {
-                            echo json_encode(['step' => $stepName, 'line' => $line]) . "\n";
-                            File::append($logFile, $line);
-                            flush();
-                        }
-                        if ($err = fgets($pipes[2])) {
-                            echo json_encode(['step' => $stepName, 'line' => $err]) . "\n";
-                            File::append($logFile, $err);
-                            flush();
-                        }
-                    }
-                    fclose($pipes[1]);
-                    fclose($pipes[2]);
-                    proc_close($process);
-                }
-            }
-
-            // ✅ Update APP_VERSION
-            $latestVersion = $this->fetchLatestVersion();
-            $envPath       = $basePath.'/.env';
-            $envContent    = File::get($envPath);
-            $oldEnvVersion = '1.0.0';
-
-            if (preg_match('/^APP_VERSION=(.*)$/m', $envContent, $matches)) {
-                $oldEnvVersion = trim($matches[1]);
-            }
-
-            if (preg_match('/^APP_VERSION=.*$/m', $envContent)) {
-                $envContent = preg_replace('/^APP_VERSION=.*$/m', 'APP_VERSION='.$latestVersion, $envContent);
-            } else {
-                $envContent .= "\nAPP_VERSION=".$latestVersion;
-            }
-
-            File::put($envPath, $envContent);
-            Artisan::call('config:clear');
-
-            $doneMsg = "✅ System updated to version: $latestVersion\n";
-            File::append($logFile, $doneMsg);
-            echo json_encode(['step' => 'Done', 'line' => $doneMsg]) . "\n";
-            flush();
-
-            // Conditional DB updates
-            if ($oldEnvVersion === '1.6.6' && $latestVersion === '1.6.7') {
-                DB::table('test6')->where('id', 1)->update(['body' => $latestVersion]);
-
-                if (!Schema::hasTable('test7')) {
-                    Schema::create('test7', function (Blueprint $table) {
-                        $table->id();
-                        $table->string('name');
-                        $table->integer('quantity')->default(0);
-                        $table->timestamps();
-                    });
-                    $msg = "✅ Table 'test7' created\n";
-                    File::append($logFile, $msg);
-                    echo json_encode(['step' => 'DB', 'line' => $msg]) . "\n";
-                    flush();
-                }
-
-                $data = DB::table('test7')->get();
-                $msg = "Fetched ".count($data)." rows from 'test7'\n";
-                File::append($logFile, $msg);
-                echo json_encode(['step' => 'DB', 'line' => $msg]) . "\n";
-                flush();
-            }
-        }, 200, ['Content-Type' => 'text/event-stream']);
+{
+    if (!auth()->user()->is_admin) {
+        return response()->json(['saved' => false, 'message' => 'Unauthorized.']);
     }
 
-    /**
-     * Detect proper NPM command depending on OS.
-     */
-    private function getNpmCommand(string $basePath): string
-    {
-        $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+    $basePath = base_path();
+    $logDir   = $basePath . '/npmOutput';
+    $logFile  = $logDir . '/npm_' . date('Y-m-d_H-i-s') . '.log';
 
-        if ($isWindows) {
-            // Local dev → npm run dev
-            return "cd $basePath && npm run dev 2>&1";
+    if (!File::exists($logDir)) File::makeDirectory($logDir, 0755, true);
+
+    // Detect Node/npm
+    $nodeInstalled = trim(shell_exec("node -v")) ? true : false;
+    $npmInstalled  = trim(shell_exec("npm -v")) ? true : false;
+
+    return response()->stream(function () use ($basePath, $logFile, $nodeInstalled, $npmInstalled) {
+
+        // Step 1: Git pull
+        $cmd = "cd $basePath && git fetch origin main && git reset --hard origin/main";
+        $this->runCommand($cmd, 'Pull Git', $logFile);
+
+        // Step 2: Build frontend only if Node/npm exist
+        if ($nodeInstalled && $npmInstalled) {
+            $npmCmd = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? "npm run dev" : "npm run build";
+            $this->runCommand("cd $basePath && $npmCmd 2>&1", 'Build Frontend', $logFile);
         } else {
-            // Linux / production → npm run build
-            return "cd $basePath && npm run build 2>&1";
+            $msg = "❌ Node or npm not installed, skipping frontend build.\n";
+            File::append($logFile, $msg);
+            echo json_encode(['step' => 'Build Frontend', 'line' => $msg]) . "\n";
+            flush();
         }
+
+        // Step 3: Update APP_VERSION
+        $latestVersion = $this->fetchLatestVersion();
+        $envPath       = $basePath.'/.env';
+        $envContent    = File::get($envPath);
+
+        if (preg_match('/^APP_VERSION=(.*)$/m', $envContent)) {
+            $envContent = preg_replace('/^APP_VERSION=.*$/m', 'APP_VERSION='.$latestVersion, $envContent);
+        } else {
+            $envContent .= "\nAPP_VERSION=".$latestVersion;
+        }
+
+        File::put($envPath, $envContent);
+        Artisan::call('config:clear');
+
+        $msg = "✅ System updated to version: $latestVersion\n";
+        File::append($logFile, $msg);
+        echo json_encode(['step' => 'Done', 'line' => $msg]) . "\n";
+        flush();
+    }, 200, ['Content-Type' => 'text/event-stream']);
+}
+
+/**
+ * Run a shell command and stream logs to frontend + log file
+ */
+private function runCommand($cmd, $stepName, $logFile)
+{
+    echo json_encode(['step' => $stepName, 'line' => "=== STEP: $stepName ==="]) . "\n";
+    flush();
+    File::append($logFile, "=== STEP: $stepName ===\n");
+
+    $process = proc_open($cmd, [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
+    if (is_resource($process)) {
+        while (!feof($pipes[1]) || !feof($pipes[2])) {
+            if ($line = fgets($pipes[1])) {
+                echo json_encode(['step' => $stepName, 'line' => $line]) . "\n";
+                File::append($logFile, $line);
+                flush();
+            }
+            if ($err = fgets($pipes[2])) {
+                echo json_encode(['step' => $stepName, 'line' => $err]) . "\n";
+                File::append($logFile, $err);
+                flush();
+            }
+        }
+        fclose($pipes[1]);
+        fclose($pipes[2]);
+        proc_close($process);
     }
+}
+
 
 
 private function fetchLatestVersion()
