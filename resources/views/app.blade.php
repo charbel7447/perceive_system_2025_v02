@@ -1,20 +1,35 @@
 <!doctype html>
 <html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-        <link rel="icon" href="/favicon.ico" type="image/x-icon">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>{{settings()->get('app_title')}}</title>
-        <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ url('/')}}/css/bootstrap.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-<script src="https://cdn.tailwindcss.com"></script>
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ settings()->get('app_title') }}</title>
 
-    
-    </head>
-    <body>
-        <div id="root"></div>
+    @php
+        // Detect OS
+        $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+    @endphp
+
+    @if($isWindows)
+        {{-- Local Dev → Use npm run dev served assets --}}
+        <link rel="stylesheet" href="http://localhost:3000/css/app.css">
+        <script type="module" src="http://localhost:3000/js/app.js"></script>
+    @else
+        {{-- Production → Use compiled assets --}}
+        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+        <script type="module" src="{{ mix('js/app.js') }}"></script>
+    @endif
+
+    {{-- Other CSS/JS --}}
+    <link rel="stylesheet" type="text/css" href="{{ url('/') }}/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="root"></div>
 <?php
     use Spatie\Activitylog\Models\Activity;
     if(auth()->user()->is_admin == 1){
