@@ -214,45 +214,60 @@ class SettingsController extends Controller
     }
 
 
-   public function updateSystemLive()
+
+public function updateSystemLive()
 {
     if (!auth()->user()->is_admin) {
-        return response()->json(['saved' => false, 'message' => 'Unauthorized.']);
+        return response()->json([
+            'saved' => false,
+            'message' => 'Unauthorized.'
+        ]);
     }
 
     $basePath = base_path();
-    $logDir   = $basePath . '/npmOutput';
-    $logFile  = $logDir . '/npm_' . date('Y-m-d_H-i-s') . '.log';
+    $steps = [
+        'Pull Git' => "cd $basePath && git fetch origin main 2>&1 && git reset --hard origin/main 2>&1",
+        // 'Build Frontend' => "cd $basePath && npm run dev 2>&1",
+    ];
 
-    if (!File::exists($logDir)) File::makeDirectory($logDir, 0755, true);
-
-    // Detect Node/npm
-    $nodeInstalled = trim(shell_exec("node -v")) ? true : false;
-    $npmInstalled  = trim(shell_exec("npm -v")) ? true : false;
-
-    return response()->stream(function () use ($basePath, $logFile, $nodeInstalled, $npmInstalled) {
-
-        // Step 1: Git pull
-        $cmd = "cd $basePath && git fetch origin main && git reset --hard origin/main";
-        $this->runCommand($cmd, 'Pull Git', $logFile);
-
-        // Step 2: Build frontend only if Node/npm exist
-        if ($nodeInstalled && $npmInstalled) {
-            $npmCmd = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? "npm run dev" : "npm run build";
-            $this->runCommand("cd $basePath && $npmCmd 2>&1", 'Build Frontend', $logFile);
-        } else {
-            $msg = "❌ Node or npm not installed, skipping frontend build.\n";
-            File::append($logFile, $msg);
-            echo json_encode(['step' => 'Build Frontend', 'line' => $msg]) . "\n";
+    return response()->stream(function () use ($steps, $basePath) {
+        foreach ($steps as $stepName => $cmd) {
+            echo json_encode(['step' => $stepName, 'line' => "=== STEP: $stepName ==="]) . "\n";
             flush();
+
+            $process = proc_open(
+                $cmd,
+                [1 => ['pipe','r'], 2 => ['pipe','r']],
+                $pipes
+            );
+
+            if (is_resource($process)) {
+                while (!feof($pipes[1]) || !feof($pipes[2])) {
+                    if ($line = fgets($pipes[1])) {
+                        echo json_encode(['step' => $stepName, 'line' => $line]) . "\n";
+                        flush();
+                    }
+                    if ($err = fgets($pipes[2])) {
+                        echo json_encode(['step' => $stepName, 'line' => $err]) . "\n";
+                        flush();
+                    }
+                }
+                fclose($pipes[1]);
+                fclose($pipes[2]);
+                proc_close($process);
+            }
         }
 
-        // Step 3: Update APP_VERSION
+        // ✅ Update APP_VERSION
         $latestVersion = $this->fetchLatestVersion();
-        $envPath       = $basePath.'/.env';
-        $envContent    = File::get($envPath);
+        $envPath = $basePath.'/.env';
+        $envContent = File::get($envPath);
+        $oldEnvVersion = '1.0.0'; // fallback
+        if (preg_match('/^APP_VERSION=(.*)$/m', $envContent, $matches)) {
+            $oldEnvVersion = trim($matches[1]);
+        }
 
-        if (preg_match('/^APP_VERSION=(.*)$/m', $envContent)) {
+        if (preg_match('/^APP_VERSION=.*$/m', $envContent)) {
             $envContent = preg_replace('/^APP_VERSION=.*$/m', 'APP_VERSION='.$latestVersion, $envContent);
         } else {
             $envContent .= "\nAPP_VERSION=".$latestVersion;
@@ -261,44 +276,40 @@ class SettingsController extends Controller
         File::put($envPath, $envContent);
         Artisan::call('config:clear');
 
-        $msg = "✅ System updated to version: $latestVersion\n";
-        File::append($logFile, $msg);
-        echo json_encode(['step' => 'Done', 'line' => $msg]) . "\n";
+        echo json_encode(['step' => 'Done', 'line' => "✅ System updated to version: $latestVersion"]) . "\n";
+
+        echo json_encode(['step' => 'Done', 'line' => "✅ System updated to version: $oldEnvVersion. ' '.$latestVersion "]) . "\n";
         flush();
+
+        // ✅ Conditional table creation & fetch
+        if ($oldEnvVersion === '1.6.6' && $latestVersion === '1.6.7') {
+            // Update test6
+            DB::table('test6')->where('id', 1)->update(['body' => $latestVersion]);
+
+            // Ensure DB connection is active
+            DB::connection()->getPdo();
+
+            // Create test7 if not exists
+            if (!Schema::hasTable('test7')) {
+                Schema::create('test7', function (Blueprint $table) {
+                    $table->id();
+                    $table->string('name');
+                    $table->integer('quantity')->default(0);
+                    $table->timestamps();
+                });
+
+                echo json_encode(['step' => 'DB', 'line' => "✅ Table 'test7' created"]) . "\n";
+                flush();
+            }
+
+            // Fetch data from test7
+            $data = DB::table('test7')->get();
+            echo json_encode(['step' => 'DB', 'line' => "Fetched ".count($data)." rows from 'test7'"]) . "\n";
+            flush();
+        }
+
     }, 200, ['Content-Type' => 'text/event-stream']);
 }
-
-/**
- * Run a shell command and stream logs to frontend + log file
- */
-private function runCommand($cmd, $stepName, $logFile)
-{
-    echo json_encode(['step' => $stepName, 'line' => "=== STEP: $stepName ==="]) . "\n";
-    flush();
-    File::append($logFile, "=== STEP: $stepName ===\n");
-
-    $process = proc_open($cmd, [1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $pipes);
-    if (is_resource($process)) {
-        while (!feof($pipes[1]) || !feof($pipes[2])) {
-            if ($line = fgets($pipes[1])) {
-                echo json_encode(['step' => $stepName, 'line' => $line]) . "\n";
-                File::append($logFile, $line);
-                flush();
-            }
-            if ($err = fgets($pipes[2])) {
-                echo json_encode(['step' => $stepName, 'line' => $err]) . "\n";
-                File::append($logFile, $err);
-                flush();
-            }
-        }
-        fclose($pipes[1]);
-        fclose($pipes[2]);
-        proc_close($process);
-    }
-}
-
-
-
 private function fetchLatestVersion()
 {
     $update_url = DB::table('settings')->where('key', 'update_url')->value('value');
