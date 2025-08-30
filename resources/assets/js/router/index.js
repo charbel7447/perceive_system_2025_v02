@@ -274,7 +274,7 @@ const router = new VueRouter({
         {path: '/personal-settings', component: PersonalSettings},
         {path: '/email/:id/:type', component: EmailDocument},
         {path: '/settings', component: Settings},
-        {path: '*', component: NotFound}
+        {path: '*', component: debitNotes}
     ]
 })
 
