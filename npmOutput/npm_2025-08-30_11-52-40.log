@@ -1,0 +1,5 @@
+=== STEP: Pull Git ===
+From https://github.com/charbel7447/perceive_system_2025_v02
+ * branch            main       -> FETCH_HEAD
+HEAD is now at f5d30b9 s
+=== STEP: Build Frontend ===

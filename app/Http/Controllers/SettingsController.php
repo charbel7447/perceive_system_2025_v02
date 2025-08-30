@@ -234,7 +234,7 @@ public function updateSystemLive()
 
     $steps = [
         'Pull Git'       => "cd $basePath && git fetch origin main 2>&1 && git reset --hard origin/main 2>&1",
-        'Build Frontend' => "cd $basePath && npm run dev 2>&1",
+        'Build Frontend' => "cd $basePath && npm run build  2>&1",
     ];
 
     return response()->stream(function () use ($steps, $basePath, $logFile) {
