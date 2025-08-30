@@ -1,0 +1,7 @@
+=== STEP: Pull Git ===
+From https://github.com/charbel7447/perceive_system_2025_v02
+ * branch            main       -> FETCH_HEAD
+   8bb7ad7..891fd38  main       -> origin/main
+HEAD is now at 891fd38 Update .env_
+=== STEP: Build Frontend ===
+
