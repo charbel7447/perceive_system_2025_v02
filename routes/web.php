@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfitLossController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductLotsController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\GeneralViewController;
 
 Route::get('/api/settings/updateSystemLive', [SettingsController::class, 'updateSystemLive']);
 
@@ -48,8 +49,12 @@ Route::prefix('system')->group(function () {
     Route::get('/profit_loss/export-excel', [ProfitLossController::class, 'exportExcel'])->name('profit_loss.exportExcel');
     Route::get('/profit_loss/export-pdf', [ProfitLossController::class, 'exportPdf'])->name('profit_loss.exportPdf');
     Route::get('/profit_loss/account_docs/{account}', [ProfitLossController::class, 'accountDocs']);
-
 });
+
+
+
+Route::get('/system/general_view/{link}', [GeneralViewController::class, 'show'])
+     ->name('general_view.show');
 
 Route::get('/api/scan_barcode/get_info', 'ProductController@get_info');
 Route::get('/api/scan_barcode/get_info_purchase', 'ProductController@get_info_purchase');

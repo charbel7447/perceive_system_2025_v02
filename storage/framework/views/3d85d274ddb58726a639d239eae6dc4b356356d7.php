@@ -1,0 +1,1 @@
+sss<?php /**PATH C:\xampp\htdocs\perceive_system_2025_v02\resources\views/general_views/test1.blade.php ENDPATH**/ ?>

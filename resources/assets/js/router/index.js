@@ -147,6 +147,8 @@ import Settings from '../views/settings/form.vue'
 import NotFound from '../views/error/not_found.vue'
 
 import vatrate from './vatrate'
+import GeneralView from '../views/general_view/index.vue'
+
 
 Vue.use(VueRouter)
 
@@ -274,7 +276,9 @@ const router = new VueRouter({
         {path: '/personal-settings', component: PersonalSettings},
         {path: '/email/:id/:type', component: EmailDocument},
         {path: '/settings', component: Settings},
-        {path: '*', component: debitNotes}
+        // {path: '*', component: NotFound}
+         // Catch-all dynamic route
+        { path: '*', component: GeneralView }
     ]
 })
 
